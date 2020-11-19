@@ -3,4 +3,13 @@
     <string name="new_note">New Note</string>
     <string name="note_color">Note Color</string>
     <string name="whats_in_your_mind">What is in your mind ?</string>
+
+    <string name="create">Create</string>
+    <string name="create_hint">Create a new Note</string>
+
+    <string name="text_note">Text Note</string>
+    <string name="text_note_hint">Create a Text Note</string>
+
+    <string name="check_list_note">Check List</string>
+    <string name="check_list_note_hint">Create a check list note</string>
 </resources>

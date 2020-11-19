@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <font
+        app:font="@font/alegreya_standard"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        />
+
+    <font
+        app:font="@font/alegreya_italic"
+        app:fontStyle="italic"
+        app:fontWeight="400"
+        />
+
+    <font
+        app:font="@font/alegreya_bold"
+        app:fontStyle="normal"
+        app:fontWeight="700"
+        />
+
+    <font
+        app:font="@font/alegreya_bold_italic"
+        app:fontStyle="italic"
+        app:fontWeight="700"
+        />
+
+    <font
+        app:font="@font/alegreya_black"
+        app:fontStyle="normal"
+        app:fontWeight="900"
+        />
+
+    <font
+        app:font="@font/alegreya_black_italic"
+        app:fontStyle="italic"
+        app:fontWeight="900"
+        />
+
+</font-family>
