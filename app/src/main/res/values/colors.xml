@@ -13,4 +13,32 @@
     <color name="orange_yellow_crayola">#E9C46A</color>
     <color name="orange_yellow_crayola_dark">#C2941E</color>
     <color name="orange_yellow_crayola_darker">#6A5111</color>
+
+    <!-- Blue Liberty -->
+    <color name="blue_liberty_light">#8997D1</color>
+    <color name="blue_liberty">#4357AD</color>
+    <color name="blue_liberty_dark">#2E3B76</color>
+    <color name="blue_liberty_darker">#171E3B</color>
+
+    <!-- Imperial Red -->
+    <color name="red_imperial_lighter">#F5B8B8</color>
+    <color name="red_imperial_light">#ED8282</color>
+    <color name="red_imperial">#E54B4B</color>
+    <color name="red_imperial_dark">#B31919</color>
+    <color name="red_imperial_darker">#7D1212</color>
+
+    <!-- Persian Green -->
+    <color name="green_persian_lighter">#8EE1D9</color>
+    <color name="green_persian_light">#4ED0C3</color>
+    <color name="green_persian">#2A9D8F</color>
+    <color name="green_persian_dark">#1E7167</color>
+    <color name="green_persian_darker">#11403B</color>
+    
+    <!-- Grey -->
+    <color name="grey_lighter_platinum">#EBEBEB</color>
+    <color name="grey_light_silver">#C2C2C2</color>
+    <color name="grey_spanish">#999999</color>
+    <color name="grey_dark_sonic_silver">#7A7A7A</color>
+    <color name="grey_darker_davys">#525252</color>
+
 </resources>

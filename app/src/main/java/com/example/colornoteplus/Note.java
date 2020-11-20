@@ -1,6 +1,8 @@
 package com.example.colornoteplus;
 
-public abstract class Note<T> extends Object{
+import java.io.Serializable;
+
+public abstract class Note<T> extends Object implements Serializable {
 
     private String title;
             public String getTitle() { return title; }

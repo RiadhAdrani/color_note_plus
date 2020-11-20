@@ -1,6 +1,8 @@
 package com.example.colornoteplus;
 
-public abstract class Object {
+import java.io.Serializable;
+
+public abstract class Object implements Serializable {
 
     // Root class for all object in the app
 

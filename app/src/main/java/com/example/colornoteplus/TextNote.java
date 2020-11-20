@@ -1,8 +1,9 @@
 package com.example.colornoteplus;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class TextNote extends Note<String> {
+public class TextNote extends Note<String> implements Serializable {
 
     // public constructor
     public TextNote(String name,int color){

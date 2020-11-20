@@ -15,7 +15,7 @@
     </style>
 
     <style name="item_default">
-        <item name="android:background">@drawable/default_item_style</item>
+        <item name="android:background">@drawable/item_default_style</item>
     </style>
 
 </resources>
