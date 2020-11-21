@@ -8,10 +8,17 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
+
+        <!-- text, icon and button vectors-->
         <item name="colorOnSecondary">@color/black</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ActivityBackgroundStyle">
+        <item name="android:background">@color/grey_darker_davys</item>
     </style>
 
     <style name="item_default">

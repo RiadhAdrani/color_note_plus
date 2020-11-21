@@ -2,22 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/ActivityBackgroundStyle"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/note_title_view"/>
 
     <EditText
         android:id="@+id/note_title_view"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/note_color_view"
         app:layout_constraintBottom_toTopOf="@id/note_content_view"
         android:autofillHints="@string/new_note"
         android:hint="@string/new_note"
         android:inputType="textCapWords"
+        android:textColorHint="@color/grey_dark_sonic_silver"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="4dp"/>
+        android:layout_marginEnd="4dp"
+        style="@style/DefaultBlackFont24sp"
+        />
 
     <ImageButton
         android:id="@+id/note_color_view"
@@ -45,6 +57,7 @@
         android:inputType="textCapSentences|textMultiLine"
         android:gravity="start"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp"/>
+        android:layout_marginVertical="4dp"
+        style="@style/DefaultBlackFont16sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

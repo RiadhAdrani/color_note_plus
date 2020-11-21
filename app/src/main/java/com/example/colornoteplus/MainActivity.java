@@ -1,10 +1,12 @@
 package com.example.colornoteplus;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton textFAB;
     FloatingActionButton checkListFAB;
 
+    // toolbar
+    Toolbar toolbar;
+
     // status variables
     Boolean areFABsVisible = false;
 
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // load note list
         ArrayList<Note<?>> dummyList = new ArrayList<>();
