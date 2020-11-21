@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
 
-        noteList = new ArrayList<>(dummyList);
+        noteList = new ArrayList<>();
 
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void textFABOnClickListener(){
         Intent i = new Intent(this,NoteActivity.class);
-        i.putExtra(CONST.NOTE_ACTIVITY_NOTE,-1);
+        i.putExtra(CONST.KEY_NOTE_ACTIVITY,CONST.NOTE_DEFAULT_UID);
         startActivity(i);
     }
 
@@ -118,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
         Intent i;
 
         if (TextNote.class.equals(noteList.get(position).getClass())) {
+
             i = new Intent(getApplicationContext(),NoteActivity.class);
-            i.putExtra(CONST.NOTE_ACTIVITY_NOTE,position);
+            i.putExtra(CONST.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
         }
     }
