@@ -9,12 +9,14 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Orange Yellow Crayola -->
+    <color name="orange_yellow_crayola_lighter">#FFF5D6</color>
     <color name="orange_yellow_crayola_light">#F4E3B8</color>
     <color name="orange_yellow_crayola">#E9C46A</color>
     <color name="orange_yellow_crayola_dark">#C2941E</color>
     <color name="orange_yellow_crayola_darker">#6A5111</color>
 
     <!-- Blue Liberty -->
+    <color name="blue_liberty_lighter">#D3D8EE</color>
     <color name="blue_liberty_light">#8997D1</color>
     <color name="blue_liberty">#4357AD</color>
     <color name="blue_liberty_dark">#2E3B76</color>
@@ -41,11 +43,25 @@
     <color name="grey_dark_sonic_silver">#7A7A7A</color>
     <color name="grey_darker_davys">#525252</color>
 
-    <!-- TODO: add more colors -->
     <!-- Orange -->
+    <color name="orange_lighter">#FAD3B3</color>
+    <color name="orange_light">#F5A666</color>
+    <color name="orange">#F07A19</color>
+    <color name="orange_dark">#C05D0C</color>
+    <color name="orange_darker">#864109</color>
 
     <!-- Green -->
+    <color name="green_lighter">#C5E7D0</color>
+    <color name="green_light">#8CCFA1</color>
+    <color name="green">#429E5F</color>
+    <color name="green_dark">#36814E</color>
+    <color name="green_darker">#245634</color>
 
-    <!-- Purple -->
+    <!-- Pink -->
+    <color name="pink_lighter">#FCC3FD</color>
+    <color name="pink_light">#F875FA</color>
+    <color name="pink">#F426F7</color>
+    <color name="pink_dark">#9B069D</color>
+    <color name="pink_darker">#4D034F</color>
 
 </resources>

@@ -12,4 +12,5 @@ public abstract class CONST {
     public final static String NOTE_PLACEHOLDER = "New Note";
     public final static int NOTE_DEFAULT_COLOR = 0;
     public final static String NOTE_DEFAULT_UID = "NEW_NOTE";
+    public final static int  DEFAULT_TOOLBAR_COLOR = R.color.grey_spanish;
 }

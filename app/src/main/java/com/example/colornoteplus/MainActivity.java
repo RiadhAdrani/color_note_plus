@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(CONST.DEFAULT_TOOLBAR_COLOR));
 
         // load note list
         ArrayList<Note<?>> dummyList = new ArrayList<>();
