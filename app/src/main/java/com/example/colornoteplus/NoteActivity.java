@@ -1,12 +1,14 @@
 package com.example.colornoteplus;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Objects;
 
@@ -24,22 +26,34 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        TextNote note = new TextNote("MyNote",1);
+
         // set Style
-        setTheme(R.style.NoteRed);
+        setTheme(StyleManager.getTheme(note.getColor()));
 
         setContentView(R.layout.note_activity);
 
+        if (getResources().getConfiguration().uiMode == Configuration.UI_MODE_NIGHT_YES){
+            Toast.makeText(this,"Dark Mode",Toast.LENGTH_SHORT).show();
+        } else{
+            Toast.makeText(this,"Light Mode",Toast.LENGTH_SHORT).show();
+        }
+        
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.red_imperial));
+        Log.d("NOTE_ACTIVITY_DEBUG","Color ID: " + StyleManager.getThemeColor(note.getColor()));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         titleView = findViewById(R.id.note_title_view);
+        titleView.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(note.getColor())));
+
         colorView = findViewById(R.id.note_color_view);
+
         contentView = findViewById(R.id.note_content_view);
+        contentView.setTextColor(getResources().getColor(StyleManager.getThemeColorDarker(note.getColor())));
 
-        TextNote note = getNote(getIntent().getStringExtra(CONST.KEY_NOTE_ACTIVITY));
-
+        // For Debugging Purpose
         Log.d("NOTE_ACTIVITY_DEBUG","Note Name: "+note.getTitle());
         Log.d("NOTE_ACTIVITY_DEBUG","Note UID: "+note.getUid());
         Log.d("NOTE_ACTIVITY_DEBUG","Note Color: "+note.getColor());
@@ -54,5 +68,7 @@ public class NoteActivity extends AppCompatActivity {
         else return MySharedPreferences.LoadTextNoteFromSharedPreferences(uid,getApplicationContext());
     }
 
+    private void setActivityColor(){
 
+    }
 }
