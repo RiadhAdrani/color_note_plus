@@ -2,6 +2,8 @@ package com.example.colornoteplus;
 
 public abstract class CONST {
 
+    public final static String SHARED_PREFERENCES = "SHARED_PREFERENCES";
+
     public final static int MAX_TEXT_LENGTH = 5000;
     public final static String KEY_NOTE_ACTIVITY = "LOAD_NOTE";
     public final static String KEY_NOTE_LIST = "NOTE_LIST";

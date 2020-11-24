@@ -1,6 +1,6 @@
 package com.example.colornoteplus;
 
-import org.w3c.dom.Text;
+import android.content.Context;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -27,4 +27,21 @@ public class TextNote extends Note<String> implements Serializable {
         setUid(UUID.randomUUID().toString() + getCreationDate());
     }
 
+    @Override
+    public void save(Context context) {
+        MySharedPreferences.SaveTextNoteToSharedPreferences(this,context);
+    }
+
+    @Override
+    public void load(Context context) {
+        TextNote temp = MySharedPreferences.LoadTextNoteFromSharedPreferences(this.getUid(),context);
+        setTitle(temp.getTitle());
+        setContent(temp.getContent());
+        setColor(temp.getColor());
+    }
+
+    @Override
+    public void delete(Context context) {
+
+    }
 }

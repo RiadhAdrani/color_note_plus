@@ -3,6 +3,7 @@ package com.example.colornoteplus;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     NoteAdapter adapter;
 
     // note list
-    ArrayList<Note<?>> noteList;
+    ArrayList<Note<?>> noteList = new ArrayList<>();
 
     // floating action buttons
     ExtendedFloatingActionButton mainFAB;
@@ -54,7 +56,11 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
 
-        noteList = new ArrayList<>();
+        Log.d("DEBUG_NOTE_LIST","Note List Size = " + MySharedPreferences.LoadStringArrayToSharedPreferences(CONST.KEY_NOTE_LIST,this).size());
+
+        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(CONST.KEY_NOTE_LIST,this)) {
+            noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this));
+        }
 
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
@@ -120,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkListFABOnClickListener(){
-
+        TextNote dumpNote = new TextNote("Testing", 0);
+        noteList.add(dumpNote);
+        adapter.notifyItemInserted(noteList.size()-1);
+        MySharedPreferences.SaveTextNoteToSharedPreferences( dumpNote,this);
     }
 
     private void noteOnClickListener(int position){

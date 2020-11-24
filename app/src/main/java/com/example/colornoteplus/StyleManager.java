@@ -74,7 +74,7 @@ public abstract class StyleManager {
 
     public static int getBackground(int index){
         return index > 0 && index < backgroundColors.size() ?
-                backgroundColors.get(index).getDrawable() : 0;
+                backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
     }
 
     public static int getTheme(int index){

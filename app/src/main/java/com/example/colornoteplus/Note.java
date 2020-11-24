@@ -1,5 +1,7 @@
 package com.example.colornoteplus;
 
+import android.content.Context;
+
 import java.io.Serializable;
 
 public abstract class Note<T> extends Object implements Serializable {
@@ -15,4 +17,10 @@ public abstract class Note<T> extends Object implements Serializable {
     private T content;
             public T getContent() { return content; }
             public void setContent(T content) { this.content = content; }
+
+    public abstract void save(Context context);
+
+    public abstract void load(Context context);
+
+    public abstract void delete(Context context);
 }

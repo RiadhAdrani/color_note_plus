@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,24 +13,24 @@ public abstract class MySharedPreferences {
 
     public static String LoadStringFromSharedPreferences(String key,Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Load String",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");
     }
 
     public static void SaveStringToSharedPreferences(String string, String key, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Save String",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,string.trim());
         editor.apply();
     }
 
     public static Long LoadLongFromSharedPreferences(String key,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Load String",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(key,0L);
     }
 
     public static void SaveTextNoteToSharedPreferences(TextNote note,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SAVE_TEXT_NOTE_TO_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -46,7 +45,7 @@ public abstract class MySharedPreferences {
 
         TextNote note;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -65,7 +64,7 @@ public abstract class MySharedPreferences {
 
     public static void SaveStringArrayToSharedPreferences(ArrayList<String> list,String key,Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SAVE_STRING_ARRAY_TO_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -80,7 +79,7 @@ public abstract class MySharedPreferences {
 
         ArrayList<String> list;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -88,7 +87,7 @@ public abstract class MySharedPreferences {
         // Should be unique, otherwise data will be overridden
         String json = sharedPreferences.getString(uid,null);
 
-        Type type = new TypeToken<TextNote>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
         list = gson.fromJson(json,type);
 
         if (list == null){

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
@@ -29,11 +30,27 @@ public class NoteActivity extends AppCompatActivity {
 
     private boolean isLightUI;
 
+    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
+    // Literally Main()
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        note = new TextNote("MyNote",5);
+        note = new TextNote("MyNote",0);
+
+        setTheme(StyleManager.getTheme(note.getColor()));
+
+        setContentView(R.layout.note_activity);
+
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        titleView = findViewById(R.id.note_title_view);
+        contentView = findViewById(R.id.note_content_view);
+        colorView = findViewById(R.id.note_color_view);
 
         isLightUI = true;
 
@@ -42,16 +59,15 @@ public class NoteActivity extends AppCompatActivity {
 
         setActivityColorTheme();
 
-        // For Debugging Purpose
-        Log.d("NOTE_ACTIVITY_DEBUG","Note Name: "+note.getTitle());
-        Log.d("NOTE_ACTIVITY_DEBUG","Note UID: "+note.getUid());
-        Log.d("NOTE_ACTIVITY_DEBUG","Note Color: "+note.getColor());
-
         titleView.setText(note.getTitle());
         colorView.setBackgroundResource(StyleManager.getBackground(note.getColor()));
         contentView.setText(note.getContent());
     }
 
+    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+    // Method used to add menus and configure button action
+    // like OnClickListeners ...
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -67,6 +83,18 @@ public class NoteActivity extends AppCompatActivity {
                 // TODO: save note to Shared Preferences
                 // TODO: add note to note list
 
+                note.save(getApplicationContext());
+
+                ArrayList<String> noteList =
+                        MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                CONST.KEY_NOTE_LIST,getApplicationContext()
+                        );
+
+                noteList.add(note.getUid());
+                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                        noteList,CONST.KEY_NOTE_LIST,getApplicationContext()
+                );
+
                 return true;
             }
         });
@@ -74,22 +102,20 @@ public class NoteActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
     private TextNote getNote(String uid){
         if (uid.equals(CONST.NOTE_DEFAULT_UID)) return new TextNote();
         else return MySharedPreferences.LoadTextNoteFromSharedPreferences(uid,getApplicationContext());
     }
 
+    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
+    // Method used to automatically configure color theme of the activity
     private void setActivityColorTheme(){
         // set Style
-        setTheme(StyleManager.getTheme(note.getColor()));
-
-        setContentView(R.layout.note_activity);
-        toolbar = findViewById(R.id.toolbar);
-        titleView = findViewById(R.id.note_title_view);
-        contentView = findViewById(R.id.note_content_view);
-        colorView = findViewById(R.id.note_color_view);
-
-        setSupportActionBar(toolbar);
 
         toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
 
@@ -101,5 +127,7 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
+    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
 }
