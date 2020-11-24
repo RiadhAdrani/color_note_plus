@@ -12,4 +12,6 @@
 
     <string name="check_list_note">Check List</string>
     <string name="check_list_note_hint">Create a check list note</string>
+
+    <string name="save">Save</string>
 </resources>
