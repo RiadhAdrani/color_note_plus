@@ -6,6 +6,9 @@
     <string name="pick_a_color">Pick a color :</string>
     <string name="cancel">cancel</string>
     <string name="save_success">Saved Successfully !</string>
+    <string name="title_short">Title is too short !</string>
+
+    <string name="text_divider">/</string>
 
     <string name="create">Create</string>
     <string name="create_hint">Create a new Note</string>

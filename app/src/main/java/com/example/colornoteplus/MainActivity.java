@@ -1,6 +1,7 @@
 package com.example.colornoteplus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -126,7 +127,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkListFABOnClickListener(){
-        Toast.makeText(this, "Feature Not available yet !", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "Feature Not available yet !", Toast.LENGTH_SHORT).show();
+        Statics.StyleableToast(
+                getApplicationContext(),
+                "Feature not available yet !",
+                R.color.grey_dark_sonic_silver,
+                R.color.white,
+                3,
+                R.color.grey_dark_sonic_silver,
+                true);
     }
 
     private void noteOnClickListener(int position){

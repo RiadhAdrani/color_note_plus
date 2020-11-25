@@ -33,7 +33,7 @@
             <item name="colorSecondary">@color/red_imperial_dark</item>
             <item name="colorSecondaryVariant">@color/red_imperial</item>
             <!-- text, icon and button vectors-->
-            <item name="colorOnSecondary">@color/black</item>
+            <item name="colorOnSecondary">@color/red_imperial_darker</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/red_imperial</item>
     </style>
