@@ -13,24 +13,24 @@ public abstract class MySharedPreferences {
 
     public static String LoadStringFromSharedPreferences(String key,Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");
     }
 
     public static void SaveStringToSharedPreferences(String string, String key, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,string.trim());
         editor.apply();
     }
 
     public static Long LoadLongFromSharedPreferences(String key,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(key,0L);
     }
 
     public static void SaveTextNoteToSharedPreferences(TextNote note,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -45,7 +45,7 @@ public abstract class MySharedPreferences {
 
         TextNote note;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -64,7 +64,7 @@ public abstract class MySharedPreferences {
 
     public static void SaveStringArrayToSharedPreferences(ArrayList<String> list,String key,Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -79,7 +79,7 @@ public abstract class MySharedPreferences {
 
         ArrayList<String> list;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONST.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data

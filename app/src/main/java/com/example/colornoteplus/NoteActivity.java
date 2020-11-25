@@ -1,10 +1,12 @@
 package com.example.colornoteplus;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -28,8 +30,6 @@ public class NoteActivity extends AppCompatActivity {
     // Current note
     private TextNote note;
 
-    private boolean isLightUI;
-
     // --------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
 
@@ -38,30 +38,15 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        note = new TextNote("MyNote",0);
+        // note = new TextNote("MyNote",5);
 
-        setTheme(StyleManager.getTheme(note.getColor()));
+        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
+            note = MySharedPreferences.LoadTextNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+        } else {
+            note = new TextNote();
+        }
 
-        setContentView(R.layout.note_activity);
-
-        toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-
-        titleView = findViewById(R.id.note_title_view);
-        contentView = findViewById(R.id.note_content_view);
-        colorView = findViewById(R.id.note_color_view);
-
-        isLightUI = true;
-
-        // TODO: get UI mode from Shared Preferences
-        // the user can also manually switch the UI mode
-
-        setActivityColorTheme();
-
-        titleView.setText(note.getTitle());
-        colorView.setBackgroundResource(StyleManager.getBackground(note.getColor()));
-        contentView.setText(note.getContent());
+        initTheme();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -76,27 +61,33 @@ public class NoteActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_note_activity_toolbar,menu);
 
         MenuItem saveButton = menu.findItem(R.id.save);
-        saveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+        saveButton.setOnMenuItemClickListener(menuItem -> {
 
-                // TODO: save note to Shared Preferences
-                // TODO: add note to note list
+            // TODO: save note to Shared Preferences
+            // TODO: add note to note list
 
-                note.save(getApplicationContext());
+            note.setTitle(titleView.getText().toString().trim());
+            note.setContent(contentView.getText().toString().trim());
+            note.save(getApplicationContext());
+
+            if (!isNoteOld()){
+
+                Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
                         MySharedPreferences.LoadStringArrayToSharedPreferences(
-                                CONST.KEY_NOTE_LIST,getApplicationContext()
+                                Statics.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
                 MySharedPreferences.SaveStringArrayToSharedPreferences(
-                        noteList,CONST.KEY_NOTE_LIST,getApplicationContext()
+                        noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
                 );
-
-                return true;
             }
+
+            Toast.makeText(this, getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+
+            return true;
         });
 
         return super.onCreateOptionsMenu(menu);
@@ -105,29 +96,89 @@ public class NoteActivity extends AppCompatActivity {
     // --------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
 
-    private TextNote getNote(String uid){
-        if (uid.equals(CONST.NOTE_DEFAULT_UID)) return new TextNote();
-        else return MySharedPreferences.LoadTextNoteFromSharedPreferences(uid,getApplicationContext());
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
-
     // Method used to automatically configure color theme of the activity
-    private void setActivityColorTheme(){
-        // set Style
+    private void initTheme(){
 
+        setTheme(StyleManager.getTheme(note.getColor()));
+
+        setContentView(R.layout.note_activity);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
-
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        titleView = findViewById(R.id.note_title_view);
+        titleView.setText(note.getTitle());
         titleView.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(note.getColor())));
 
+        contentView = findViewById(R.id.note_content_view);
+        contentView.setText(note.getContent());
         contentView.setTextColor(getResources().getColor(StyleManager.getThemeColorDarker(note.getColor())));
+
+        colorView = findViewById(R.id.note_color_view);
+        colorView.setOnClickListener(view -> buildColorPickDialog());
+        colorView.setBackgroundResource(StyleManager.getBackground(note.getColor()));
 
     }
 
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
+    private boolean isNoteOld(){
+        for (String n: MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,getApplicationContext())){
+            if (n.equals(note.getUid())) return true;
+        }
+        return false;
+    }
+
+    private void buildColorPickDialog(){
+
+        FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
+
+        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+
+        fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
+            @Override
+            public void OnClickListener(int position) {
+                note.setColor(position);
+                switchTheme(position);
+                fragment.dismiss();
+            }
+
+            @Override
+            public void OnLongClickListener(int position) {
+
+            }
+        });
+
+    }
+
+    private void switchTheme(int id){
+
+        String titleTemp = titleView.getText().toString().trim();
+        String textTemp = contentView.getText().toString().trim();
+
+        // change theme
+        setTheme(StyleManager.getTheme(id));
+        setContentView(R.layout.note_activity);
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(id)));
+
+        // change toolbar theme
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(id)));
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        titleView = findViewById(R.id.note_title_view);
+        titleView.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(id)));
+        titleView.setText(titleTemp);
+
+        contentView = findViewById(R.id.note_content_view);
+        contentView.setTextColor(getResources().getColor(StyleManager.getThemeColorDarker(id)));
+        contentView.setText(textTemp);
+
+        colorView = findViewById(R.id.note_color_view);
+        colorView.setBackgroundResource(StyleManager.getBackground(id));
+        colorView.setOnClickListener(view -> buildColorPickDialog());
+
+    }
 
 }

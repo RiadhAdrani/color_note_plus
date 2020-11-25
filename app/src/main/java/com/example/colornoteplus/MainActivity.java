@@ -1,10 +1,9 @@
 package com.example.colornoteplus;
 
 import android.content.Intent;
-import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(CONST.DEFAULT_TOOLBAR_COLOR));
+        toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
 
         // load note list
         ArrayList<Note<?>> dummyList = new ArrayList<>();
@@ -56,9 +54,11 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
 
-        Log.d("DEBUG_NOTE_LIST","Note List Size = " + MySharedPreferences.LoadStringArrayToSharedPreferences(CONST.KEY_NOTE_LIST,this).size());
+        // MySharedPreferences.SaveStringArrayToSharedPreferences(new ArrayList<>(),Statics.KEY_NOTE_LIST,getApplicationContext());
 
-        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(CONST.KEY_NOTE_LIST,this)) {
+        Log.d("DEBUG_NOTE_LIST","Note List Size = " + MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this).size());
+
+        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
             noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this));
         }
 
@@ -121,15 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void textFABOnClickListener(){
         Intent i = new Intent(this,NoteActivity.class);
-        i.putExtra(CONST.KEY_NOTE_ACTIVITY,CONST.NOTE_DEFAULT_UID);
+        i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
         startActivity(i);
     }
 
     private void checkListFABOnClickListener(){
-        TextNote dumpNote = new TextNote("Testing", 0);
-        noteList.add(dumpNote);
-        adapter.notifyItemInserted(noteList.size()-1);
-        MySharedPreferences.SaveTextNoteToSharedPreferences( dumpNote,this);
+        Toast.makeText(this, "Feature Not available yet !", Toast.LENGTH_SHORT).show();
     }
 
     private void noteOnClickListener(int position){
@@ -139,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         if (TextNote.class.equals(noteList.get(position).getClass())) {
 
             i = new Intent(getApplicationContext(),NoteActivity.class);
-            i.putExtra(CONST.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+            i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
         }
     }

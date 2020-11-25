@@ -19,8 +19,8 @@ public class TextNote extends Note<String> implements Serializable {
     }
 
     public TextNote(){
-        setTitle(CONST.NOTE_PLACEHOLDER);
-        setColor(CONST.NOTE_DEFAULT_COLOR);
+        setTitle(Statics.NOTE_PLACEHOLDER);
+        setColor(Statics.NOTE_DEFAULT_COLOR);
         setContent(null);
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());

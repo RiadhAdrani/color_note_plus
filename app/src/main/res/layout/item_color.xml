@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:id="@+id/fragment_item_color"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="4dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:background="@color/grey_dark_sonic_silver"
+    style="@style/ColorPaletteStyle">
+
+</androidx.constraintlayout.widget.ConstraintLayout>

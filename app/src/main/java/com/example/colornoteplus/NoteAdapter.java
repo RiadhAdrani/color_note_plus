@@ -46,7 +46,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             holder.titleView.setText(item.getTitle());
             holder.contentView.setText((String) item.getContent());}
 
-        // TODO: set background color
         holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
 
         holder.itemView.setOnClickListener(view -> {

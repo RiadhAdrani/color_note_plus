@@ -3,6 +3,9 @@
     <string name="new_note">New Note</string>
     <string name="note_color">Note Color</string>
     <string name="whats_in_your_mind">What is in your mind ?</string>
+    <string name="pick_a_color">Pick a color :</string>
+    <string name="cancel">cancel</string>
+    <string name="save_success">Saved Successfully !</string>
 
     <string name="create">Create</string>
     <string name="create_hint">Create a new Note</string>
