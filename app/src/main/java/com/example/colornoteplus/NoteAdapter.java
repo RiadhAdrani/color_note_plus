@@ -1,9 +1,12 @@
 package com.example.colornoteplus;
 
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,17 +14,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
 
     // display notes in a recycler view
 
     private final ArrayList<Note<?>> list;
     private OnItemClickListener listener;
+    private final Context context;
 
-    public NoteAdapter(ArrayList<Note<?>> list){
+    public NoteAdapter(ArrayList<Note<?>> list, Context context){
+
         this.list = list;
+        this.context = context;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -56,6 +61,26 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             if (listener != null) listener.OnLongClickListener(position);
             return true;
         });
+
+        holder.moreOptionsView.setOnClickListener(view -> {
+
+            PopupMenu menu = new PopupMenu(context,holder.moreOptionsView);
+            menu.setOnMenuItemClickListener(menuItem -> {
+
+                final int delete = R.id.item_option_delete;
+                final int color = R.id.item_option_color;
+
+                switch (menuItem.getItemId()){
+                    case delete: if (listener != null) listener.OnDeleteClickListener(position); return true;
+                    case color: if (listener != null) listener.OnColorSwitchClickListener(position); return true;
+                }
+
+                return false;
+            });
+
+            menu.inflate(R.menu.menu_note_more_options);
+            menu.show();
+        });
     }
 
     @Override
@@ -68,17 +93,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         ConstraintLayout backgroundView;
         TextView titleView;
         TextView contentView;
+        ImageButton moreOptionsView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             backgroundView = itemView.findViewById(R.id.item_background);
             titleView = itemView.findViewById(R.id.item_title);
             contentView = itemView.findViewById(R.id.item_content);
+            moreOptionsView = itemView.findViewById(R.id.item_more_options);
         }
     }
 
     public interface OnItemClickListener{
         void OnClickListener(int position);
         void OnLongClickListener(int position);
+        void OnDeleteClickListener(int position);
+        void OnColorSwitchClickListener(int position);
     }
 }

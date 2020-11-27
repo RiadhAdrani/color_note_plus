@@ -4,7 +4,10 @@
     <string name="note_color">Note Color</string>
     <string name="whats_in_your_mind">What is in your mind ?</string>
     <string name="pick_a_color">Pick a color :</string>
-    <string name="cancel">cancel</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="switch_color">Switch Color</string>
+    <string name="more_options">More Options</string>
     <string name="save_success">Saved Successfully !</string>
     <string name="title_short">Title is too short !</string>
 

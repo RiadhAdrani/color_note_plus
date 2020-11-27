@@ -1,8 +1,6 @@
 package com.example.colornoteplus;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,9 +14,8 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     // recycler view and its adapter
     RecyclerView rv;
@@ -47,14 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
 
-        // load note list
-        ArrayList<Note<?>> dummyList = new ArrayList<>();
-        for (int i = 0;i < 10;i++){
-            dummyList.add(new TextNote(UUID.randomUUID().toString(),
-                    (int) (Math.random() * StyleManager.getBackgroundColors().size())
-            ));
-        }
-
         // MySharedPreferences.SaveStringArrayToSharedPreferences(new ArrayList<>(),Statics.KEY_NOTE_LIST,getApplicationContext());
 
         Log.d("DEBUG_NOTE_LIST","Note List Size = " + MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this).size());
@@ -65,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
-        adapter = new NoteAdapter(noteList);
+        adapter = new NoteAdapter(noteList,getApplicationContext());
+
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
@@ -76,6 +66,16 @@ public class MainActivity extends AppCompatActivity {
             public void OnLongClickListener(int position) {
                 Toast.makeText(getApplicationContext(),"Item "+ position + " Held",Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void OnDeleteClickListener(int position) {
+                deleteItem(position);
+            }
+
+            @Override
+            public void OnColorSwitchClickListener(int position) {
+            }
+
         });
 
         rv = findViewById(R.id.note_recycler_view);
@@ -149,4 +149,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
     }
+
+    private void deleteItem(int position){
+        noteList.remove(position);
+        adapter.notifyItemRemoved(position);
+    }
+
 }
