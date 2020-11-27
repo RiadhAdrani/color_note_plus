@@ -1,17 +1,21 @@
 package com.example.colornoteplus;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +39,11 @@ public class NoteActivity extends AppCompatActivity {
     // Current note
     private TextNote note;
 
+    private boolean deletedSpecialCharacter = false;
+
+    // Undo & Redo Handler
+    TextUndoRedo textUndoRedoHandler;
+
     // --------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
 
@@ -45,17 +54,13 @@ public class NoteActivity extends AppCompatActivity {
 
         // note = new TextNote("MyNote",5);
 
-        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
-            note = MySharedPreferences.LoadTextNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
-        } else {
-            note = new TextNote();
-        }
+        getNoteFromIntent();
+
+        textUndoRedoHandler = new TextUndoRedo();
 
         initTheme();
     }
 
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
     // Method used to add menus and configure button action
     // like OnClickListeners ...
     @Override
@@ -65,60 +70,27 @@ public class NoteActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_note_activity_toolbar,menu);
 
+        MenuItem undoButton = menu.findItem(R.id.undo);
+        undoButton.setOnMenuItemClickListener(menuItem -> undo());
+
+        MenuItem redoButton = menu.findItem(R.id.redo);
+        redoButton.setOnMenuItemClickListener(menuItem -> redo());
+
         MenuItem saveButton = menu.findItem(R.id.save);
-        saveButton.setOnMenuItemClickListener(menuItem -> {
-
-            // TODO: save note to Shared Preferences
-            // TODO: add note to note list
-
-            if (titleView.getText().toString().trim().length() < Statics.NOTE_TITLE_MINIMUM_LENGTH){
-
-                Statics.StyleableToast(getApplicationContext(),
-                        getString(R.string.title_short),
-                        StyleManager.getThemeColorDark(note.getColor()),
-                        R.color.white,
-                        3,
-                        StyleManager.getThemeColorDark(note.getColor()),
-                        true);
-            }
-            else {
-
-                note.setTitle(titleView.getText().toString().trim());
-                note.setContent(contentView.getText().toString().trim());
-                note.save(getApplicationContext());
-
-                if (!isNoteOld()){
-
-                    Log.d("DEBUG_SAVE","Note is old !");
-
-                    ArrayList<String> noteList =
-                            MySharedPreferences.LoadStringArrayToSharedPreferences(
-                                    Statics.KEY_NOTE_LIST,getApplicationContext()
-                            );
-
-                    noteList.add(note.getUid());
-                    MySharedPreferences.SaveStringArrayToSharedPreferences(
-                            noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
-                    );
-                }
-
-                Statics.StyleableToast(getApplicationContext(),
-                        getString(R.string.save_success),
-                        StyleManager.getThemeColorDark(note.getColor()),
-                        R.color.white,
-                        3,
-                        StyleManager.getThemeColorDark(note.getColor()),
-                        false);
-            }
-
-            return true;
-        });
+        saveButton.setOnMenuItemClickListener(menuItem -> saveTextNote());
 
         return super.onCreateOptionsMenu(menu);
     }
 
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
+    // get note from the intent
+    private void getNoteFromIntent(){
+
+        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
+            note = MySharedPreferences.LoadTextNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+        } else {
+            note = new TextNote();
+        }
+    }
 
     // Method used to automatically configure color theme of the activity
     private void initTheme(){
@@ -127,9 +99,13 @@ public class NoteActivity extends AppCompatActivity {
 
         setContentView(R.layout.note_activity);
 
-        changeViewsColor(note.getColor());
+        changeViewsColor();
+
+        textUndoRedoHandler.pushUndo(contentView.getText().toString().trim());
     }
 
+    // switch theme when the user
+    // click on a new color
     private void switchTheme(int id){
 
         String titleTemp = titleView.getText().toString().trim();
@@ -140,14 +116,15 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.note_activity);
         getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(id)));
 
-        changeViewsColor(id);
+        changeViewsColor();
 
         titleView.setText(titleTemp);
         contentView.setText(textTemp);
 
     }
 
-    private void changeViewsColor(int i){
+    // switch colors and themes
+    private void changeViewsColor(){
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -198,11 +175,26 @@ public class NoteActivity extends AppCompatActivity {
         m = contentView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.content_max_length);
         contentCharacterCount.setText(m);
 
+        contentView.setOnKeyListener((view, i, keyEvent) -> {
+
+            if (i == KeyEvent.KEYCODE_DEL){
+                if (!contentView.getText().toString().isEmpty()){
+                    if (Statics.SPECIAL_STRINGS.contains(contentView.getText().toString().charAt(contentView.getText().toString().length() - 1))){
+                        deletedSpecialCharacter = true;
+                        Log.d("UNDO_REDO","Deleted special Character");
+                    }
+                }
+            }
+
+            return false;
+        });
+
         contentView.addTextChangedListener(new TextWatcher()
         {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
+
             }
 
             @Override
@@ -216,6 +208,9 @@ public class NoteActivity extends AppCompatActivity {
                 // this will show characters remaining
                 String msg = contentView.getText().toString().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.content_max_length);
                 contentCharacterCount.setText(msg);
+
+                if (!s.toString().isEmpty()) myUpdateUndo(s.charAt(s.toString().length()-1));
+
             }
         });
 
@@ -225,6 +220,9 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
+    // check if the list is old or not
+    // if old return true
+    // else   return false
     private boolean isNoteOld(){
         for (String n: MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
@@ -232,6 +230,7 @@ public class NoteActivity extends AppCompatActivity {
         return false;
     }
 
+    // build the color picker dialog
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
@@ -252,6 +251,113 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // save note when the user click on the save button
+    // in the toolbar
+    private boolean saveTextNote(){
+
+        if (titleView.getText().toString().trim().length() < Statics.NOTE_TITLE_MINIMUM_LENGTH){
+
+            Statics.StyleableToast(getApplicationContext(),
+                    getString(R.string.title_short),
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    R.color.white,
+                    3,
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    true);
+        }
+        else {
+
+            note.setTitle(titleView.getText().toString().trim());
+            note.setContent(contentView.getText().toString().trim());
+            note.save(getApplicationContext());
+
+            if (!isNoteOld()){
+
+                Log.d("DEBUG_SAVE","Note is old !");
+
+                ArrayList<String> noteList =
+                        MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                Statics.KEY_NOTE_LIST,getApplicationContext()
+                        );
+
+                noteList.add(note.getUid());
+                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                        noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
+                );
+            }
+
+            Statics.StyleableToast(getApplicationContext(),
+                    getString(R.string.save_success),
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    R.color.white,
+                    3,
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    false);
+        }
+
+        return true;
+
+    }
+
+    // update Undo stack when text changes
+    private void myUpdateUndo(char lastCharacter){
+
+        if (deletedSpecialCharacter){
+
+            textUndoRedoHandler.pushUndo(contentView.getText().toString().trim());
+            deletedSpecialCharacter = false;
+
+            Log.d("UNDO_REDO","Last character: "+lastCharacter);
+            Log.d("UNDO_REDO","Elements in Undo Stack: "+textUndoRedoHandler.getUndoStack().size());
+            return;
+        }
+
+        if (Statics.SPECIAL_STRINGS.contains(lastCharacter)){
+
+                textUndoRedoHandler.pushUndo(contentView.getText().toString().trim());
+        }
+
+        Log.d("UNDO_REDO","Last character: "+lastCharacter);
+        Log.d("UNDO_REDO","Elements in Undo Stack: "+textUndoRedoHandler.getUndoStack().size());
+    }
+
+    // perform undo action
+    // when the button is clicked
+    private boolean undo(){
+
+        if (!textUndoRedoHandler.getUndoStack().empty()) {
+            if (textUndoRedoHandler.getUndoStack().size() == 1){
+                contentView.setText(textUndoRedoHandler.getUndoStack().firstElement());
+                Statics.StyleableToast(getApplicationContext(),
+                        getString(R.string.nothing_to_undo),
+                        StyleManager.getThemeColorDark(note.getColor()),
+                        R.color.white,
+                        3,
+                        StyleManager.getThemeColorDark(note.getColor()),
+                        false);
+            }
+            else {
+                contentView.setText(textUndoRedoHandler.popUndo());
+            }
+        }
+        return true;
+    }
+
+    // perform redo action
+    // when the button is clicked
+    private boolean redo(){
+
+        Statics.StyleableToast(getApplicationContext(),
+                getString(R.string.feature_unavailable),
+                StyleManager.getThemeColorDark(note.getColor()),
+                R.color.white,
+                3,
+                StyleManager.getThemeColorDark(note.getColor()),
+                false);
+
+        return true;
     }
 
 }

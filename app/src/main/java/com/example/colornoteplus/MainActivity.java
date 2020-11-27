@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,10 +42,6 @@ public class MainActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
-
-        // MySharedPreferences.SaveStringArrayToSharedPreferences(new ArrayList<>(),Statics.KEY_NOTE_LIST,getApplicationContext());
-
-        Log.d("DEBUG_NOTE_LIST","Note List Size = " + MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this).size());
 
         for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
             noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this));
@@ -100,6 +95,18 @@ public class MainActivity extends AppCompatActivity{
         mainFAB.setOnClickListener(view -> mainFABHandler());
     }
 
+    // action to be executed
+    // when the activity is paused or suspended
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        saveNoteList();
+
+    }
+
+    // handle the main FAB
+    // and the animations
     private void mainFABHandler(){
         if (!areFABsVisible){
 
@@ -120,14 +127,17 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // create and open a note
+    // in a new activity
     private void textFABOnClickListener(){
         Intent i = new Intent(this,NoteActivity.class);
         i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
         startActivity(i);
     }
 
+    // create and open a check list
+    // in a new activity
     private void checkListFABOnClickListener(){
-        // Toast.makeText(this, "Feature Not available yet !", Toast.LENGTH_SHORT).show();
         Statics.StyleableToast(
                 getApplicationContext(),
                 "Feature not available yet !",
@@ -138,6 +148,9 @@ public class MainActivity extends AppCompatActivity{
                 true);
     }
 
+    // open the note activity
+    // of a note at a given position
+    // in note list
     private void noteOnClickListener(int position){
 
         Intent i;
@@ -150,9 +163,31 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // delete a note at a given position
+    // in the note list
     private void deleteItem(int position){
+
+        ArrayList<String> n = MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
+        n.add(noteList.get(position).getUid());
+        MySharedPreferences.SaveStringArrayToSharedPreferences(n,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
+
         noteList.remove(position);
         adapter.notifyItemRemoved(position);
+    }
+
+
+    // collect the UIDs of the notes
+    // and save them to the shared preferences
+    private void saveNoteList(){
+
+        ArrayList<String> mNoteList = new ArrayList<>();
+
+        for (Note<?> note : noteList) {
+            mNoteList.add(note.getUid());
+        }
+
+        MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
+
     }
 
 }

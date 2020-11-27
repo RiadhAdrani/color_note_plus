@@ -10,6 +10,12 @@
     <string name="more_options">More Options</string>
     <string name="save_success">Saved Successfully !</string>
     <string name="title_short">Title is too short !</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+
+    <string name="feature_unavailable">Feature Unavailable at the moment !</string>
+
+    <string name="nothing_to_undo">Nothing to Undo !</string>
 
     <string name="text_divider">/</string>
 
