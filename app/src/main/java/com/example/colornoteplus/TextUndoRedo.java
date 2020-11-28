@@ -4,9 +4,8 @@ import java.util.Stack;
 
 public class TextUndoRedo {
 
-    private  Stack<String> undoStack ;
-    private  Stack<String> redoStack ;
-    private OnTextChange onTextChange;
+    private final Stack<String> undoStack ;
+    private final Stack<String> redoStack ;
 
     public TextUndoRedo(){
         undoStack = new Stack<>();
@@ -25,15 +24,8 @@ public class TextUndoRedo {
 
     public String popRedo(){ return redoStack.pop(); }
 
-    public void updateUndo(){ onTextChange.updateRedo(); }
+    public void resetUndo(){ undoStack.clear(); }
 
-    public void updateRedo(){ onTextChange.updateRedo(); }
-
-    public void setOnTextChange(OnTextChange onTextChange) { this.onTextChange = onTextChange; }
-
-    public interface OnTextChange{
-        void updateUndo();
-        void updateRedo();
-    }
+    public void resetRedo(){ redoStack.clear(); }
 
 }

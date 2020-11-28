@@ -1,6 +1,5 @@
 package com.example.colornoteplus;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,13 +9,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -40,9 +36,10 @@ public class NoteActivity extends AppCompatActivity {
     private TextNote note;
 
     private boolean deletedSpecialCharacter = false;
+    private boolean deleteRedoStack = false;
 
     // Undo & Redo Handler
-    TextUndoRedo textUndoRedoHandler;
+    private TextUndoRedo textUndoRedoHandler;
 
     // --------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
@@ -329,6 +326,13 @@ public class NoteActivity extends AppCompatActivity {
 
         if (!textUndoRedoHandler.getUndoStack().empty()) {
             if (textUndoRedoHandler.getUndoStack().size() == 1){
+
+                if (deleteRedoStack) {
+                    textUndoRedoHandler.resetRedo();
+                    deleteRedoStack = true;
+                }
+
+                textUndoRedoHandler.pushRedo(contentView.getText().toString().trim());
                 contentView.setText(textUndoRedoHandler.getUndoStack().firstElement());
                 Statics.StyleableToast(getApplicationContext(),
                         getString(R.string.nothing_to_undo),
@@ -339,6 +343,13 @@ public class NoteActivity extends AppCompatActivity {
                         false);
             }
             else {
+
+                if (deleteRedoStack) {
+                    textUndoRedoHandler.resetRedo();
+                    deleteRedoStack = true;
+                }
+
+                textUndoRedoHandler.pushRedo(contentView.getText().toString().trim());
                 contentView.setText(textUndoRedoHandler.popUndo());
             }
         }
@@ -349,13 +360,22 @@ public class NoteActivity extends AppCompatActivity {
     // when the button is clicked
     private boolean redo(){
 
-        Statics.StyleableToast(getApplicationContext(),
-                getString(R.string.feature_unavailable),
-                StyleManager.getThemeColorDark(note.getColor()),
-                R.color.white,
-                3,
-                StyleManager.getThemeColorDark(note.getColor()),
-                false);
+
+        Log.d("UNDO_REDO","Elements in Redo Stack: "+textUndoRedoHandler.getRedoStack().size());
+
+        if (!textUndoRedoHandler.getRedoStack().empty()){
+            contentView.setText(textUndoRedoHandler.popRedo());
+            deleteRedoStack = false;
+        }
+        else {
+            Statics.StyleableToast(getApplicationContext(),
+                    getString(R.string.nothing_to_redo),
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    R.color.white,
+                    3,
+                    StyleManager.getThemeColorDark(note.getColor()),
+                    false);
+        }
 
         return true;
     }

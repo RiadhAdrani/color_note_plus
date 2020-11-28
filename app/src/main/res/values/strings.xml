@@ -16,6 +16,7 @@
     <string name="feature_unavailable">Feature Unavailable at the moment !</string>
 
     <string name="nothing_to_undo">Nothing to Undo !</string>
+    <string name="nothing_to_redo">Nothing to Redo !</string>
 
     <string name="text_divider">/</string>
 
