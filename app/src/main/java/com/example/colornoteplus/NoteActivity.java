@@ -94,7 +94,7 @@ public class NoteActivity extends AppCompatActivity {
 
         setTheme(StyleManager.getTheme(note.getColor()));
 
-        setContentView(R.layout.note_activity);
+        setContentView(R.layout.activity_note);
 
         changeViewsColor();
 
@@ -110,7 +110,7 @@ public class NoteActivity extends AppCompatActivity {
 
         // change theme
         setTheme(StyleManager.getTheme(id));
-        setContentView(R.layout.note_activity);
+        setContentView(R.layout.activity_note);
         getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(id)));
 
         changeViewsColor();

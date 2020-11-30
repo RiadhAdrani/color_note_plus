@@ -3,5 +3,6 @@
 
     <integer name="title_max_length">50</integer>
     <integer name="content_max_length">5000</integer>
+    <integer name="check_list_item_max_length">75</integer>
 
 </resources>

@@ -1,24 +1,13 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class TextNote extends Note<String> implements Serializable {
+public class CheckListNote extends Note<ArrayList<CheckListItem>> {
 
-    // public constructor
-    public TextNote(String name,int color){
-        setTitle(name);
-        setColor(color);
-        setContent(null);
-        setCreationDate(Calendar.getInstance().getTime().getTime());
-        setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(UUID.randomUUID().toString() + getCreationDate());
-    }
-
-    public TextNote(){
+    public CheckListNote(){
         setTitle(Statics.NOTE_PLACEHOLDER);
         setColor(Statics.NOTE_DEFAULT_COLOR);
         setContent(null);
@@ -27,20 +16,26 @@ public class TextNote extends Note<String> implements Serializable {
         setUid(UUID.randomUUID().toString() + getCreationDate());
     }
 
+    public CheckListNote(String name,int color){
+        setTitle(name);
+        setColor(color);
+        setContent(null);
+        setCreationDate(Calendar.getInstance().getTime().getTime());
+        setModificationDate(Calendar.getInstance().getTime().getTime());
+        setUid(UUID.randomUUID().toString() + getCreationDate());
+    }
+
     @Override
     public void save(Context context) {
-        MySharedPreferences.SaveTextNoteToSharedPreferences(this,context);
+        MySharedPreferences.SaveCheckListNoteToSharedPreferences(this,context);
     }
 
     @Override
     public void load(Context context) {
-        TextNote temp = MySharedPreferences.LoadTextNoteFromSharedPreferences(this.getUid(),context);
-        setTitle(temp.getTitle());
-        setContent(temp.getContent());
-        setColor(temp.getColor());
     }
 
     @Override
     public void delete(Context context) {
+
     }
 }

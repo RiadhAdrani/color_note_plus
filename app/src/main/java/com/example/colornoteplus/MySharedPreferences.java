@@ -62,6 +62,39 @@ public abstract class MySharedPreferences {
             return note;
     }
 
+    public static void SaveCheckListNoteToSharedPreferences(CheckListNote note,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(note);
+
+        editor.putString(note.getUid(),json);
+
+        editor.apply();
+    }
+
+    public static CheckListNote LoadCheckListNoteFromSharedPreferences(String uid,Context context){
+
+        CheckListNote note;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(uid,null);
+
+        Type type = new TypeToken<CheckListNote>() {}.getType();
+        note = gson.fromJson(json,type);
+
+        if (note == null){
+            return new CheckListNote();
+        } else
+            return note;
+    }
+
     public static void SaveStringArrayToSharedPreferences(ArrayList<String> list,String key,Context context){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);

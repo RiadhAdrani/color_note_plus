@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">ColorNoterPlus</string>
+    <string name="app_name">Color Noter</string>
     <string name="new_note">New Note</string>
+    <string name="new_item">New Item</string>
     <string name="note_color">Note Color</string>
     <string name="whats_in_your_mind">What is in your mind ?</string>
     <string name="pick_a_color">Pick a color :</string>

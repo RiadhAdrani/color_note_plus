@@ -138,14 +138,9 @@ public class MainActivity extends AppCompatActivity{
     // create and open a check list
     // in a new activity
     private void checkListFABOnClickListener(){
-        Statics.StyleableToast(
-                getApplicationContext(),
-                "Feature not available yet !",
-                R.color.grey_dark_sonic_silver,
-                R.color.white,
-                3,
-                R.color.grey_dark_sonic_silver,
-                true);
+        Intent i = new Intent(this,CheckListNoteActivity.class);
+        // i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
+        startActivity(i);
     }
 
     // open the note activity
