@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,9 +32,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private ImageButton colorView;
     private ArrayList<CheckListItem> content;
     private RecyclerView contentView;
-    private ImageButton addItem;
-    private ImageButton priority;
-    private ImageButton dueTime;
+    private FloatingActionButton fab;
 
     // toolbar
     private Toolbar toolbar;
@@ -43,6 +43,13 @@ public class CheckListNoteActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ArrayList<CheckListItem> dummyList = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            dummyList.add(new CheckListItem(UUID.randomUUID().toString()));
+        }
+
+        content = dummyList;
 
         getNoteFromIntent();
 
@@ -82,6 +89,9 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // change status bar color
         getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(color)));
+
+        // set up FAB action
+        fab = findViewById(R.id.fab_add_item);
 
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -128,13 +138,6 @@ public class CheckListNoteActivity extends AppCompatActivity{
         colorView.setBackgroundResource(StyleManager.getBackground(color));
 
         contentView = findViewById(R.id.note_content_view);
-
-        ArrayList<CheckListItem> dummyList = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
-            dummyList.add(new CheckListItem(UUID.randomUUID().toString()));
-        }
-
-        content = dummyList;
 
         if (content == null){
             Log.d("DEBUG_NULL","Content is null");

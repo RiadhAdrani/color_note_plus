@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/fragment_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/new_item"
+        android:autofillHints="@string/new_item"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_margin="8dp"
+        android:inputType="textCapSentences|textMultiLine" />
+
+    <ImageButton
+        android:id="@+id/fragment_item_priority_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_priority"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_text"
+        app:layout_constraintRight_toLeftOf="@id/fragment_item_priority_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:contentDescription="@string/set_priority" />
+
+    <TextView
+        android:id="@+id/fragment_item_priority_text"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/set_priority"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/fragment_item_priority_button"/>
+
+    <ImageButton
+        android:id="@+id/fragment_item_due_time_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_alarm_add"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_priority_button"
+        app:layout_constraintRight_toLeftOf="@id/fragment_item_due_time_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:contentDescription="@string/set_priority" />
+
+    <TextView
+        android:id="@+id/fragment_item_due_time_text"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/set_reminder"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_priority_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/fragment_item_due_time_button"/>
+
+    <Button
+        android:id="@+id/fragment_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_item"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_due_time_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/fragment_cancel"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/fragment_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_item_due_time_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/fragment_add_item"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
