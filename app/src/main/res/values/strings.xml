@@ -14,6 +14,21 @@
     <string name="undo">Undo</string>
     <string name="redo">Redo</string>
 
+    <string name="low_priority">Unimportant</string>
+    <string name="medium_priority">Normal</string>
+    <string name="high_priority">Important</string>
+    <string name="urgent_priority">Urgent</string>
+
+    <string name="add_item">Add Item</string>
+
+    <string name="delete_item">Delete Item</string>
+
+    <string name="priority">Priority</string>
+    <string name="set_priority">Set Priority</string>
+
+    <string name="reminder">None</string>
+    <string name="set_reminder">Set Reminder</string>
+
     <string name="feature_unavailable">Feature Unavailable at the moment !</string>
 
     <string name="nothing_to_undo">Nothing to Undo !</string>

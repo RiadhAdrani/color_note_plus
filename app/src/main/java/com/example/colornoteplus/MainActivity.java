@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity{
     // in a new activity
     private void checkListFABOnClickListener(){
         Intent i = new Intent(this,CheckListNoteActivity.class);
-        // i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
+        i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
         startActivity(i);
     }
 

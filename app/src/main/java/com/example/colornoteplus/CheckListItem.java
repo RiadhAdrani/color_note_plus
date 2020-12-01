@@ -1,15 +1,16 @@
 package com.example.colornoteplus;
 
+import android.content.Context;
+
 import java.util.Calendar;
 
 public class CheckListItem extends Object {
 
     public enum PRIORITY{
-        VERY_LOW,
         LOW,
         MEDIUM,
         HIGH,
-        VERY_HIGH
+        URGENT
     }
 
     private String description;
@@ -45,5 +46,17 @@ public class CheckListItem extends Object {
             setDueDate(dueDate);
             setCreationDate(Calendar.getInstance().getTime().getTime());
             setModificationDate(Calendar.getInstance().getTime().getTime());
+    }
+
+    public String priorityToString(Context context){
+
+            switch (this.priority){
+                case LOW: return context.getResources().getString(R.string.low_priority);
+                case MEDIUM: return context.getResources().getString(R.string.medium_priority);
+                case HIGH: return context.getResources().getString(R.string.high_priority);
+                case URGENT: return context.getResources().getString(R.string.urgent_priority);
+            }
+
+        return context.getResources().getString(R.string.medium_priority);
     }
 }

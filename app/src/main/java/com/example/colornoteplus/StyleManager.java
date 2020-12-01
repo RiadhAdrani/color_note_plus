@@ -8,9 +8,11 @@ public abstract class StyleManager {
     private static final ArrayList<BackgroundColor> backgroundColors = new ArrayList<>(Arrays.asList(
 
             // Default Color : Orange Yellow
-            new BackgroundColor(R.drawable.item_default_style,
+            new BackgroundColor(
+                    R.drawable.item_default_style,
+                    R.drawable.item_default_light,
+                    R.drawable.item_default_dark,
                     R.style.ThemeOrangeYellow,
-                    false,
                     R.color.orange_yellow_crayola_lighter,
                     R.color.orange_yellow_crayola_light,
                     R.color.orange_yellow_crayola,
@@ -18,9 +20,11 @@ public abstract class StyleManager {
                     R.color.orange_yellow_crayola_darker),
 
             // Blue : Liberty Blue
-            new BackgroundColor(R.drawable.item_blue_style,
+            new BackgroundColor(
+                    R.drawable.item_blue_style,
+                    R.drawable.item_blue_light,
+                    R.drawable.item_blue_dark,
                     R.style.ThemeBlueLiberty,
-                    false,
                     R.color.blue_liberty_lighter,
                     R.color.blue_liberty_light,
                     R.color.blue_liberty,
@@ -28,9 +32,11 @@ public abstract class StyleManager {
                     R.color.blue_liberty_darker),
 
             // Green
-            new BackgroundColor(R.drawable.item_green_style,
+            new BackgroundColor(
+                    R.drawable.item_green_style,
+                    R.drawable.item_green_light,
+                    R.drawable.item_green_dark,
                     R.style.ThemeGreen,
-                    false,
                     R.color.green_lighter,
                     R.color.green_light,
                     R.color.green,
@@ -38,9 +44,11 @@ public abstract class StyleManager {
                     R.color.green_darker),
 
             // Grey : Silver to Black
-            new BackgroundColor(R.drawable.item_grey_style,
+            new BackgroundColor(
+                    R.drawable.item_grey_style,
+                    R.drawable.item_grey_light,
+                    R.drawable.item_grey_dark,
                     R.style.ThemeGrey,
-                    false,
                     R.color.grey_lighter_platinum,
                     R.color.grey_light_silver,
                     R.color.grey_spanish,
@@ -48,9 +56,11 @@ public abstract class StyleManager {
                     R.color.grey_darker_davys),
 
             // Red : Imperial Red
-            new BackgroundColor(R.drawable.item_red_style,
+            new BackgroundColor(
+                    R.drawable.item_red_style,
+                    R.drawable.item_red_light,
+                    R.drawable.item_red_dark,
                     R.style.ThemeRedImperial,
-                    false,
                     R.color.red_imperial_lighter,
                     R.color.red_imperial_light,
                     R.color.red_imperial,
@@ -58,9 +68,11 @@ public abstract class StyleManager {
                     R.color.red_imperial_darker),
 
             // Pink
-            new BackgroundColor(R.drawable.item_pink_style,
+            new BackgroundColor(
+                    R.drawable.item_pink_style,
+                    R.drawable.item_pink_light,
+                    R.drawable.item_pink_dark,
                     R.style.ThemePink,
-                    false,
                     R.color.pink_lighter,
                     R.color.pink_light,
                     R.color.pink,
@@ -75,6 +87,16 @@ public abstract class StyleManager {
     public static int getBackground(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
+    }
+
+    public static int getBackgroundLight(int index){
+        return index > 0 && index < backgroundColors.size() ?
+                backgroundColors.get(index).getDrawableLight() : backgroundColors.get(0).getDrawableLight();
+    }
+
+    public static int getBackgroundDark(int index){
+        return index > 0 && index < backgroundColors.size() ?
+                backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
     }
 
     public static int getTheme(int index){

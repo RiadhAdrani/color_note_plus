@@ -3,11 +3,16 @@ package com.example.colornoteplus;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +20,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class CheckListNoteActivity extends AppCompatActivity{
 
@@ -22,7 +28,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private EditText titleView;
     private TextView titleCharacterCount;
     private ImageButton colorView;
-    private ArrayList<CheckListNote> content;
+    private ArrayList<CheckListItem> content;
     private RecyclerView contentView;
     private ImageButton addItem;
     private ImageButton priority;
@@ -38,7 +44,32 @@ public class CheckListNoteActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        changeViewsColor(3);
+        getNoteFromIntent();
+
+        changeViewsColor(0);
+    }
+
+    // Method used to add menus and configure button action
+    // like OnClickListeners ...
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Create a submenu for sorting purpose
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_check_list_activity,menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // get note from the intent
+    private void getNoteFromIntent(){
+
+        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
+            note = MySharedPreferences.LoadCheckListNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+        } else {
+            note = new CheckListNote();
+        }
     }
 
     private void changeViewsColor(int color){
@@ -48,6 +79,9 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // set the appropriate layout
         setContentView(R.layout.activity_check_list_note);
+
+        // change status bar color
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(color)));
 
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -90,22 +124,57 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // setting the color view
         colorView = findViewById(R.id.note_color_view);
-        // colorView.setOnClickListener(view -> buildColorPickDialog());
+        colorView.setOnClickListener(view -> buildColorPickDialog());
         colorView.setBackgroundResource(StyleManager.getBackground(color));
 
-        // setting the new item menu
-        ConstraintLayout layout = findViewById(R.id.note_add_check_list);
-        layout.setBackgroundColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
-        layout.findViewById(R.id.item_check_box).setVisibility(View.GONE);
-        layout.findViewById(R.id.item_delete).setVisibility(View.GONE);
-        layout.findViewById(R.id.item_priority).setBackgroundResource(StyleManager.getBackground(color));
-        layout.findViewById(R.id.item_due_time).setBackgroundResource(StyleManager.getBackground(color));
-        EditText title = layout.findViewById(R.id.item_title);
-        title.setTextColor(getResources().getColor(StyleManager.getThemeColorDarker(color)));
-        title.setHintTextColor(getResources().getColor(StyleManager.getThemeColorLight(color)));
-        layout.findViewById(R.id.item_add).setBackgroundResource(StyleManager.getBackground(color));
-
         contentView = findViewById(R.id.note_content_view);
+
+        ArrayList<CheckListItem> dummyList = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            dummyList.add(new CheckListItem(UUID.randomUUID().toString()));
+        }
+
+        content = dummyList;
+
+        if (content == null){
+            Log.d("DEBUG_NULL","Content is null");
+        }
+
+        CheckListAdapter adapter = new CheckListAdapter(getApplicationContext(),content,color);
+
+        contentView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        contentView.setAdapter(adapter);
+
+    }
+
+    private void switchColor(int color){
+
+        String tempTitle = titleView.getText().toString().trim();
+        changeViewsColor(color);
+        titleView.setText(tempTitle);
+
+    }
+
+    // build the color picker dialog
+    private void buildColorPickDialog(){
+
+        FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
+
+        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+
+        fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
+            @Override
+            public void OnClickListener(int position) {
+                note.setColor(position);
+                switchColor(position);
+                fragment.dismiss();
+            }
+
+            @Override
+            public void OnLongClickListener(int position) {
+
+            }
+        });
 
     }
 }
