@@ -1,0 +1,98 @@
+package com.example.colornoteplus;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.media.Image;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
+
+import java.util.Objects;
+
+public class FragmentAddCheckListItem extends AppCompatDialogFragment {
+
+    private final int color;
+    private OnClickListener listener;
+    private View dialog;
+    private CheckListItem item;
+
+    public FragmentAddCheckListItem(int color){
+        this.color = color;
+    }
+
+    public void setOnClickListener(OnClickListener listener){
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+        item = new CheckListItem(getString(R.string.new_item),-1L, CheckListItem.PRIORITY.MEDIUM);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        dialog = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.fragment_new_check_list_item,null);
+
+        builder.setView(dialog);
+
+        dialog.setBackgroundColor(getResources().getColor(R.color.white));
+
+        Button cancel = dialog.findViewById(R.id.fragment_cancel);
+        cancel.setOnClickListener(view -> dismiss());
+        cancel.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(color)));
+        cancel.setTextColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
+
+        Button confirm = dialog.findViewById(R.id.fragment_add_item);
+        confirm.setOnClickListener(view -> listener.onConfirmClickListener());
+        confirm.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(color)));
+        confirm.setTextColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
+
+        Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
+
+        ImageButton setDueTime = dialog.findViewById(R.id.fragment_item_due_time_button);
+        setDueTime.setBackgroundResource(StyleManager.getBackground(color));
+        setDueTime.setOnClickListener(view -> listener.onSetDueTimeClickListener());
+
+        TextView dueTime = dialog.findViewById(R.id.fragment_item_due_time_text);
+        dueTime.setTextColor((getResources().getColor(StyleManager.getThemeColor(color))));
+        dueTime.setHintTextColor((getResources().getColor(StyleManager.getThemeColorLight(color))));
+        dueTime.setText(getString(R.string.set_reminder));
+
+        EditText text = dialog.findViewById(R.id.fragment_item_text);
+        text.setText(R.string.new_item);
+        text.setHint(R.string.new_item);
+        text.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(color)));
+        text.setHintTextColor(getResources().getColor(StyleManager.getThemeColorLight(color)));
+
+        return builder.create();
+    }
+
+    public interface OnClickListener{
+        void onConfirmClickListener();
+        void onSetPriorityClickListener();
+        void onSetDueTimeClickListener();
+    }
+
+    public void changeDueTimeText(String text){
+        TextView view = dialog.findViewById(R.id.fragment_item_due_time_text);
+        view.setText(text);
+    }
+
+    public String getInputText(){
+        EditText view = dialog.findViewById(R.id.fragment_item_text);
+        return view.getText().toString().trim();
+    }
+
+    public CheckListItem getItem(){
+        return item;
+    }
+}

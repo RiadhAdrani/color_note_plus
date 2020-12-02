@@ -34,6 +34,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private RecyclerView contentView;
     private FloatingActionButton fab;
 
+    CheckListAdapter adapter;
+
     // toolbar
     private Toolbar toolbar;
 
@@ -65,7 +67,6 @@ public class CheckListNoteActivity extends AppCompatActivity{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_check_list_activity,menu);
 
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -92,6 +93,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // set up FAB action
         fab = findViewById(R.id.fab_add_item);
+        fab.setOnClickListener(view -> onFabClickListener());
 
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -137,14 +139,36 @@ public class CheckListNoteActivity extends AppCompatActivity{
         colorView.setOnClickListener(view -> buildColorPickDialog());
         colorView.setBackgroundResource(StyleManager.getBackground(color));
 
+        adapter = new CheckListAdapter(getApplicationContext(),note.getContent(),color);
+        adapter.setOnItemClickListener(new CheckListAdapter.OnItemClickListener() {
+            @Override
+            public void onChecked(int position) {
+
+            }
+
+            @Override
+            public void onUnchecked(int position) {
+
+            }
+
+            @Override
+            public void onSetPriority(int position) {
+
+            }
+
+            @Override
+            public void onSetReminder(int position) {
+
+            }
+
+            @Override
+            public void onDelete(int position) {
+                note.getContent().remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+        });
+
         contentView = findViewById(R.id.note_content_view);
-
-        if (content == null){
-            Log.d("DEBUG_NULL","Content is null");
-        }
-
-        CheckListAdapter adapter = new CheckListAdapter(getApplicationContext(),content,color);
-
         contentView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         contentView.setAdapter(adapter);
 
@@ -179,5 +203,29 @@ public class CheckListNoteActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    private void onFabClickListener(){
+        FragmentAddCheckListItem fragment = new FragmentAddCheckListItem(note.getColor());
+        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
+        fragment.setOnClickListener(new FragmentAddCheckListItem.OnClickListener() {
+            @Override
+            public void onConfirmClickListener() {
+                fragment.getItem().setDescription(fragment.getInputText());
+                note.getContent().add(0,fragment.getItem());
+                adapter.notifyItemInserted(0);
+                fragment.dismiss();
+            }
+
+            @Override
+            public void onSetPriorityClickListener() {
+
+            }
+
+            @Override
+            public void onSetDueTimeClickListener() {
+
+            }
+        });
     }
 }

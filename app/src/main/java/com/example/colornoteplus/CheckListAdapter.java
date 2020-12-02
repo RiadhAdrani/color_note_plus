@@ -1,11 +1,11 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,9 +26,11 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         this.context = context;
     }
 
-    private ArrayList<CheckListItem> list;
-    private int color;
-    private Context context;
+    final private ArrayList<CheckListItem> list;
+    final private int color;
+    final private Context context;
+    private OnItemClickListener listener;
+
 
     @NonNull
     @Override
@@ -44,23 +46,31 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         CheckListItem currentItem = list.get(position);
 
-        if (currentItem == null){
-            Log.d("DEBUG_NULL","current item is null");
-        }
-
         holder.background.setBackgroundResource(StyleManager.getBackgroundLight(color));
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) listener.onChecked(position);
+                else listener.onUnchecked(position);
+            }
+        });
 
         holder.title.setTextColor(context.getResources().getColor(StyleManager.getThemeColorDark(color)));
         holder.title.setHintTextColor(context.getResources().getColor(StyleManager.getThemeColor(color)));
+        assert currentItem != null;
         holder.title.setText(currentItem.getDescription().trim());
 
         holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getThemeColor(color)));
         holder.dueTimeText.setText(currentItem.getDoneDate() != -1 ? DateFormat.getDateInstance().format(new Date(currentItem.getDueDate())) : context.getString(R.string.set_reminder));
+        holder.dueTimeText.setOnClickListener(view -> listener.onSetReminder(position));
 
         holder.priorityText.setTextColor(context.getResources().getColor(StyleManager.getThemeColor(color)));
         holder.priorityText.setText(currentItem.priorityToString(context));
+        holder.priorityText.setOnClickListener(view -> listener.onSetPriority(position));
 
         holder.delete.setBackgroundResource(StyleManager.getBackground(color));
+        holder.delete.setOnClickListener(view -> listener.onDelete(position));
     }
 
     @Override
@@ -87,5 +97,17 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
             background = itemView.findViewById(R.id.item_background);
 
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void onChecked(int position);
+        void onUnchecked(int position);
+        void onSetPriority(int position);
+        void onSetReminder(int position);
+        void onDelete(int position);
     }
 }

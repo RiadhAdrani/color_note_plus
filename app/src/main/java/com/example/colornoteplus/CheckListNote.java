@@ -10,7 +10,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     public CheckListNote(){
         setTitle(Statics.NOTE_PLACEHOLDER);
         setColor(Statics.NOTE_DEFAULT_COLOR);
-        setContent(null);
+        setContent(new ArrayList<>());
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
         setUid(UUID.randomUUID().toString() + getCreationDate());
@@ -19,7 +19,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     public CheckListNote(String name,int color){
         setTitle(name);
         setColor(color);
-        setContent(null);
+        setContent(new ArrayList<>());
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
         setUid(UUID.randomUUID().toString() + getCreationDate());
