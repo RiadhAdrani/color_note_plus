@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -48,12 +47,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         holder.background.setBackgroundResource(StyleManager.getBackgroundLight(color));
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) listener.onChecked(position);
-                else listener.onUnchecked(position);
-            }
+        holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) listener.onChecked(position);
+            else listener.onUnchecked(position);
         });
 
         holder.title.setTextColor(context.getResources().getColor(StyleManager.getThemeColorDark(color)));
@@ -70,7 +66,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         holder.priorityText.setOnClickListener(view -> listener.onSetPriority(position));
 
         holder.delete.setBackgroundResource(StyleManager.getBackground(color));
-        holder.delete.setOnClickListener(view -> listener.onDelete(position));
+        holder.delete.setOnClickListener(view -> {
+            listener.onDelete(holder.getAdapterPosition());
+        });
     }
 
     @Override
@@ -97,6 +95,22 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
             background = itemView.findViewById(R.id.item_background);
 
         }
+    }
+
+    public void addItem(CheckListItem item,int position){
+        if (position < 0){
+            list.add(item);
+            notifyItemInserted(list.size());
+        }
+        else {
+            list.add(position,item);
+            notifyItemInserted(position);
+        }
+    }
+
+    public void removeItem(int position){
+        list.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){

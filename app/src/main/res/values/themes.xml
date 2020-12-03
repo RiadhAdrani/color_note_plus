@@ -95,7 +95,7 @@
     <style name="ThemeOrangeYellow" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange_yellow_crayola</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorPrimaryVariant">@color/orange_yellow_crayola_lighter</item>
         <!-- unknown -->
         <item name="colorOnPrimary">@color/orange_yellow_crayola_dark</item>
         <!-- Secondary brand color. -->

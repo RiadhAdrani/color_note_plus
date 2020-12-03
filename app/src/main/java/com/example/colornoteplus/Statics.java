@@ -18,6 +18,7 @@ public abstract class Statics {
     public final static String KEY_NOTE_LIST_TRASH = "NOTE_LIST_TRASH";
     public final static String TAG_FRAGMENT_COLOR_PICK = "PICK_COLOR";
     public final static String TAG_FRAGMENT_ADD_CHECK_LIST_ITEM = "ADD_CHECK_LIST_ITEM";
+    public final static String TAG_FRAGMENT_DATE_PICKER = "DATE_PICKER";
 
     public final static String NOTE_PLACEHOLDER = "New Note";
     public final static int NOTE_DEFAULT_COLOR = 0;

@@ -1,11 +1,15 @@
 package com.example.colornoteplus;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -13,8 +17,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 public class FragmentAddCheckListItem extends AppCompatDialogFragment {
@@ -57,6 +65,23 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         confirm.setTextColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
 
         Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                CheckListItem.getPriorities(getContext()));
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        priority.setAdapter(adapter);
+        priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                item.setPriority(CheckListItem.PRIORITY.values()[i]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         ImageButton setDueTime = dialog.findViewById(R.id.fragment_item_due_time_button);
         setDueTime.setBackgroundResource(StyleManager.getBackground(color));
@@ -82,7 +107,7 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         void onSetDueTimeClickListener();
     }
 
-    public void changeDueTimeText(String text){
+    public void setDueTimeText(String text){
         TextView view = dialog.findViewById(R.id.fragment_item_due_time_text);
         view.setText(text);
     }

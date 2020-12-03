@@ -1,7 +1,9 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CheckListItem extends Object {
@@ -12,6 +14,8 @@ public class CheckListItem extends Object {
         HIGH,
         URGENT
     }
+
+
 
     private String description;
         public String getDescription() { return description; }
@@ -58,5 +62,24 @@ public class CheckListItem extends Object {
             }
 
         return context.getResources().getString(R.string.medium_priority);
+    }
+
+    public static String priorityToString(Context context, PRIORITY p){
+        switch (p){
+            case LOW: return context.getResources().getString(R.string.low_priority);
+            case MEDIUM: return context.getResources().getString(R.string.medium_priority);
+            case HIGH: return context.getResources().getString(R.string.high_priority);
+            case URGENT: return context.getResources().getString(R.string.urgent_priority);
+        }
+
+        return context.getResources().getString(R.string.medium_priority);
+    }
+
+    public static ArrayList<String> getPriorities(Context context){
+        ArrayList<String> p = new ArrayList<>();
+        for (PRIORITY e: PRIORITY.values()) {
+            p.add(priorityToString(context,e));
+        }
+        return p;
     }
 }

@@ -2,27 +2,27 @@ package com.example.colornoteplus;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 public class CheckListNoteActivity extends AppCompatActivity{
 
@@ -30,7 +30,6 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private EditText titleView;
     private TextView titleCharacterCount;
     private ImageButton colorView;
-    private ArrayList<CheckListItem> content;
     private RecyclerView contentView;
     private FloatingActionButton fab;
 
@@ -46,14 +45,13 @@ public class CheckListNoteActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<CheckListItem> dummyList = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
-            dummyList.add(new CheckListItem(UUID.randomUUID().toString()));
-        }
-
-        content = dummyList;
-
         getNoteFromIntent();
+
+        note.getContent().add(new CheckListItem("ONE"));
+        note.getContent().add(new CheckListItem("TWO"));
+        note.getContent().add(new CheckListItem("THREE"));
+        note.getContent().add(new CheckListItem("FOUR"));
+        note.getContent().add(new CheckListItem("FIVE"));
 
         changeViewsColor(0);
     }
@@ -143,12 +141,12 @@ public class CheckListNoteActivity extends AppCompatActivity{
         adapter.setOnItemClickListener(new CheckListAdapter.OnItemClickListener() {
             @Override
             public void onChecked(int position) {
-
+                Toast.makeText(CheckListNoteActivity.this, "Checked item: " +position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onUnchecked(int position) {
-
+                Toast.makeText(CheckListNoteActivity.this, "Unchecked item: " +position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -163,8 +161,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             @Override
             public void onDelete(int position) {
-                note.getContent().remove(position);
-                adapter.notifyItemRemoved(position);
+                adapter.removeItem(position);
             }
         });
 
@@ -212,20 +209,28 @@ public class CheckListNoteActivity extends AppCompatActivity{
             @Override
             public void onConfirmClickListener() {
                 fragment.getItem().setDescription(fragment.getInputText());
-                note.getContent().add(0,fragment.getItem());
-                adapter.notifyItemInserted(0);
+                adapter.addItem(fragment.getItem(),0);
                 fragment.dismiss();
             }
 
             @Override
             public void onSetPriorityClickListener() {
-
             }
 
             @Override
             public void onSetDueTimeClickListener() {
-
+                FragmentDatePicker datePicker = new FragmentDatePicker();
+                datePicker.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_DATE_PICKER);
+                datePicker.setOnDateSet((year, month, day) -> {
+                    Calendar c = Calendar.getInstance();
+                    c.set(Calendar.YEAR,year);
+                    c.set(Calendar.MONTH,month);
+                    c.set(Calendar.DAY_OF_MONTH,day);
+                    fragment.getItem().setDueDate(c.getTime().getTime());
+                    fragment.setDueTimeText(DateFormat.getDateInstance().format(new Date(fragment.getItem().getDueDate())));
+                });
             }
         });
     }
+
 }
