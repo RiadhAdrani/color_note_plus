@@ -13,7 +13,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
         setContent(new ArrayList<>());
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(UUID.randomUUID().toString() + getCreationDate());
+        setUid(Statics.NOTE_DEFAULT_UID);
     }
 
     public CheckListNote(String name,int color){
@@ -22,7 +22,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
         setContent(new ArrayList<>());
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(UUID.randomUUID().toString() + getCreationDate());
+        setUid(Statics.NOTE_CHECK_ID + UUID.randomUUID().toString() + getCreationDate());
     }
 
     @Override
@@ -38,4 +38,5 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     public void delete(Context context) {
 
     }
+
 }

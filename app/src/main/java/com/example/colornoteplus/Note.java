@@ -3,6 +3,7 @@ package com.example.colornoteplus;
 import android.content.Context;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 public abstract class Note<T> extends Object implements Serializable {
 
@@ -23,4 +24,16 @@ public abstract class Note<T> extends Object implements Serializable {
     public abstract void load(Context context);
 
     public abstract void delete(Context context);
+
+    public static TYPE getNoteClass(String uid){
+        if (uid.startsWith(Statics.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
+        if (uid.startsWith(Statics.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
+
+        return TYPE.TEXT_NOTE;
+    }
+
+    public enum TYPE{
+        TEXT_NOTE,
+        CHECK_NOTE
+    }
 }

@@ -153,8 +153,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // actions to be executed when the priority text is clicked
             @Override
-            public void onSetPriority(int position) {
-
+            public void onSetPriority(int position,int priority) {
+                note.getContent().get(position).setPriority(CheckListItem.PRIORITY.values()[priority]);
             }
 
             // actions to be executed when the due time text is clicked

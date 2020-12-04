@@ -43,4 +43,5 @@ public class TextNote extends Note<String> implements Serializable {
     @Override
     public void delete(Context context) {
     }
+
 }

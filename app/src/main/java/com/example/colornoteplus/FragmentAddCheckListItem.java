@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,11 +57,7 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
 
         Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.support_simple_spinner_dropdown_item,
-                CheckListItem.getPriorities(getContext()));
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        PriorityAdapter adapter= new PriorityAdapter(getContext(), CheckListItem.PRIORITY.values(),color);
         priority.setAdapter(adapter);
         priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

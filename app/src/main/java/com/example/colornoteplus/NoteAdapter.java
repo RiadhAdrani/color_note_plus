@@ -54,11 +54,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
         holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
 
         holder.itemView.setOnClickListener(view -> {
-            if (listener != null) listener.OnClickListener(position);
+            if (listener != null) listener.OnClickListener(holder.getAdapterPosition());
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if (listener != null) listener.OnLongClickListener(position);
+            if (listener != null) listener.OnLongClickListener(holder.getAdapterPosition());
             return true;
         });
 
@@ -71,8 +71,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
                 final int color = R.id.item_option_color;
 
                 switch (menuItem.getItemId()){
-                    case delete: if (listener != null) listener.OnDeleteClickListener(position); return true;
-                    case color: if (listener != null) listener.OnColorSwitchClickListener(position); return true;
+                    case delete: if (listener != null) listener.OnDeleteClickListener(holder.getAdapterPosition()); return true;
+                    case color: if (listener != null) listener.OnColorSwitchClickListener(holder.getAdapterPosition()); return true;
                 }
 
                 return false;

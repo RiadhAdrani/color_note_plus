@@ -44,7 +44,10 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
 
         for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
-            noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this));
+            switch (Note.getNoteClass(s)){
+                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this)); break;
+                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNoteFromSharedPreferences(s,this)); break;
+            }
         }
 
         // initializing the recycler view and its adapter

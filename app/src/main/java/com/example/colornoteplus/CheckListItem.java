@@ -1,7 +1,6 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,8 +13,6 @@ public class CheckListItem extends Object {
         HIGH,
         URGENT
     }
-
-
 
     private String description;
         public String getDescription() { return description; }

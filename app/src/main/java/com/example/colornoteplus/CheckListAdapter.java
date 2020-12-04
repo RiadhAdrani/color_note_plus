@@ -6,9 +6,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -90,7 +92,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the due time
-        holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorMain(color)));
+        holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
 
         // TODO: show remaining time instead of the due date
         //  if due date is less than 24 hours, display remaining hours and minutes
@@ -100,9 +102,20 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         holder.dueTimeText.setOnClickListener(view -> listener.onSetReminder(holder.getAdapterPosition()));
 
         // initializing the priority
-        holder.priorityText.setTextColor(context.getResources().getColor(StyleManager.getColorMain(color)));
-        holder.priorityText.setText(currentItem.priorityToString(context));
-        holder.priorityText.setOnClickListener(view -> listener.onSetPriority(holder.getAdapterPosition()));
+        PriorityAdapter adapter = new PriorityAdapter(context, CheckListItem.PRIORITY.values(),color);
+        holder.priorityText.setAdapter(adapter);
+        holder.priorityText.setSelection(currentItem.getPriority().ordinal());
+        holder.priorityText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                listener.onSetPriority(holder.getAdapterPosition(),i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         // initializing the delete button
         holder.delete.setBackgroundResource(StyleManager.getBackground(color));
@@ -122,7 +135,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         ConstraintLayout background;
         EditText title;
         ImageButton delete;
-        TextView priorityText,dueTimeText;
+        TextView dueTimeText;
+        Spinner priorityText;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -166,7 +180,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
     public interface OnItemClickListener{
         void onChecked(int position);
         void onUnchecked(int position);
-        void onSetPriority(int position);
+        void onSetPriority(int position,int priority);
         void onSetReminder(int position);
         void onDelete(int position);
         void onDescriptionChanged(int position,String description);

@@ -13,6 +13,8 @@ public abstract class Statics {
     public final static String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 
     public final static int NOTE_TITLE_MINIMUM_LENGTH = 3;
+    public final static String NOTE_TEXT_ID = "T";
+    public final static String NOTE_CHECK_ID = "C";
     public final static String KEY_NOTE_ACTIVITY = "LOAD_NOTE";
     public final static String KEY_NOTE_LIST = "NOTE_LIST";
     public final static String KEY_NOTE_LIST_TRASH = "NOTE_LIST_TRASH";

@@ -55,7 +55,7 @@
         android:paddingHorizontal="4dp"/>
 
 
-    <TextView
+    <Spinner
         android:id="@+id/item_priority_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
