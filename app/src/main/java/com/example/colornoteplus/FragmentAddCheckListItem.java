@@ -1,15 +1,12 @@
 package com.example.colornoteplus;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -17,12 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 public class FragmentAddCheckListItem extends AppCompatDialogFragment {
@@ -56,13 +49,13 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
 
         Button cancel = dialog.findViewById(R.id.fragment_cancel);
         cancel.setOnClickListener(view -> dismiss());
-        cancel.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(color)));
-        cancel.setTextColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
+        cancel.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(color)));
+        cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
 
         Button confirm = dialog.findViewById(R.id.fragment_add_item);
         confirm.setOnClickListener(view -> listener.onConfirmClickListener());
-        confirm.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(color)));
-        confirm.setTextColor(getResources().getColor(StyleManager.getThemeColorLighter(color)));
+        confirm.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(color)));
+        confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
 
         Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -88,22 +81,21 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         setDueTime.setOnClickListener(view -> listener.onSetDueTimeClickListener());
 
         TextView dueTime = dialog.findViewById(R.id.fragment_item_due_time_text);
-        dueTime.setTextColor((getResources().getColor(StyleManager.getThemeColor(color))));
-        dueTime.setHintTextColor((getResources().getColor(StyleManager.getThemeColorLight(color))));
+        dueTime.setTextColor((getResources().getColor(StyleManager.getColorMain(color))));
+        dueTime.setHintTextColor((getResources().getColor(StyleManager.getColorSecondary(color))));
         dueTime.setText(getString(R.string.set_reminder));
 
         EditText text = dialog.findViewById(R.id.fragment_item_text);
         text.setText(R.string.new_item);
         text.setHint(R.string.new_item);
-        text.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(color)));
-        text.setHintTextColor(getResources().getColor(StyleManager.getThemeColorLight(color)));
+        text.setTextColor(getResources().getColor(StyleManager.getColorPrimary(color)));
+        text.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(color)));
 
         return builder.create();
     }
 
     public interface OnClickListener{
         void onConfirmClickListener();
-        void onSetPriorityClickListener();
         void onSetDueTimeClickListener();
     }
 

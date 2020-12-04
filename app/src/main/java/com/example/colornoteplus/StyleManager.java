@@ -104,27 +104,27 @@ public abstract class StyleManager {
                 backgroundColors.get(index).getTheme() : backgroundColors.get(0).getTheme();
     }
 
-    public static int getThemeColor(int index){
+    public static int getColorMain(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
     }
 
-    public static int getThemeColorLight(int index){
+    public static int getColorSecondary(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorLight() : backgroundColors.get(0).getColorLight();
     }
 
-    public static int getThemeColorLighter(int index){
+    public static int getColorSecondaryAccent(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorLighter() : backgroundColors.get(0).getColorLighter();
     }
 
-    public static int getThemeColorDark(int index){
+    public static int getColorPrimary(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDarker();
     }
 
-    public static int getThemeColorDarker(int index){
+    public static int getColorPrimaryAccent(int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
     }

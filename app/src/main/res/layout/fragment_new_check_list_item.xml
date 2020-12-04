@@ -12,11 +12,13 @@
         app:layout_constraintTop_toTopOf="parent"
         android:hint="@string/new_item"
         android:autofillHints="@string/new_item"
+        android:textStyle="bold"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="8dp"
         android:inputType="textCapSentences|textMultiLine"
-        android:selectAllOnFocus="true"/>
+        android:selectAllOnFocus="true"
+        android:maxLength="@integer/check_list_item_max_length"/>
 
     <Spinner
         android:id="@+id/fragment_item_priority"

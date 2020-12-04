@@ -26,7 +26,7 @@
     <!--                                    Note Themes -->
     <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
 
-    <style name="ThemeRedImperial" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemeRedImperial" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
             <item name="colorPrimary">@color/red_imperial</item>
             <item name="colorPrimaryVariant">@color/red_imperial</item>
@@ -42,7 +42,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/red_imperial</item>
     </style>
 
-    <style name="ThemeBlueLiberty" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemeBlueLiberty" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_liberty</item>
         <item name="colorPrimaryVariant">@color/blue_liberty_light</item>
@@ -59,7 +59,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/blue_liberty</item>
     </style>
 
-    <style name="ThemeGreen" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemeGreen" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryVariant">@color/green_light</item>
@@ -76,7 +76,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/green</item>
     </style>
 
-    <style name="ThemeGrey" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemeGrey" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/grey_spanish</item>
         <item name="colorPrimaryVariant">@color/grey_light_silver</item>
@@ -92,7 +92,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/grey_spanish</item>
     </style>
 
-    <style name="ThemeOrangeYellow" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemeOrangeYellow" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange_yellow_crayola</item>
         <item name="colorPrimaryVariant">@color/orange_yellow_crayola_lighter</item>
@@ -108,7 +108,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/orange_yellow_crayola</item>
     </style>
 
-    <style name="ThemePink" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="ThemePink" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/pink</item>
         <item name="colorPrimaryVariant">@color/pink_light</item>

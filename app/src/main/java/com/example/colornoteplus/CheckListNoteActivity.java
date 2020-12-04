@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.EditText;
@@ -87,7 +86,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
         setContentView(R.layout.activity_check_list_note);
 
         // change status bar color
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(color)));
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(color)));
 
         // set up FAB action
         fab = findViewById(R.id.fab_add_item);
@@ -96,20 +95,20 @@ public class CheckListNoteActivity extends AppCompatActivity{
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(color)));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(color)));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // setting the note title
         titleView = findViewById(R.id.note_title_view);
         titleView.setText("");
-        titleView.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(color)));
-        titleView.setHintTextColor(getResources().getColor(StyleManager.getThemeColorLight(color)));
+        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(color)));
+        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(color)));
 
         // setting the character counter for the note title
         titleCharacterCount = findViewById(R.id.note_title_characters);
         String m = titleView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.title_max_length);
         titleCharacterCount.setText(m);
-        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getThemeColor(color)));
+        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(color)));
 
         titleView.addTextChangedListener(new TextWatcher()
         {
@@ -139,38 +138,62 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         adapter = new CheckListAdapter(getApplicationContext(),note.getContent(),color);
         adapter.setOnItemClickListener(new CheckListAdapter.OnItemClickListener() {
+
+            // actions to be taken when the item is checked
             @Override
             public void onChecked(int position) {
                 Toast.makeText(CheckListNoteActivity.this, "Checked item: " +position, Toast.LENGTH_SHORT).show();
             }
 
+            // actions to be made when the item is unchecked
             @Override
             public void onUnchecked(int position) {
                 Toast.makeText(CheckListNoteActivity.this, "Unchecked item: " +position, Toast.LENGTH_SHORT).show();
             }
 
+            // actions to be executed when the priority text is clicked
             @Override
             public void onSetPriority(int position) {
 
             }
 
+            // actions to be executed when the due time text is clicked
             @Override
             public void onSetReminder(int position) {
-
+                FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
+                datePicker.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_DATE_PICKER);
+                datePicker.setOnDateSet((year, month, day) -> {
+                    Calendar c = Calendar.getInstance();
+                    c.set(Calendar.YEAR,year);
+                    c.set(Calendar.MONTH,month);
+                    c.set(Calendar.DAY_OF_MONTH,day);
+                    note.getContent().get(position).setDueDate(c.getTime().getTime());
+                    adapter.notifyItemChanged(position);
+                });
             }
 
+            // actions to be made when the current item is deleted
             @Override
             public void onDelete(int position) {
                 adapter.removeItem(position);
             }
+
+            // actions to be executed when the EditText of the current item is changing
+            @Override
+            public void onDescriptionChanged(int position,String description) {
+                note.getContent().get(position).setDescription(description);
+            }
         });
 
+        // initializing and formatting the content recycler view
         contentView = findViewById(R.id.note_content_view);
         contentView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         contentView.setAdapter(adapter);
 
     }
 
+    // switch the theme of the activity to the desired color
+    // while preserving data
     private void switchColor(int color){
 
         String tempTitle = titleView.getText().toString().trim();
@@ -183,9 +206,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
-
         fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
-
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
@@ -202,6 +223,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
     }
 
+    // display a dialog fragment allowing the user to add a new item
     private void onFabClickListener(){
         FragmentAddCheckListItem fragment = new FragmentAddCheckListItem(note.getColor());
         fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
@@ -214,12 +236,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onSetPriorityClickListener() {
-            }
-
-            @Override
             public void onSetDueTimeClickListener() {
-                FragmentDatePicker datePicker = new FragmentDatePicker();
+                FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
                 datePicker.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_DATE_PICKER);
                 datePicker.setOnDateSet((year, month, day) -> {
                     Calendar c = Calendar.getInstance();

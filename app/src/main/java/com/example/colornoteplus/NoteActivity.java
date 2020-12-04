@@ -111,7 +111,7 @@ public class NoteActivity extends AppCompatActivity {
         // change theme
         setTheme(StyleManager.getTheme(id));
         setContentView(R.layout.activity_note);
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getThemeColor(id)));
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(id)));
 
         changeViewsColor();
 
@@ -125,18 +125,18 @@ public class NoteActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(note.getColor())));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         titleView = findViewById(R.id.note_title_view);
         titleView.setText(note.getTitle());
-        titleView.setTextColor(getResources().getColor(StyleManager.getThemeColorDark(note.getColor())));
-        titleView.setHintTextColor(getResources().getColor(StyleManager.getThemeColorLight(note.getColor())));
+        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(note.getColor())));
+        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(note.getColor())));
 
         titleCharacterCount = findViewById(R.id.note_title_characters);
         String m = titleView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.title_max_length);
         titleCharacterCount.setText(m);
-        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
+        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(note.getColor())));
 
         titleView.addTextChangedListener(new TextWatcher()
         {
@@ -161,14 +161,14 @@ public class NoteActivity extends AppCompatActivity {
 
         contentView = findViewById(R.id.note_content_view);
         contentView.setText(note.getContent());
-        contentView.setTextColor(getResources().getColor(StyleManager.getThemeColorDarker(note.getColor())));
-        contentView.setHintTextColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
+        contentView.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(note.getColor())));
+        contentView.setHintTextColor(getResources().getColor(StyleManager.getColorMain(note.getColor())));
         contentView.setScroller(new Scroller(getApplicationContext()));
         contentView.setVerticalScrollBarEnabled(true);
         contentView.setMovementMethod(new ScrollingMovementMethod());
 
         contentCharacterCount = findViewById(R.id.note_content_characters);
-        contentCharacterCount.setTextColor(getResources().getColor(StyleManager.getThemeColor(note.getColor())));
+        contentCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(note.getColor())));
         m = contentView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.content_max_length);
         contentCharacterCount.setText(m);
 
@@ -258,10 +258,10 @@ public class NoteActivity extends AppCompatActivity {
 
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     true);
         }
         else {
@@ -287,10 +287,10 @@ public class NoteActivity extends AppCompatActivity {
 
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     false);
         }
 
@@ -336,10 +336,10 @@ public class NoteActivity extends AppCompatActivity {
                 contentView.setText(textUndoRedoHandler.getUndoStack().firstElement());
                 Statics.StyleableToast(getApplicationContext(),
                         getString(R.string.nothing_to_undo),
-                        StyleManager.getThemeColorDark(note.getColor()),
+                        StyleManager.getColorPrimary(note.getColor()),
                         R.color.white,
                         3,
-                        StyleManager.getThemeColorDark(note.getColor()),
+                        StyleManager.getColorPrimary(note.getColor()),
                         false);
             }
             else {
@@ -370,10 +370,10 @@ public class NoteActivity extends AppCompatActivity {
         else {
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.nothing_to_redo),
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getThemeColorDark(note.getColor()),
+                    StyleManager.getColorPrimary(note.getColor()),
                     false);
         }
 
