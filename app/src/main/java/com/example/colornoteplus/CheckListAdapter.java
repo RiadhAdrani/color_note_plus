@@ -1,6 +1,7 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
     }
 
     // bind data and display them in the desired view
+    // while applying the current theme
     @Override
     public void onBindViewHolder(@NonNull CheckListAdapter.MyViewHolder holder, int position) {
 
@@ -64,9 +66,20 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         holder.background.setBackgroundResource(StyleManager.getBackgroundLight(color));
 
         // initializing the checkbox
+        holder.checkBox.setChecked(currentItem.isDone());
         holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) listener.onChecked(holder.getAdapterPosition());
-            else listener.onUnchecked(holder.getAdapterPosition());
+
+            // if checked
+            if (b) {
+                listener.onChecked(position);
+                holder.title.setPaintFlags(holder.title.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+
+            // if unchecked
+            else {
+                listener.onUnchecked(position);
+                holder.title.setPaintFlags(holder.title.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+            }
         });
 
         // initializing the description
@@ -87,9 +100,17 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
             @Override
             public void afterTextChanged(Editable editable) {
+                // save the current item when the user add/remove
+                // anything from the EditText
                 listener.onDescriptionChanged(holder.getAdapterPosition(),editable.toString());
             }
         });
+
+        // if the current item is done
+        // set the description paint flag
+        if (currentItem.isDone()){
+            holder.title.setPaintFlags(holder.title.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        }
 
         // initializing the due time
         holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
@@ -113,7 +134,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // TODO: Useless
             }
         });
 
@@ -138,6 +159,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         TextView dueTimeText;
         Spinner priorityText;
 
+        // initializing the view
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -154,10 +176,14 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
     // add item to the list
     // and play the animation
     public void addItem(CheckListItem item,int position){
+
+        // if the position is negative, add the item at the bottom of the list
         if (position < 0){
             list.add(item);
             notifyItemInserted(list.size());
         }
+
+        // add the item at the desired position
         else {
             list.add(position,item);
             notifyItemInserted(position);

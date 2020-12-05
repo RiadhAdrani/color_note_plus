@@ -65,6 +65,7 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
                 item.setPriority(CheckListItem.PRIORITY.values()[i]);
             }
 
+            // (UNUSED)
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 

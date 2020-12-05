@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity{
             i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
         }
+
+        if (CheckListNote.class.equals(noteList.get(position).getClass())){
+            i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
+            i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+            startActivity(i);
+        }
     }
 
     // delete a note at a given position

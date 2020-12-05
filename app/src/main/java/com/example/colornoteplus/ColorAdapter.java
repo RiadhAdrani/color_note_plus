@@ -26,8 +26,6 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder
     @Override
     public ColorAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        Log.d("DEBUG_RECYCLER_VIEW","list Size : " +list.size());
-
         return new MyViewHolder(LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.item_color,parent,false));
@@ -42,6 +40,8 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder
 
         if (listener != null){
             holder.itemView.setOnClickListener(view -> listener.OnClickListener(position));
+
+            // (UNUSED)
             holder.itemView.setOnLongClickListener(view -> { listener.OnLongClickListener(position); return true; });
         }
 
@@ -64,6 +64,8 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder
 
     public interface OnItemClickListener{
         void OnClickListener(int position);
+
+        // (UNUSED)
         void OnLongClickListener(int position);
     }
 

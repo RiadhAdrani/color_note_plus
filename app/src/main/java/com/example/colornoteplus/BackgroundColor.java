@@ -2,16 +2,22 @@ package com.example.colornoteplus;
 
 public class BackgroundColor {
 
+    // default drawable
     private final int drawable;
         public int getDrawable() { return drawable; }
 
+    // a lighter version of the default drawable
     private final int drawableLight;
         public int getDrawableLight() { return drawableLight;}
 
+    // a darker version of the drawable
     private final int drawableDark;
         public int getDrawableDark() {return drawableDark;}
 
+    // the representing theme
     private final int theme;
+
+        // the list of the colors
         private final int colorLighter;
         private final int colorLight;
         private final int color;
@@ -19,6 +25,7 @@ public class BackgroundColor {
         private final int colorDarker;
 
 
+    // default constructor
     public BackgroundColor(){
             this.drawable = R.drawable.item_default_style;
             this.drawableLight = R.drawable.item_default_light;
@@ -30,7 +37,8 @@ public class BackgroundColor {
             this.colorDark = R.color.orange_yellow_crayola_dark;
             this.colorDarker = R.color.orange_yellow_crayola_darker;
     }
-    
+
+    // custom constructor
     public BackgroundColor(int drawable,int drawableLight,int drawableDark,int theme,int colorLighter,int colorLight,int color,int colorDark,int colorDarker){
         this.drawable = drawable;
         this.drawableLight = drawableLight;
@@ -43,16 +51,22 @@ public class BackgroundColor {
         this.colorDarker = colorDarker;
     }
 
+    // getter for the theme
     public int getTheme() { return theme; }
 
+    // getter for the lighter color
     public int getColorLighter() { return colorLighter; }
 
+    // getter for the light color
     public int getColorLight() { return colorLight; }
 
+    // getter for the main color
     public int getColor() { return color; }
 
+    // getter for the dark color
     public int getColorDark() { return colorDark; }
 
+    // getter for the darker color
     public int getColorDarker() { return colorDarker; }
 
 }

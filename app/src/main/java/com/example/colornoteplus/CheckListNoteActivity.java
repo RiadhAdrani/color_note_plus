@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -44,15 +47,26 @@ public class CheckListNoteActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getNoteFromIntent();
+        // set the note depending on the UID given from the Main Activity
+        if (isNoteOld(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY))){
 
-        note.getContent().add(new CheckListItem("ONE"));
-        note.getContent().add(new CheckListItem("TWO"));
-        note.getContent().add(new CheckListItem("THREE"));
-        note.getContent().add(new CheckListItem("FOUR"));
-        note.getContent().add(new CheckListItem("FIVE"));
+            // if the UID exists in the SharedPreference
+            // Load the note
+            note = MySharedPreferences.LoadCheckListNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+        }
+        else {
 
-        changeViewsColor(0);
+            // if it is new
+            // create a new note
+            note = new CheckListNote();
+        }
+
+        // change the theme of the activity
+        // and the color scheme
+        changeViewsColor(note.getColor());
+
+        // set the title
+        titleView.setText(note.getTitle());
     }
 
     // Method used to add menus and configure button action
@@ -64,17 +78,11 @@ public class CheckListNoteActivity extends AppCompatActivity{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_check_list_activity,menu);
 
+        // save button
+        MenuItem save = menu.findItem(R.id.save);
+        save.setOnMenuItemClickListener(menuItem -> saveNote());
+
         return super.onCreateOptionsMenu(menu);
-    }
-
-    // get note from the intent
-    private void getNoteFromIntent(){
-
-        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
-            note = MySharedPreferences.LoadCheckListNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
-        } else {
-            note = new CheckListNote();
-        }
     }
 
     private void changeViewsColor(int color){
@@ -136,28 +144,29 @@ public class CheckListNoteActivity extends AppCompatActivity{
         colorView.setOnClickListener(view -> buildColorPickDialog());
         colorView.setBackgroundResource(StyleManager.getBackground(color));
 
+        // check list items adapter
         adapter = new CheckListAdapter(getApplicationContext(),note.getContent(),color);
         adapter.setOnItemClickListener(new CheckListAdapter.OnItemClickListener() {
 
-            // actions to be taken when the item is checked
+            // set the item to done
             @Override
             public void onChecked(int position) {
-                Toast.makeText(CheckListNoteActivity.this, "Checked item: " +position, Toast.LENGTH_SHORT).show();
+                note.getContent().get(position).setDone();
             }
 
-            // actions to be made when the item is unchecked
+            // set the item to undone
             @Override
             public void onUnchecked(int position) {
-                Toast.makeText(CheckListNoteActivity.this, "Unchecked item: " +position, Toast.LENGTH_SHORT).show();
+                note.getContent().get(position).setUnDone();
             }
 
-            // actions to be executed when the priority text is clicked
+            // allow the user to change the priority
             @Override
             public void onSetPriority(int position,int priority) {
                 note.getContent().get(position).setPriority(CheckListItem.PRIORITY.values()[priority]);
             }
 
-            // actions to be executed when the due time text is clicked
+            // allow the user to change or set a reminder/due date
             @Override
             public void onSetReminder(int position) {
                 FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
@@ -172,13 +181,13 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 });
             }
 
-            // actions to be made when the current item is deleted
+            // delete the item from the list
             @Override
             public void onDelete(int position) {
                 adapter.removeItem(position);
             }
 
-            // actions to be executed when the EditText of the current item is changing
+            // save the item when the user add/remove any character in the EditText
             @Override
             public void onDescriptionChanged(int position,String description) {
                 note.getContent().get(position).setDescription(description);
@@ -203,6 +212,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
     }
 
     // build the color picker dialog
+    // and allow user to pick and change the color of the note
+    // and the theme of the activity
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
@@ -215,6 +226,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 fragment.dismiss();
             }
 
+            // (UNUSED)
             @Override
             public void OnLongClickListener(int position) {
 
@@ -228,6 +240,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
         FragmentAddCheckListItem fragment = new FragmentAddCheckListItem(note.getColor());
         fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
         fragment.setOnClickListener(new FragmentAddCheckListItem.OnClickListener() {
+
+            // add the item to the check list
             @Override
             public void onConfirmClickListener() {
                 fragment.getItem().setDescription(fragment.getInputText());
@@ -235,6 +249,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 fragment.dismiss();
             }
 
+            // allow the user to select a date from a displayed calendar
+            // which will be set as reminder/due date.
             @Override
             public void onSetDueTimeClickListener() {
                 FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
@@ -249,6 +265,70 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 });
             }
         });
+    }
+
+    // check if the list is old or not
+    // if old return true
+    // else   return false
+    private boolean isNoteOld(String UID){
+        for (String n: MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,getApplicationContext())){
+            if (n.equals(UID)) return true;
+        }
+        return false;
+    }
+
+    // save note when the user click on the save button
+    // in the toolbar
+    private boolean saveNote(){
+
+        // if the text is too short, alert the user
+        if (titleView.getText().toString().trim().length() < Statics.NOTE_TITLE_MINIMUM_LENGTH){
+
+            Statics.StyleableToast(getApplicationContext(),
+                    getString(R.string.title_short),
+                    StyleManager.getColorPrimary(note.getColor()),
+                    R.color.white,
+                    3,
+                    StyleManager.getColorPrimary(note.getColor()),
+                    true);
+        }
+
+        // else, proceed to save the note
+        else {
+
+            // save the note
+            note.setTitle(titleView.getText().toString().trim());
+            note.save(getApplicationContext());
+
+            // if note is not old
+            // add its UID to the shared preferences
+            if (!isNoteOld(note.getUid())){
+
+                Log.d("DEBUG_SAVE","Note is old !");
+
+                ArrayList<String> noteList =
+                        MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                Statics.KEY_NOTE_LIST,getApplicationContext()
+                        );
+
+                noteList.add(note.getUid());
+                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                        noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
+                );
+            }
+
+            // alert user of the success
+            Statics.StyleableToast(getApplicationContext(),
+                    getString(R.string.save_success),
+                    StyleManager.getColorPrimary(note.getColor()),
+                    R.color.white,
+                    3,
+                    StyleManager.getColorPrimary(note.getColor()),
+                    false);
+        }
+
+        return true;
+
     }
 
 }

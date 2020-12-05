@@ -46,10 +46,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull NoteAdapter.MyViewHolder holder, int position) {
 
         Note<?> item = list.get(position);
+        holder.titleView.setText(item.getTitle());
 
         if (item.getClass() == TextNote.class){
-            holder.titleView.setText(item.getTitle());
             holder.contentView.setText((String) item.getContent());}
+
+        if (item.getClass() == CheckListNote.class){
+            String content = "";
+            for (CheckListItem i: ((CheckListNote) item).getContent()) {
+                content += "• " + i.getDescription()+"\n";
+            }
+            holder.contentView.setText(content);
+        }
 
         holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
 
