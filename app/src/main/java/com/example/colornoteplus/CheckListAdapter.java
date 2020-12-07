@@ -77,13 +77,13 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
             // if checked
             if (b) {
-                listener.onChecked(position);
+                listener.onChecked(holder.getAdapterPosition());
                 holder.title.setPaintFlags(holder.title.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
             // if unchecked
             else {
-                listener.onUnchecked(position);
+                listener.onUnchecked(holder.getAdapterPosition());
                 holder.title.setPaintFlags(holder.title.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
             }
         });
