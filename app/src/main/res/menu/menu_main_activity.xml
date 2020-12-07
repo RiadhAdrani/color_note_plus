@@ -10,35 +10,24 @@
         <menu>
             <item android:title="@string/sort_by_alpha"
                 android:id="@+id/sort_alpha"
+                android:icon="@drawable/ic_sort_alpha"
                 app:showAsAction="never"/>
 
-            <item android:title="@string/sort_by_status"
-                android:id="@+id/sort_status"
-                app:showAsAction="never"/>
-
-            <item android:title="@string/sort_by_priority"
-                android:id="@+id/sort_priority"
+            <item android:title="@string/sort_by_color"
+                android:id="@+id/sort_color"
+                android:icon="@drawable/ic_color"
                 app:showAsAction="never"/>
 
             <item android:title="@string/sort_by_creation"
                 android:id="@+id/sort_creation"
+                android:icon="@drawable/ic_note_add"
                 app:showAsAction="never"/>
 
             <item android:title="@string/sort_by_modification"
                 android:id="@+id/sort_modification"
-                app:showAsAction="never"/>
-
-            <item android:title="@string/sort_by_due"
-                android:id="@+id/sort_due"
+                android:icon="@drawable/ic_file"
                 app:showAsAction="never"/>
         </menu>
-
-    </item>
-
-    <item android:title="@string/save"
-        android:id="@+id/save"
-        android:icon="@drawable/ic_save"
-        app:showAsAction="always">
     </item>
 
 </menu>

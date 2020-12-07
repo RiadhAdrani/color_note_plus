@@ -37,6 +37,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
     CheckListAdapter adapter;
 
+    private boolean sortType = false;
+
     // toolbar
     private Toolbar toolbar;
 
@@ -81,6 +83,48 @@ public class CheckListNoteActivity extends AppCompatActivity{
         // save button
         MenuItem save = menu.findItem(R.id.save);
         save.setOnMenuItemClickListener(menuItem -> saveNote());
+
+        // sort by alpha
+        MenuItem sortAlpha = menu.findItem(R.id.sort_alpha);
+        sortAlpha.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByDescription(sortType);
+            return true;
+        });
+
+        // sort by status
+        MenuItem sortStatus = menu.findItem(R.id.sort_status);
+        sortStatus.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByStatus(sortType);
+            return true;
+        });
+
+        // sort by creation
+        MenuItem sortCreation = menu.findItem(R.id.sort_creation);
+        sortCreation.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByCreation(sortType);
+            return true;
+        });
+
+        // sort by modification
+        MenuItem sortModification = menu.findItem(R.id.sort_modification);
+        sortModification.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByModification(sortType);
+            return true;
+        });
+
+        // sort by due
+        MenuItem sortDue = menu.findItem(R.id.sort_due);
+        sortDue.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByDue(sortType);
+            return true;
+        });
+
+        // sort by due
+        MenuItem sortPriority = menu.findItem(R.id.sort_priority);
+        sortPriority.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByPriority(sortType);
+            return true;
+        });
 
         return super.onCreateOptionsMenu(menu);
     }

@@ -18,24 +18,39 @@ public class CheckListItem extends Object {
     // description of the item
     private String description;
         public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
+        public void setDescription(String description) {
+            this.description = description;
+            setModificationDate();
+        }
 
     // date in which the item was done
     private Long doneDate;
         public Long getDoneDate() { return doneDate; }
-        public void setDone() { doneDate = Calendar.getInstance().getTime().getTime();}
-        public void setUnDone() {doneDate = -1L;}
+        public void setDone() {
+            doneDate = Calendar.getInstance().getTime().getTime();
+            setModificationDate();
+        }
+        public void setUnDone() {
+            doneDate = -1L;
+            setModificationDate();
+        }
         public boolean isDone() { return doneDate != -1L;}
 
     // priority of the item
     private PRIORITY priority;
         public PRIORITY getPriority() { return priority; }
-        public void setPriority(PRIORITY priority) { this.priority = priority; }
+        public void setPriority(PRIORITY priority) {
+            this.priority = priority;
+            setModificationDate();
+        }
 
     // the date before which the item should be done
     private Long dueDate;
         public Long getDueDate() { return dueDate; }
-        public void setDueDate(Long dueDate) { this.dueDate = dueDate; }
+        public void setDueDate(Long dueDate) {
+            this.dueDate = dueDate;
+            setModificationDate();
+        }
 
     // (UNUSED)
     // default constructor
@@ -45,7 +60,7 @@ public class CheckListItem extends Object {
             setDueDate(-1L);
             setPriority(PRIORITY.MEDIUM);
             setCreationDate(Calendar.getInstance().getTime().getTime());
-            setModificationDate(Calendar.getInstance().getTime().getTime());
+            setModificationDate();
     }
 
     // custom constructor
@@ -55,7 +70,7 @@ public class CheckListItem extends Object {
             setPriority(p);
             setDueDate(dueDate);
             setCreationDate(Calendar.getInstance().getTime().getTime());
-            setModificationDate(Calendar.getInstance().getTime().getTime());
+            setModificationDate();
     }
 
     // (UNUSED)

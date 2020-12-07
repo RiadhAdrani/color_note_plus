@@ -40,6 +40,9 @@ public abstract class Statics {
                 .stroke(strokeWidth, context.getResources().getColor(textColor))
                 .length(isLong ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG)
                 .show();
-
     }
+
+    public enum SORT_ITEM { ALPHA , STATUS , CREATION , MODIFICATION , DUE , PRIORITY  }
+
+    public enum SORT_NOTE { ALPHA , CREATION, MODIFICATION , COLOR}
 }

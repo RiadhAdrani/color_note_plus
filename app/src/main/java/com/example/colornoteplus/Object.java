@@ -1,6 +1,7 @@
 package com.example.colornoteplus;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public abstract class Object implements Serializable {
 
@@ -20,5 +21,6 @@ public abstract class Object implements Serializable {
     // Object Modification Date
     private Long modificationDate;
             public void setModificationDate(Long modificationDate){ this.modificationDate = modificationDate; }
+            public void setModificationDate(){this.modificationDate = Calendar.getInstance().getTime().getTime();}
             public Long getModificationDate(){ return this.modificationDate;}
 }

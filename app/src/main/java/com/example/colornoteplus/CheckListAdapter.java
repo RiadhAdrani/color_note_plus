@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyViewHolder> {
@@ -39,6 +41,10 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
     // current context
     final private Context context;
+
+    private Statics.SORT_ITEM sortBy;
+        public Statics.SORT_ITEM getSortBy(){ return sortBy;}
+        public void setSortBy(Statics.SORT_ITEM sort){ this.sortBy = sort;}
 
     // listener
     private OnItemClickListener listener;
@@ -195,6 +201,42 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
     public void removeItem(int position){
         list.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void sortByDescription(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getDescription().compareTo(i2.getDescription()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByStatus(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getDoneDate().compareTo(i2.getDoneDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByCreation(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getCreationDate().compareTo(i2.getCreationDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByModification(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getModificationDate().compareTo(i2.getModificationDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByDue(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getDueDate().compareTo(i2.getDueDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByPriority(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getPriority().compareTo(i2.getPriority()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
     }
 
     // override the current listener
