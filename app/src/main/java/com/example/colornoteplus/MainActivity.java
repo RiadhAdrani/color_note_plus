@@ -2,6 +2,9 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity{
     ExtendedFloatingActionButton mainFAB;
     FloatingActionButton textFAB;
     FloatingActionButton checkListFAB;
+
+    // sortType
+    boolean sortType;
 
     // toolbar
     Toolbar toolbar;
@@ -96,6 +102,44 @@ public class MainActivity extends AppCompatActivity{
 
         // main FAB onClickListener
         mainFAB.setOnClickListener(view -> mainFABHandler());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Create a submenu for sorting purpose
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main_activity,menu);
+
+        // save by title
+        MenuItem sortAlpha = menu.findItem(R.id.sort_alpha);
+        sortAlpha.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByTitle(sortType);
+            return true;
+        } );
+
+        // save by color
+        MenuItem sortColor = menu.findItem(R.id.sort_color);
+        sortColor.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByColor(sortType);
+            return true;
+        });
+
+        // sort by creation date
+        MenuItem sortCreation = menu.findItem(R.id.sort_creation);
+        sortCreation.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByCreation(sortType);
+            return true;
+        });
+
+        // sort by modification date
+        MenuItem sortModification = menu.findItem(R.id.sort_modification);
+        sortModification.setOnMenuItemClickListener(menuItem -> {
+            adapter.sortByModification(sortType);
+            return true;
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     // action to be executed

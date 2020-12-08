@@ -10,22 +10,18 @@
         <menu>
             <item android:title="@string/sort_by_alpha"
                 android:id="@+id/sort_alpha"
-                android:icon="@drawable/ic_sort_alpha"
                 app:showAsAction="never"/>
 
             <item android:title="@string/sort_by_color"
                 android:id="@+id/sort_color"
-                android:icon="@drawable/ic_color"
                 app:showAsAction="never"/>
 
             <item android:title="@string/sort_by_creation"
                 android:id="@+id/sort_creation"
-                android:icon="@drawable/ic_note_add"
                 app:showAsAction="never"/>
 
             <item android:title="@string/sort_by_modification"
                 android:id="@+id/sort_modification"
-                android:icon="@drawable/ic_file"
                 app:showAsAction="never"/>
         </menu>
     </item>

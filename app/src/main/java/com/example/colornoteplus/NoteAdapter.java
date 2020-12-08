@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
 
@@ -89,6 +90,30 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
             menu.inflate(R.menu.menu_note_more_options);
             menu.show();
         });
+    }
+
+    public void sortByTitle(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getTitle().compareTo(i2.getTitle()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByCreation(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getCreationDate().compareTo(i2.getCreationDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByModification(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getModificationDate().compareTo(i2.getModificationDate()));
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
+    }
+
+    public void sortByColor(boolean isDescending){
+        Collections.sort(list, (i1, i2) -> i1.getColor()-i2.getColor());
+        if (isDescending) Collections.reverse(list);
+        notifyDataSetChanged();
     }
 
     @Override
