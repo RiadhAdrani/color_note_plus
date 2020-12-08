@@ -20,6 +20,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     // save the note
     @Override
     public void save(Context context) {
+        setModificationDate();
         MySharedPreferences.SaveCheckListNoteToSharedPreferences(this,context);
     }
 

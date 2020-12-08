@@ -29,6 +29,7 @@ public class TextNote extends Note<String> implements Serializable {
 
     @Override
     public void save(Context context) {
+        setModificationDate();
         MySharedPreferences.SaveTextNoteToSharedPreferences(this,context);
     }
 
