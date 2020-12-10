@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTheme(R.style.ThemeGrey);
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
@@ -73,7 +76,8 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void OnDeleteClickListener(int position) {
-                deleteItem(position);
+                adapter.removeItem(position);
+                // deleteItem(position);
             }
 
             @Override
@@ -110,6 +114,23 @@ public class MainActivity extends AppCompatActivity{
         // Create a submenu for sorting purpose
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_activity,menu);
+
+        // search
+        MenuItem search = menu.findItem(R.id.search);
+        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) search.getActionView();
+        searchView.setQueryHint(getString(R.string.search));
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         // save by title
         MenuItem sortAlpha = menu.findItem(R.id.sort_alpha);
@@ -148,6 +169,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
 
+        noteList = new ArrayList<>(adapter.getListFull());
         saveNoteList();
 
     }

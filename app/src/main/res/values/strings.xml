@@ -14,6 +14,7 @@
     <string name="undo">Undo</string>
     <string name="redo">Redo</string>
     <string name="sort">Sort</string>
+    <string name="search">Search</string>
     <string name="sort_by_color">By Color</string>
     <string name="sort_by_priority">By Priority</string>
     <string name="sort_by_due">By Due date</string>

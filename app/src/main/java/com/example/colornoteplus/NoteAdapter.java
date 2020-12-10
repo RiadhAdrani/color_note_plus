@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -15,20 +17,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> implements Filterable {
 
     // display notes in a recycler view
 
     private final ArrayList<Note<?>> list;
+    private final ArrayList<Note<?>> listFull;
     private OnItemClickListener listener;
     private final Context context;
 
     public NoteAdapter(ArrayList<Note<?>> list, Context context){
 
         this.list = list;
+        listFull = new ArrayList<>(list);
         this.context = context;
     }
+
+    public ArrayList<Note<?>> getListFull() {return listFull;}
 
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
@@ -92,6 +99,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
         });
     }
 
+    public void removeItem(int position){
+
+        String uid = list.get(position).getUid();
+
+        for (Note<?> note : listFull) {
+            if (note.getUid().equals(uid)){
+                listFull.remove(note);
+                break;
+            }
+        }
+
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public void sortByTitle(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getTitle().compareTo(i2.getTitle()));
         if (isDescending) Collections.reverse(list);
@@ -120,6 +142,40 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder>{
     public int getItemCount() {
         return list.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private final Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            ArrayList<Note<?>> filteredList = new ArrayList<>();
+            if (charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(listFull);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase();
+                for (Note<?> item: listFull){
+                    if (item.getTitle().toLowerCase().contains(filterPattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list.clear();
+            list.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
