@@ -12,6 +12,7 @@
     <string name="save_success">Saved Successfully !</string>
     <string name="title_short">Title is too short !</string>
     <string name="undo">Undo</string>
+    <string name="lock_unlock">Switch Lock</string>
     <string name="redo">Redo</string>
     <string name="sort">Sort</string>
     <string name="search">Search</string>

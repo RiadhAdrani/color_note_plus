@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,6 +33,9 @@ public class NoteActivity extends AppCompatActivity {
 
     // toolbar
     private Toolbar toolbar;
+
+    // status
+    private boolean lock = true;
 
     // Current note
     private TextNote note;
@@ -75,6 +80,24 @@ public class NoteActivity extends AppCompatActivity {
 
         MenuItem saveButton = menu.findItem(R.id.save);
         saveButton.setOnMenuItemClickListener(menuItem -> saveTextNote());
+
+        MenuItem lockButton = menu.findItem(R.id.lock);
+        lockButton.setOnMenuItemClickListener(menuItem -> {
+            if (lock) {
+
+                contentView.setFocusableInTouchMode(true);
+                lock = false;
+                lockButton.setIcon(R.drawable.ic_unlocked);
+            }
+            else {
+
+                contentView.setFocusableInTouchMode(false);
+                contentView.clearFocus();
+                lockButton.setIcon(R.drawable.ic_locked);
+                lock = true;
+            }
+            return true;
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -210,6 +233,10 @@ public class NoteActivity extends AppCompatActivity {
 
             }
         });
+
+        contentView.setFocusableInTouchMode(false);
+        contentView.clearFocus();
+
 
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());

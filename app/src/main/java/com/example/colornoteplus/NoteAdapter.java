@@ -110,6 +110,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
+        ArrayList<String> trash = MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,context);
+        trash.add(uid);
+        MySharedPreferences.SaveStringArrayToSharedPreferences(trash,Statics.KEY_NOTE_LIST_TRASH,context);
+
         list.remove(position);
         notifyItemRemoved(position);
     }
