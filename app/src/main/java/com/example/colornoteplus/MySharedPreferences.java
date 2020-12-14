@@ -11,6 +11,13 @@ import java.util.ArrayList;
 
 public abstract class MySharedPreferences {
 
+    public static void DeleteNote(String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
     public static String LoadStringFromSharedPreferences(String key,Context context){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);

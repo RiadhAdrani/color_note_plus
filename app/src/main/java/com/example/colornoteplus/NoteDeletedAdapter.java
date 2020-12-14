@@ -41,6 +41,11 @@ public class NoteDeletedAdapter extends NoteAdapter {
             if (getListener() != null) getListener().OnClickListener(holder.getAdapterPosition());
         });
 
+        holder.itemView.setOnLongClickListener(view -> {
+            if (getListener() != null) getListener().OnLongClickListener(holder.getAdapterPosition());
+            return true;
+        });
+
         holder.moreOptionsView.setVisibility(View.GONE);
     }
 

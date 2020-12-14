@@ -232,6 +232,17 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void OnLongClickListener(int position) {
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        getApplicationContext(),
+                        3,
+                        R.drawable.ic_delete,
+                        getString(R.string.confirm_delete_permanently),
+                        () -> {
+                            MySharedPreferences.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
+                            adapter.removeItem(position);
+                        }
+                );
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
 
             @Override
