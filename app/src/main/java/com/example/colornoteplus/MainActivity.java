@@ -2,11 +2,10 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,10 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
+
+    enum STATES {
+        NOTES, DELETED_NOTES
+    }
+
+    STATES state;
 
     // recycler view and its adapter
     RecyclerView rv;
@@ -52,14 +58,45 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        state = STATES.NOTES;
+
         setTheme(R.style.ThemeGrey);
         setContentView(R.layout.activity_main);
-
-        drawer = findViewById(R.id.drawer_layout);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(item -> {
+
+            final int notes = R.id.nav_notes, recycler = R.id.nav_recycler_bin, settings = R.id.nav_settings, about = R.id.nav_about;
+
+            switch (item.getItemId()){
+                case notes:
+                    saveNoteList();
+                    initNoteState();
+                    state = STATES.NOTES;
+                    break;
+                case recycler:
+                    saveNoteList();
+                    initRecyclerState();
+                    state = STATES.DELETED_NOTES;
+                    break;
+                case settings:
+                    Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                    break;
+                case about:
+                    Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+
+            drawer.closeDrawers();
+
+            return true;
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -70,6 +107,33 @@ public class MainActivity extends AppCompatActivity{
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        mainFAB = findViewById(R.id.fab_main);
+        textFAB = findViewById(R.id.fab_text);
+        checkListFAB = findViewById(R.id.fab_checklist);
+
+        // initializing FABs
+        mainFAB.shrink();
+
+        textFAB.hide();
+        textFAB.setOnClickListener(view -> textFABOnClickListener());
+
+        checkListFAB.hide();
+        checkListFAB.setOnClickListener(view -> checkListFABOnClickListener());
+
+        areFABsVisible = false;
+
+        // main FAB onClickListener
+        mainFAB.setOnClickListener(view -> mainFABHandler());
+
+        rv = findViewById(R.id.note_recycler_view);
+
+        initNoteState();
+    }
+
+    private void initNoteState(){
+
+        noteList.clear();
 
         for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
@@ -90,13 +154,18 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void OnLongClickListener(int position) {
-                Toast.makeText(getApplicationContext(),"Item "+ position + " Held",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void OnDeleteClickListener(int position) {
-                adapter.removeItem(position);
-                // deleteItem(position);
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        getApplicationContext(),
+                        3, // TODO: make a global variable for color
+                        R.drawable.ic_delete,
+                        getString(R.string.confirm_delete),
+                        () -> adapter.removeItem(position)
+                );
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
 
             @Override
@@ -105,26 +174,80 @@ public class MainActivity extends AppCompatActivity{
 
         });
 
-        rv = findViewById(R.id.note_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
-        // initializing FABs
-        mainFAB = findViewById(R.id.fab_main);
-        mainFAB.shrink();
+        mainFAB.show();
+    }
 
-        textFAB = findViewById(R.id.fab_text);
-        textFAB.hide();
-        textFAB.setOnClickListener(view -> textFABOnClickListener());
+    private void initRecyclerState(){
 
-        checkListFAB = findViewById(R.id.fab_checklist);
-        checkListFAB.hide();
-        checkListFAB.setOnClickListener(view -> checkListFABOnClickListener());
+        noteList.clear();
 
-        areFABsVisible = false;
+        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,this)) {
+            switch (Note.getNoteClass(s)){
+                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this)); break;
+                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNoteFromSharedPreferences(s,this)); break;
+            }
+        }
 
-        // main FAB onClickListener
-        mainFAB.setOnClickListener(view -> mainFABHandler());
+        // initializing the recycler view and its adapter
+        // and displaying the list of the notes
+        adapter = new NoteDeletedAdapter(noteList,getApplicationContext());
+
+        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+            @Override
+            public void OnClickListener(int position) {
+
+                ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                        Statics.KEY_NOTE_LIST,
+                        getApplicationContext()
+                );
+
+                temp.add(noteList.get(position).getUid());
+
+                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                        temp,
+                        Statics.KEY_NOTE_LIST,
+                        getApplicationContext()
+                );
+
+                Intent i;
+
+                if (TextNote.class.equals(noteList.get(position).getClass())) {
+
+                    i = new Intent(getApplicationContext(),NoteActivity.class);
+                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                    startActivity(i);
+                }
+
+                if (CheckListNote.class.equals(noteList.get(position).getClass())){
+                    i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
+                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                    startActivity(i);
+                }
+
+                adapter.removeItem(position);
+            }
+
+            @Override
+            public void OnLongClickListener(int position) {
+            }
+
+            @Override
+            public void OnDeleteClickListener(int position) {
+            }
+
+            @Override
+            public void OnColorSwitchClickListener(int position) {
+            }
+
+        });
+
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(adapter);
+
+        mainFAB.hide();
     }
 
     @Override
@@ -263,31 +386,21 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    // delete a note at a given position
-    // in the note list
-    private void deleteItem(int position){
-
-        ArrayList<String> n = MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
-        n.add(noteList.get(position).getUid());
-        MySharedPreferences.SaveStringArrayToSharedPreferences(n,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
-
-        noteList.remove(position);
-        adapter.notifyItemRemoved(position);
-    }
-
-
     // collect the UIDs of the notes
     // and save them to the shared preferences
     private void saveNoteList(){
 
         ArrayList<String> mNoteList = new ArrayList<>();
+        for (Note<?> note : noteList) { mNoteList.add(note.getUid()); }
 
-        for (Note<?> note : noteList) {
-            mNoteList.add(note.getUid());
+        switch (state){
+            case NOTES:
+                MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
+                break;
+            case DELETED_NOTES:
+                MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
+                break;
         }
-
-        MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
-
     }
 
 }

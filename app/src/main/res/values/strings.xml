@@ -20,6 +20,7 @@
     <string name="undo">Undo</string>
     <string name="lock_unlock">Switch Lock</string>
     <string name="redo">Redo</string>
+    <string name="confirm">Confirm</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>
@@ -67,5 +68,10 @@
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
 
+    <string name="dialog_text_placeholder">Confirm Action ?</string>
+
+    <string name="confirm_delete">Are you sure you want to delete this item ?</string>
+    <string name="confirm_restore">Are you sure you want to restore this item?</string>
+    <string name="confirm_restore_open">Are you sure you want to restore this item and open it?</string>
 
 </resources>

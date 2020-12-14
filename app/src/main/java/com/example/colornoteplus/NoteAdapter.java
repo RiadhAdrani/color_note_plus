@@ -24,6 +24,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     // display notes in a recycler view
 
     private final ArrayList<Note<?>> list;
+
+    public ArrayList<Note<?>> getList() {
+        return list;
+    }
+
+    public OnItemClickListener getListener() {
+        return listener;
+    }
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
     private final ArrayList<Note<?>> listFull;
     private OnItemClickListener listener;
     private final Context context;
