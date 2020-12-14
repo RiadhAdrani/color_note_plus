@@ -1,19 +1,26 @@
 <resources>
     <string name="app_name">Color Noter</string>
+    <string name="notes">Notes</string>
     <string name="new_note">New Note</string>
     <string name="new_item">New Item</string>
     <string name="note_color">Note Color</string>
     <string name="whats_in_your_mind">What is in your mind ?</string>
     <string name="pick_a_color">Pick a color :</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="switch_color">Switch Color</string>
+    <string name="settings">Settings</string>
+    <string name="recycler_bin">Recycler Bin</string>
+    <string name="more">More</string>
+    <string name="about">About</string>
     <string name="more_options">More Options</string>
     <string name="save_success">Saved Successfully !</string>
     <string name="title_short">Title is too short !</string>
     <string name="undo">Undo</string>
     <string name="lock_unlock">Switch Lock</string>
     <string name="redo">Redo</string>
+
     <string name="sort">Sort</string>
     <string name="search">Search</string>
     <string name="sort_by_color">By Color</string>
@@ -30,7 +37,6 @@
     <string name="urgent_priority">Urgent</string>
 
     <string name="add_item">Add Item</string>
-
     <string name="delete_item">Delete Item</string>
 
     <string name="priority">Priority</string>
@@ -55,5 +61,11 @@
     <string name="check_list_note">Check List</string>
     <string name="check_list_note_hint">Create a check list note</string>
 
-    <string name="save">Save</string>
+    <string name="no_user_name">No user</string>
+    <string name="no_user_email">No email</string>
+
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+
+
 </resources>

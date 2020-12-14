@@ -2,14 +2,18 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +27,9 @@ public class MainActivity extends AppCompatActivity{
     // recycler view and its adapter
     RecyclerView rv;
     NoteAdapter adapter;
+
+    // navigation drawer
+    private DrawerLayout drawer;
 
     // note list
     ArrayList<Note<?>> noteList = new ArrayList<>();
@@ -48,9 +55,21 @@ public class MainActivity extends AppCompatActivity{
         setTheme(R.style.ThemeGrey);
         setContentView(R.layout.activity_main);
 
+        drawer = findViewById(R.id.drawer_layout);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,
+                drawer,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close);
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
@@ -106,6 +125,17 @@ public class MainActivity extends AppCompatActivity{
 
         // main FAB onClickListener
         mainFAB.setOnClickListener(view -> mainFABHandler());
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
     @Override

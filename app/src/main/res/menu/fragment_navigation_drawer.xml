@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/notes"
+            android:title="@string/notes"
+            android:icon="@drawable/ic_file"
+            />
+        <item
+            android:id="@+id/recycler_bin"
+            android:title="@string/recycler_bin"
+            android:icon="@drawable/ic_delete"
+            />
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"
+            android:icon="@drawable/ic_settings"
+            />
+    </group>
+
+    <item android:title="@string/more">
+        <menu>
+            <item
+                android:id="@+id/about"
+                android:title="@string/about"
+                android:icon="@drawable/ic_info"
+                />
+        </menu>
+    </item>
+
+</menu>
