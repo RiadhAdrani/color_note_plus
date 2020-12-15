@@ -11,7 +11,7 @@
         android:theme="@style/Theme.ColorNotePlus">
 
         <activity android:name=".CheckListNoteActivity"
-                  android:parentActivityName=".MainActivity">
+                  >
 
         </activity>
 

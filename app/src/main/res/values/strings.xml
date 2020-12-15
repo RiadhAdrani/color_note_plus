@@ -24,6 +24,7 @@
     <string name="confirm">Confirm</string>
     <string name="restore">Restore</string>
     <string name="delete_permanently">Delete Permanently</string>
+    <string name="discard">Discard</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>
@@ -77,5 +78,6 @@
     <string name="confirm_delete_permanently">Are you sure you want to delete this item permanently ?</string>
     <string name="confirm_restore">Are you sure you want to restore this item ?</string>
     <string name="confirm_restore_open">Are you sure you want to restore this item and open it ?</string>
+    <string name="confirm_unsaved_changes">There are some unsaved changes, would you like to save and exit ?</string>
 
 </resources>

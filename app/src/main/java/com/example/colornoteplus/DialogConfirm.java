@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,23 +12,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import java.util.Objects;
+
 public class DialogConfirm extends AppCompatDialogFragment {
 
     private final int color;
-    private final Context context;
     private final int icon;
     private final String text;
+    private final int buttonNumbers;
     private final OnConfirmClickListener listener;
 
     public interface OnConfirmClickListener{
-        void OnConfirm();
+        void OnPrimaryAction();
+        void OnSecondaryAction();
     }
 
-    public DialogConfirm(Context context, int color, int icon, String text, OnConfirmClickListener listener) {
-        this.context = context;
+    public DialogConfirm(int color, int icon, String text, OnConfirmClickListener listener) {
         this.color = color;
         this.icon = icon;
         this.text = text;
+        buttonNumbers = 2;
+        this.listener = listener;
+    }
+
+    public DialogConfirm(int color, int icon, String text, int buttonNumbers,OnConfirmClickListener listener) {
+        this.color = color;
+        this.icon = icon;
+        this.text = text;
+        this.buttonNumbers = buttonNumbers;
         this.listener = listener;
     }
 
@@ -39,7 +49,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        View dialog = getActivity().getLayoutInflater().inflate(R.layout.dialog_confirm_action,null);
+        View dialog = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.dialog_confirm_action,null);
 
         builder.setView(dialog);
 
@@ -64,9 +74,20 @@ public class DialogConfirm extends AppCompatDialogFragment {
         confirm.setBackgroundResource(StyleManager.getBackground(color));
         confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
         confirm.setOnClickListener(view -> {
-            listener.OnConfirm();
+            listener.OnPrimaryAction();
             dismiss();
         });
+
+        Button secondaryAction = dialog.findViewById(R.id.dialog_secondary_action);
+        secondaryAction.setBackgroundResource(StyleManager.getBackground(color));
+        secondaryAction.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
+        secondaryAction.setOnClickListener(view -> {
+            listener.OnSecondaryAction();
+            dismiss();
+        });
+
+        if (buttonNumbers < 3) secondaryAction.setVisibility(View.GONE);
+        if (buttonNumbers < 2) confirm.setVisibility(View.GONE);
 
         return builder.create();
     }

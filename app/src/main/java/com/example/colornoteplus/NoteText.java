@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class TextNote extends Note<String> implements Serializable {
+public class NoteText extends Note<String> implements Serializable {
 
     // public constructor
-    public TextNote(String name,int color){
+    public NoteText(String name, int color){
         setTitle(name);
         setColor(color);
         setContent(null);
@@ -18,7 +18,7 @@ public class TextNote extends Note<String> implements Serializable {
         setUid(UUID.randomUUID().toString() + getCreationDate());
     }
 
-    public TextNote(){
+    public NoteText(){
         setTitle(Statics.NOTE_PLACEHOLDER);
         setColor(Statics.NOTE_DEFAULT_COLOR);
         setContent(null);
@@ -34,8 +34,22 @@ public class TextNote extends Note<String> implements Serializable {
     }
 
     @Override
+    public boolean hasChanged(Context context) {
+
+        NoteText original = MySharedPreferences.LoadTextNoteFromSharedPreferences(getUid(),context);
+
+        if (getColor() != original.getColor())
+            return true;
+
+        if (!getTitle().equals(original.getTitle()))
+            return true;
+
+        return !getContent().equals(original.getContent());
+    }
+
+    @Override
     public void load(Context context) {
-        TextNote temp = MySharedPreferences.LoadTextNoteFromSharedPreferences(this.getUid(),context);
+        NoteText temp = MySharedPreferences.LoadTextNoteFromSharedPreferences(this.getUid(),context);
         setTitle(temp.getTitle());
         setContent(temp.getContent());
         setColor(temp.getColor());

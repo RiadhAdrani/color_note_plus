@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,7 +36,7 @@ public class NoteActivity extends AppCompatActivity {
     private boolean lock = true;
 
     // Current note
-    private TextNote note;
+    private NoteText note;
 
     private boolean deletedSpecialCharacter = false;
     private boolean deleteRedoStack = false;
@@ -54,7 +52,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // note = new TextNote("MyNote",5);
+        // note = new NoteText("MyNote",5);
 
         getNoteFromIntent();
 
@@ -108,7 +106,7 @@ public class NoteActivity extends AppCompatActivity {
         if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
             note = MySharedPreferences.LoadTextNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
-            note = new TextNote();
+            note = new NoteText();
         }
     }
 

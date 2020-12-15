@@ -73,12 +73,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         Note<?> item = list.get(position);
         holder.titleView.setText(item.getTitle());
 
-        if (item.getClass() == TextNote.class){
+        if (item.getClass() == NoteText.class){
             holder.contentView.setText((String) item.getContent());}
 
-        if (item.getClass() == CheckListNote.class){
+        if (item.getClass() == NoteCheckList.class){
             String content = "";
-            for (CheckListItem i: ((CheckListNote) item).getContent()) {
+            for (CheckListItem i: ((NoteCheckList) item).getContent()) {
                 content += "• " + i.getDescription()+"\n";
             }
             holder.contentView.setText(content);

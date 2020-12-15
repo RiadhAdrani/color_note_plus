@@ -1,10 +1,12 @@
 package com.example.colornoteplus;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -43,7 +46,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private Toolbar toolbar;
 
     // Current note
-    private CheckListNote note;
+    private NoteCheckList note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // if it is new
             // create a new note
-            note = new CheckListNote();
+            note = new NoteCheckList();
         }
 
         // change the theme of the activity
@@ -69,6 +72,21 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // set the title
         titleView.setText(note.getTitle());
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // save the note
+        note.setTitle(titleView.getText().toString().trim());
+
+        if (note.hasChanged(this)){
+            unsavedChangesAlert();
+            Toast.makeText(this, "Unsaved changes", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        startMainActivity();
     }
 
     // Method used to add menus and configure button action
@@ -129,6 +147,16 @@ public class CheckListNoteActivity extends AppCompatActivity{
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+        if (item.getItemId() == R.id.home)
+            return onUpButtonPressed();
+
+        return true;
+    }
+
     private void changeViewsColor(int color){
 
         // set the global theme
@@ -142,6 +170,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         // set up FAB action
         fab = findViewById(R.id.fab_add_item);
+        fab.setBackgroundColor(getResources().getColor(StyleManager.getColorPrimary(color)));
         fab.setOnClickListener(view -> onFabClickListener());
 
         // setting the toolbar
@@ -149,6 +178,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(color)));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(view -> onUpButtonPressed());
 
         // setting the note title
         titleView = findViewById(R.id.note_title_view);
@@ -335,6 +365,8 @@ public class CheckListNoteActivity extends AppCompatActivity{
                     3,
                     StyleManager.getColorPrimary(note.getColor()),
                     true);
+
+            return false;
         }
 
         // else, proceed to save the note
@@ -373,6 +405,51 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
         return true;
 
+    }
+
+    // return to main activity
+    private void startMainActivity(){
+        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void unsavedChangesAlert(){
+        DialogConfirm dialogConfirm = new DialogConfirm(
+                note.getColor(),
+                R.drawable.ic_info,
+                getString(R.string.confirm_unsaved_changes),
+                3,
+                new DialogConfirm.OnConfirmClickListener() {
+
+                    // save and exit
+                    @Override
+                    public void OnPrimaryAction() {
+
+                        if (saveNote())
+                            startMainActivity();
+                    }
+
+                    // discard
+                    @Override
+                    public void OnSecondaryAction() {
+                        startMainActivity();
+                    }
+                });
+        dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+    }
+
+    private boolean onUpButtonPressed(){
+        // save the note
+        note.setTitle(titleView.getText().toString().trim());
+
+        if (note.hasChanged(getApplicationContext())){
+            unsavedChangesAlert();
+            return true;
+        }
+
+        startMainActivity();
+        return true;
     }
 
 }

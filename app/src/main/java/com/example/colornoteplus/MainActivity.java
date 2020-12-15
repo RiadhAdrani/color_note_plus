@@ -160,11 +160,20 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void OnOptionOneClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        getApplicationContext(),
                         3, // TODO: make a global variable for color
                         R.drawable.ic_delete,
                         getString(R.string.confirm_delete),
-                        () -> adapter.removeItem(position)
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                adapter.removeItem(position);
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+
+                            }
+                        }
                 );
                 dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
@@ -203,40 +212,47 @@ public class MainActivity extends AppCompatActivity{
             public void OnClickListener(int position) {
                 // open a dialog asking the user for confirmation
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        getApplicationContext(),
                         3,
                         R.drawable.ic_info,
                         getString(R.string.confirm_restore_open),
-                        () -> {
-                            ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
-                                    Statics.KEY_NOTE_LIST,
-                                    getApplicationContext()
-                            );
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                        Statics.KEY_NOTE_LIST,
+                                        getApplicationContext()
+                                );
 
-                            temp.add(noteList.get(position).getUid());
+                                temp.add(noteList.get(position).getUid());
 
-                            MySharedPreferences.SaveStringArrayToSharedPreferences(
-                                    temp,
-                                    Statics.KEY_NOTE_LIST,
-                                    getApplicationContext()
-                            );
+                                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                        temp,
+                                        Statics.KEY_NOTE_LIST,
+                                        getApplicationContext()
+                                );
 
-                            Intent i;
+                                Intent i;
 
-                            if (TextNote.class.equals(noteList.get(position).getClass())) {
+                                if (NoteText.class.equals(noteList.get(position).getClass())) {
 
-                                i = new Intent(getApplicationContext(),NoteActivity.class);
-                                i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                                startActivity(i);
+                                    i = new Intent(getApplicationContext(),NoteActivity.class);
+                                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                    startActivity(i);
+                                }
+
+                                if (NoteCheckList.class.equals(noteList.get(position).getClass())){
+                                    i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
+                                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                    startActivity(i);
+                                }
+
+                                adapter.removeItem(position);
                             }
 
-                            if (CheckListNote.class.equals(noteList.get(position).getClass())){
-                                i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
-                                i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                                startActivity(i);
-                            }
+                            @Override
+                            public void OnSecondaryAction() {
 
-                            adapter.removeItem(position);
+                            }
                         }
                 );
                 dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
@@ -251,25 +267,34 @@ public class MainActivity extends AppCompatActivity{
             public void OnOptionOneClick(int position) {
                 // open a dialog asking the user for confirmation
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        getApplicationContext(),
                         3,
                         R.drawable.ic_info,
                         getString(R.string.confirm_restore),
-                        () -> {
-                            ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
-                                    Statics.KEY_NOTE_LIST,
-                                    getApplicationContext()
-                            );
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                {
+                                    ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                            Statics.KEY_NOTE_LIST,
+                                            getApplicationContext()
+                                    );
 
-                            temp.add(noteList.get(position).getUid());
+                                    temp.add(noteList.get(position).getUid());
 
-                            MySharedPreferences.SaveStringArrayToSharedPreferences(
-                                    temp,
-                                    Statics.KEY_NOTE_LIST,
-                                    getApplicationContext()
-                            );
+                                    MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                            temp,
+                                            Statics.KEY_NOTE_LIST,
+                                            getApplicationContext()
+                                    );
 
-                            adapter.removeItem(position);
+                                    adapter.removeItem(position);
+                                }
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+
+                            }
                         }
                 );
                 dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
@@ -279,13 +304,20 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void OnOptionTwoClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        getApplicationContext(),
                         3,
                         R.drawable.ic_delete,
                         getString(R.string.confirm_delete_permanently),
-                        () -> {
-                            MySharedPreferences.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
-                            adapter.removeItem(position);
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                    MySharedPreferences.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
+                                    adapter.removeItem(position);
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+
+                            }
                         }
                 );
                 dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
@@ -423,14 +455,14 @@ public class MainActivity extends AppCompatActivity{
 
         Intent i;
 
-        if (TextNote.class.equals(noteList.get(position).getClass())) {
+        if (NoteText.class.equals(noteList.get(position).getClass())) {
 
             i = new Intent(getApplicationContext(),NoteActivity.class);
             i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
         }
 
-        if (CheckListNote.class.equals(noteList.get(position).getClass())){
+        if (NoteCheckList.class.equals(noteList.get(position).getClass())){
             i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
             i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);

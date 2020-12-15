@@ -1,7 +1,6 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
@@ -25,12 +24,12 @@ public class NoteDeletedAdapter extends NoteAdapter {
         Note<?> item = getList().get(position);
         holder.titleView.setText(item.getTitle());
 
-        if (item.getClass() == TextNote.class){
+        if (item.getClass() == NoteText.class){
             holder.contentView.setText((String) item.getContent());}
 
-        if (item.getClass() == CheckListNote.class){
+        if (item.getClass() == NoteCheckList.class){
             String content = "";
-            for (CheckListItem i: ((CheckListNote) item).getContent()) {
+            for (CheckListItem i: ((NoteCheckList) item).getContent()) {
                 content += "• " + i.getDescription()+"\n";
             }
             holder.contentView.setText(content);

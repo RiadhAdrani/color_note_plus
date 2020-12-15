@@ -36,7 +36,7 @@ public abstract class MySharedPreferences {
         return sharedPreferences.getLong(key,0L);
     }
 
-    public static void SaveTextNoteToSharedPreferences(TextNote note,Context context){
+    public static void SaveTextNoteToSharedPreferences(NoteText note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -48,9 +48,9 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static TextNote LoadTextNoteFromSharedPreferences(String uid,Context context){
+    public static NoteText LoadTextNoteFromSharedPreferences(String uid, Context context){
 
-        TextNote note;
+        NoteText note;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -60,16 +60,16 @@ public abstract class MySharedPreferences {
         // Should be unique, otherwise data will be overridden
         String json = sharedPreferences.getString(uid,null);
 
-        Type type = new TypeToken<TextNote>() {}.getType();
+        Type type = new TypeToken<NoteText>() {}.getType();
         note = gson.fromJson(json,type);
 
         if (note == null){
-            return new TextNote();
+            return new NoteText();
         } else
             return note;
     }
 
-    public static void SaveCheckListNoteToSharedPreferences(CheckListNote note,Context context){
+    public static void SaveCheckListNoteToSharedPreferences(NoteCheckList note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -81,9 +81,9 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static CheckListNote LoadCheckListNoteFromSharedPreferences(String uid,Context context){
+    public static NoteCheckList LoadCheckListNoteFromSharedPreferences(String uid, Context context){
 
-        CheckListNote note;
+        NoteCheckList note;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -93,11 +93,11 @@ public abstract class MySharedPreferences {
         // Should be unique, otherwise data will be overridden
         String json = sharedPreferences.getString(uid,null);
 
-        Type type = new TypeToken<CheckListNote>() {}.getType();
+        Type type = new TypeToken<NoteCheckList>() {}.getType();
         note = gson.fromJson(json,type);
 
         if (note == null){
-            return new CheckListNote();
+            return new NoteCheckList();
         } else
             return note;
     }

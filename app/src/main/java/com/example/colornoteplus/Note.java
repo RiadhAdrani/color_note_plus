@@ -3,7 +3,6 @@ package com.example.colornoteplus;
 import android.content.Context;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 
 public abstract class Note<T> extends Object implements Serializable {
 
@@ -20,6 +19,8 @@ public abstract class Note<T> extends Object implements Serializable {
             public void setContent(T content) { this.content = content; }
 
     public abstract void save(Context context);
+
+    public abstract boolean hasChanged(Context context);
 
     public abstract void load(Context context);
 
