@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -64,12 +63,14 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
 
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setCheckedItem(R.id.nav_notes);
         navigationView.setNavigationItemSelectedListener(item -> {
 
             final int notes = R.id.nav_notes, recycler = R.id.nav_recycler_bin, settings = R.id.nav_settings, about = R.id.nav_about;
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void OnDeleteClickListener(int position) {
+            public void OnOptionOneClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
                         getApplicationContext(),
                         3, // TODO: make a global variable for color
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void OnColorSwitchClickListener(int position) {
+            public void OnOptionTwoClick(int position) {
             }
 
         });
@@ -178,6 +179,8 @@ public class MainActivity extends AppCompatActivity{
         rv.setAdapter(adapter);
 
         mainFAB.show();
+
+        toolbar.setTitle(R.string.my_notes);
     }
 
     private void initRecyclerState(){
@@ -198,40 +201,83 @@ public class MainActivity extends AppCompatActivity{
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
+                // open a dialog asking the user for confirmation
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        getApplicationContext(),
+                        3,
+                        R.drawable.ic_info,
+                        getString(R.string.confirm_restore_open),
+                        () -> {
+                            ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                    Statics.KEY_NOTE_LIST,
+                                    getApplicationContext()
+                            );
 
-                ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
-                        Statics.KEY_NOTE_LIST,
-                        getApplicationContext()
+                            temp.add(noteList.get(position).getUid());
+
+                            MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                    temp,
+                                    Statics.KEY_NOTE_LIST,
+                                    getApplicationContext()
+                            );
+
+                            Intent i;
+
+                            if (TextNote.class.equals(noteList.get(position).getClass())) {
+
+                                i = new Intent(getApplicationContext(),NoteActivity.class);
+                                i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                startActivity(i);
+                            }
+
+                            if (CheckListNote.class.equals(noteList.get(position).getClass())){
+                                i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
+                                i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                startActivity(i);
+                            }
+
+                            adapter.removeItem(position);
+                        }
                 );
-
-                temp.add(noteList.get(position).getUid());
-
-                MySharedPreferences.SaveStringArrayToSharedPreferences(
-                        temp,
-                        Statics.KEY_NOTE_LIST,
-                        getApplicationContext()
-                );
-
-                Intent i;
-
-                if (TextNote.class.equals(noteList.get(position).getClass())) {
-
-                    i = new Intent(getApplicationContext(),NoteActivity.class);
-                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                    startActivity(i);
-                }
-
-                if (CheckListNote.class.equals(noteList.get(position).getClass())){
-                    i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
-                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                    startActivity(i);
-                }
-
-                adapter.removeItem(position);
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
 
             @Override
             public void OnLongClickListener(int position) {
+            }
+
+            // restore
+            @Override
+            public void OnOptionOneClick(int position) {
+                // open a dialog asking the user for confirmation
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        getApplicationContext(),
+                        3,
+                        R.drawable.ic_info,
+                        getString(R.string.confirm_restore),
+                        () -> {
+                            ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                    Statics.KEY_NOTE_LIST,
+                                    getApplicationContext()
+                            );
+
+                            temp.add(noteList.get(position).getUid());
+
+                            MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                    temp,
+                                    Statics.KEY_NOTE_LIST,
+                                    getApplicationContext()
+                            );
+
+                            adapter.removeItem(position);
+                        }
+                );
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+            }
+
+            // delete permanently
+            @Override
+            public void OnOptionTwoClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
                         getApplicationContext(),
                         3,
@@ -245,20 +291,14 @@ public class MainActivity extends AppCompatActivity{
                 dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
 
-            @Override
-            public void OnDeleteClickListener(int position) {
-            }
-
-            @Override
-            public void OnColorSwitchClickListener(int position) {
-            }
-
         });
 
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
         mainFAB.hide();
+
+        toolbar.setTitle(R.string.recycler_bin);
     }
 
     @Override

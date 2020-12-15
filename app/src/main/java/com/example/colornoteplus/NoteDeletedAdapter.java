@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 
@@ -46,7 +47,25 @@ public class NoteDeletedAdapter extends NoteAdapter {
             return true;
         });
 
-        holder.moreOptionsView.setVisibility(View.GONE);
+        holder.moreOptionsView.setOnClickListener(view -> {
+
+            PopupMenu menu = new PopupMenu(getContext(),holder.moreOptionsView);
+            menu.setOnMenuItemClickListener(menuItem -> {
+
+                final int restore = R.id.item_restore;
+                final int delete = R.id.item_delete_permanently;
+
+                switch (menuItem.getItemId()){
+                    case restore: if (getListener() != null) getListener().OnOptionOneClick(holder.getAdapterPosition()); return true;
+                    case delete: if (getListener() != null) getListener().OnOptionTwoClick(holder.getAdapterPosition()); return true;
+                }
+
+                return false;
+            });
+
+            menu.inflate(R.menu.menu_recycler_bin);
+            menu.show();
+        });
     }
 
 }

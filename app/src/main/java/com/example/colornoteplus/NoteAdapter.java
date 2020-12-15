@@ -10,7 +10,6 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -105,8 +104,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
                 final int color = R.id.item_option_color;
 
                 switch (menuItem.getItemId()){
-                    case delete: if (listener != null) listener.OnDeleteClickListener(holder.getAdapterPosition()); return true;
-                    case color: if (listener != null) listener.OnColorSwitchClickListener(holder.getAdapterPosition()); return true;
+                    case delete: if (listener != null) listener.OnOptionOneClick(holder.getAdapterPosition()); return true;
+                    case color: if (listener != null) listener.OnOptionTwoClick(holder.getAdapterPosition()); return true;
                 }
 
                 return false;
@@ -218,7 +217,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     public interface OnItemClickListener{
         void OnClickListener(int position);
         void OnLongClickListener(int position);
-        void OnDeleteClickListener(int position);
-        void OnColorSwitchClickListener(int position);
+        void OnOptionOneClick(int position);
+        void OnOptionTwoClick(int position);
     }
 }
