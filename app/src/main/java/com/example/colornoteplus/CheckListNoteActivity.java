@@ -297,6 +297,9 @@ public class CheckListNoteActivity extends AppCompatActivity{
             public void OnClickListener(int position) {
                 note.setColor(position);
                 switchColor(position);
+                if (isNoteOld(note.getUid())){
+                    note.save(getApplicationContext());
+                }
                 fragment.dismiss();
             }
 
