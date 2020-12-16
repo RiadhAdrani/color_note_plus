@@ -17,7 +17,9 @@ public class CheckListItem extends Object {
 
     // description of the item
     private String description;
-        public String getDescription() { return description; }
+        public String getDescription() {
+            return description;
+        }
         public void setDescription(String description) {
             this.description = description;
             setModificationDate();
@@ -25,7 +27,9 @@ public class CheckListItem extends Object {
 
     // date in which the item was done
     private Long doneDate;
-        public Long getDoneDate() { return doneDate; }
+        public Long getDoneDate() {
+            return doneDate;
+        }
         public void setDone() {
             doneDate = Calendar.getInstance().getTime().getTime();
             setModificationDate();
@@ -34,11 +38,15 @@ public class CheckListItem extends Object {
             doneDate = -1L;
             setModificationDate();
         }
-        public boolean isDone() { return doneDate != -1L;}
+        public boolean isDone() {
+            return doneDate != -1L;
+        }
 
     // priority of the item
     private PRIORITY priority;
-        public PRIORITY getPriority() { return priority; }
+        public PRIORITY getPriority() {
+            return priority;
+        }
         public void setPriority(PRIORITY priority) {
             this.priority = priority;
             setModificationDate();
