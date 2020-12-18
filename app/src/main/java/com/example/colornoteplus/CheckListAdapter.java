@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyViewHolder> {
@@ -57,7 +56,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         return new CheckListAdapter.MyViewHolder(LayoutInflater.
                 from(parent.getContext()).
-                inflate(R.layout.item_check_list,parent,false));
+                inflate(R.layout.item_check_list_v2,parent,false));
     }
 
     // bind data and display them in the desired view
@@ -120,6 +119,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         // initializing the due time
         holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
+        holder.dueTimeText.setVisibility(View.GONE);
 
         // TODO: show remaining time instead of the due date
         //  if due date is less than 24 hours, display remaining hours and minutes
@@ -130,6 +130,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         // initializing the priority
         PriorityAdapter adapter = new PriorityAdapter(context, CheckListItem.PRIORITY.values(),color);
+        holder.priorityText.setVisibility(View.GONE);
         holder.priorityText.setAdapter(adapter);
         holder.priorityText.setSelection(currentItem.getPriority().ordinal());
         holder.priorityText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

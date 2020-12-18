@@ -128,4 +128,8 @@ public abstract class StyleManager {
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
     }
+
+    public static int getNeutralColor(){
+        return R.color.white;
+    }
 }

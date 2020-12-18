@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -377,6 +376,13 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // save the note
             note.setTitle(titleView.getText().toString().trim());
+            if (note.getContent().size() > 0){
+                for (int i = 0; i < note.getContent().size(); i++){
+                    if (note.getContent().get(i).getDescription().trim().isEmpty()){
+                        adapter.removeItem(i);
+                    }
+                }
+            }
             note.save(getApplicationContext());
 
             // if note is not old

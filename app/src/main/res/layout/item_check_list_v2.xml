@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/item_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="4dp">
+
+    <CheckBox
+        android:id="@+id/item_check_box"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/item_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginVertical="4dp"
+        android:layout_marginHorizontal="4dp"
+        />
+
+    <EditText
+        android:id="@+id/item_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/item_info_container"
+        app:layout_constraintLeft_toRightOf="@id/item_check_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:color/transparent"
+        android:maxLength="@integer/check_list_item_max_length"
+        android:textSize="18sp"
+        android:hint="@string/new_item"
+        android:textStyle="bold"
+        android:layout_marginStart="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:layout_marginEnd="4dp"
+        android:autofillHints="@string/new_item"
+        android:inputType="textCapSentences|textMultiLine" />
+
+    <LinearLayout
+        android:id="@+id/item_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/item_title"
+        android:orientation="vertical" >
+
+        <Spinner
+            android:id="@+id/item_priority_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_priority"
+            android:contentDescription="@string/set_priority"
+            android:textAlignment="center"
+            style="@style/ColorPaletteStyle"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="4dp"
+            />
+
+        <TextView
+            android:id="@+id/item_due_time_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/item_title"
+            android:text="@string/set_reminder"
+            android:contentDescription="@string/set_reminder"
+            style="@style/ColorPaletteStyle"
+            android:background="?android:attr/selectableItemBackground"
+            />
+
+        <ImageButton
+            android:id="@+id/item_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="@string/delete_item"
+            android:textAlignment="center"
+            style="@style/ColorPaletteStyle"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="4dp"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

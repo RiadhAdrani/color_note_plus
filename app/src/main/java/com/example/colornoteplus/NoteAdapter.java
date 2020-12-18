@@ -95,6 +95,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             return true;
         });
 
+        holder.line.setBackgroundColor(context.getResources().getColor(StyleManager.getColorSecondaryAccent(item.getColor())));
+
         holder.moreOptionsView.setOnClickListener(view -> {
 
             PopupMenu menu = new PopupMenu(context,holder.moreOptionsView);
@@ -204,6 +206,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         TextView titleView;
         TextView contentView;
         ImageButton moreOptionsView;
+        View line;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -211,6 +214,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             titleView = itemView.findViewById(R.id.item_title);
             contentView = itemView.findViewById(R.id.item_content);
             moreOptionsView = itemView.findViewById(R.id.item_more_options);
+            line = itemView.findViewById(R.id.item_line);
         }
     }
 
