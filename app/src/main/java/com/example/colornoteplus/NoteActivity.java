@@ -1,5 +1,6 @@
 package com.example.colornoteplus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -100,6 +102,8 @@ public class NoteActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+
     // get note from the intent
     private void getNoteFromIntent(){
 
@@ -148,6 +152,7 @@ public class NoteActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(note.getColor())));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(view -> onUpButtonPressed());
 
         titleView = findViewById(R.id.note_title_view);
         titleView.setText(note.getTitle());
@@ -235,7 +240,6 @@ public class NoteActivity extends AppCompatActivity {
         contentView.setFocusableInTouchMode(false);
         contentView.clearFocus();
 
-
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());
         colorView.setBackgroundResource(StyleManager.getBackground(note.getColor()));
@@ -264,6 +268,9 @@ public class NoteActivity extends AppCompatActivity {
             public void OnClickListener(int position) {
                 note.setColor(position);
                 switchTheme(position);
+                if (isNoteOld()){
+                    note.save(getApplicationContext());
+                }
                 fragment.dismiss();
             }
 
@@ -288,6 +295,8 @@ public class NoteActivity extends AppCompatActivity {
                     3,
                     StyleManager.getColorPrimary(note.getColor()),
                     true);
+
+            return false;
         }
         else {
 
@@ -403,6 +412,66 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    // return to main activity
+    private void startMainActivity(){
+        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void unsavedChangesAlert(){
+        DialogConfirm dialogConfirm = new DialogConfirm(
+                note.getColor(),
+                R.drawable.ic_info,
+                getString(R.string.confirm_unsaved_changes),
+                3,
+                new DialogConfirm.OnConfirmClickListener() {
+
+                    // save and exit
+                    @Override
+                    public void OnPrimaryAction() {
+
+                        if (saveTextNote())
+                            startMainActivity();
+                    }
+
+                    // discard
+                    @Override
+                    public void OnSecondaryAction() {
+                        startMainActivity();
+                    }
+                });
+        dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+    }
+
+    private boolean onUpButtonPressed(){
+        // save the note
+        note.setTitle(titleView.getText().toString().trim());
+
+        if (note.hasChanged(getApplicationContext())){
+            unsavedChangesAlert();
+            return true;
+        }
+
+        startMainActivity();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // save the note
+        note.setTitle(titleView.getText().toString().trim());
+
+        if (note.hasChanged(this)){
+            unsavedChangesAlert();
+            Toast.makeText(this, "Unsaved changes", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        startMainActivity();
     }
 
 }
