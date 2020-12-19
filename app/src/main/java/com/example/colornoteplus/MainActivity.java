@@ -238,12 +238,14 @@ public class MainActivity extends AppCompatActivity{
                                     i = new Intent(getApplicationContext(),NoteActivity.class);
                                     i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                     startActivity(i);
+                                    finish();
                                 }
 
                                 if (NoteCheckList.class.equals(noteList.get(position).getClass())){
                                     i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
                                     i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                     startActivity(i);
+                                    finish();
                                 }
 
                                 adapter.removeItem(position);
@@ -438,6 +440,7 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(this,NoteActivity.class);
         i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
         startActivity(i);
+        finish();
     }
 
     // create and open a check list
@@ -446,6 +449,7 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(this,CheckListNoteActivity.class);
         i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
         startActivity(i);
+        finish();
     }
 
     // open the note activity
@@ -460,12 +464,14 @@ public class MainActivity extends AppCompatActivity{
             i = new Intent(getApplicationContext(),NoteActivity.class);
             i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
+            finish();
         }
 
         if (NoteCheckList.class.equals(noteList.get(position).getClass())){
             i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
             i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
+            finish();
         }
     }
 

@@ -447,8 +447,10 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private boolean onUpButtonPressed(){
+
         // save the note
         note.setTitle(titleView.getText().toString().trim());
+        note.setContent(contentView.getText().toString().trim());
 
         if (note.hasChanged(getApplicationContext())){
             unsavedChangesAlert();
@@ -464,6 +466,7 @@ public class NoteActivity extends AppCompatActivity {
 
         // save the note
         note.setTitle(titleView.getText().toString().trim());
+        note.setContent(contentView.getText().toString().trim());
 
         if (note.hasChanged(this)){
             unsavedChangesAlert();

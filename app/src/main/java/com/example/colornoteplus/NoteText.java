@@ -44,11 +44,10 @@ public class NoteText extends Note<String> implements Serializable {
         if (!getTitle().equals(original.getTitle()))
             return true;
 
-        if (getContent() != null && original.getContent() != null){
-            return !getContent().trim().equals(original.getContent());
-        }
+        if (getContent() == null) setContent("");
+        if (original.getContent() == null) original.setContent("");
 
-        return false;
+        return !getContent().trim().equals(original.getContent());
     }
 
     @Override
