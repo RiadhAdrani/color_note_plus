@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity{
 
         noteList.clear();
 
-        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,this)) {
+        for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this)); break;
-                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNoteFromSharedPreferences(s,this)); break;
+                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
             }
         }
 
@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void OnOptionTwoClick(int position) {
+                buildColorPickDialog(position);
             }
 
         });
@@ -196,10 +197,10 @@ public class MainActivity extends AppCompatActivity{
 
         noteList.clear();
 
-        for (String s : MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,this)) {
+        for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST_TRASH,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNoteFromSharedPreferences(s,this)); break;
-                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNoteFromSharedPreferences(s,this)); break;
+                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
             }
         }
 
@@ -218,14 +219,14 @@ public class MainActivity extends AppCompatActivity{
                         new DialogConfirm.OnConfirmClickListener() {
                             @Override
                             public void OnPrimaryAction() {
-                                ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                ArrayList<String> temp = MySharedPreferences.LoadStringArray(
                                         Statics.KEY_NOTE_LIST,
                                         getApplicationContext()
                                 );
 
                                 temp.add(noteList.get(position).getUid());
 
-                                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                MySharedPreferences.SaveStringArray(
                                         temp,
                                         Statics.KEY_NOTE_LIST,
                                         getApplicationContext()
@@ -253,7 +254,7 @@ public class MainActivity extends AppCompatActivity{
 
                             @Override
                             public void OnSecondaryAction() {
-
+                                buildColorPickDialog(position);
                             }
                         }
                 );
@@ -276,14 +277,14 @@ public class MainActivity extends AppCompatActivity{
                             @Override
                             public void OnPrimaryAction() {
                                 {
-                                    ArrayList<String> temp = MySharedPreferences.LoadStringArrayToSharedPreferences(
+                                    ArrayList<String> temp = MySharedPreferences.LoadStringArray(
                                             Statics.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
                                     temp.add(noteList.get(position).getUid());
 
-                                    MySharedPreferences.SaveStringArrayToSharedPreferences(
+                                    MySharedPreferences.SaveStringArray(
                                             temp,
                                             Statics.KEY_NOTE_LIST,
                                             getApplicationContext()
@@ -484,12 +485,35 @@ public class MainActivity extends AppCompatActivity{
 
         switch (state){
             case NOTES:
-                MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
+                MySharedPreferences.SaveStringArray(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
                 break;
             case DELETED_NOTES:
-                MySharedPreferences.SaveStringArrayToSharedPreferences(mNoteList,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
+                MySharedPreferences.SaveStringArray(mNoteList,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
                 break;
         }
+    }
+
+    // build the color picker dialog
+    private void buildColorPickDialog(int notePosition){
+
+        FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,noteList.get(notePosition).getColor());
+
+        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+
+        fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
+            @Override
+            public void OnClickListener(int position) {
+
+                adapter.switchColor(notePosition,position);
+                fragment.dismiss();
+            }
+
+            @Override
+            public void OnLongClickListener(int position) {
+
+            }
+        });
+
     }
 
 }

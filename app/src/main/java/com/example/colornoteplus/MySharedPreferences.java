@@ -18,25 +18,25 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static String LoadStringFromSharedPreferences(String key,Context context){
+    public static String LoadString(String key, Context context){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");
     }
 
-    public static void SaveStringToSharedPreferences(String string, String key, Context context){
+    public static void SaveString(String string, String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,string.trim());
         editor.apply();
     }
 
-    public static Long LoadLongFromSharedPreferences(String key,Context context){
+    public static Long LoadLong(String key,Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(key,0L);
     }
 
-    public static void SaveTextNoteToSharedPreferences(NoteText note, Context context){
+    public static void SaveTextNote(NoteText note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -48,7 +48,7 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static NoteText LoadTextNoteFromSharedPreferences(String uid, Context context){
+    public static NoteText LoadTextNote(String uid, Context context){
 
         NoteText note;
 
@@ -69,7 +69,7 @@ public abstract class MySharedPreferences {
             return note;
     }
 
-    public static void SaveCheckListNoteToSharedPreferences(NoteCheckList note, Context context){
+    public static void SaveCheckListNote(NoteCheckList note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -81,7 +81,7 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static NoteCheckList LoadCheckListNoteFromSharedPreferences(String uid, Context context){
+    public static NoteCheckList LoadCheckListNote(String uid, Context context){
 
         NoteCheckList note;
 
@@ -102,7 +102,7 @@ public abstract class MySharedPreferences {
             return note;
     }
 
-    public static void SaveStringArrayToSharedPreferences(ArrayList<String> list,String key,Context context){
+    public static void SaveStringArray(ArrayList<String> list, String key, Context context){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -115,7 +115,7 @@ public abstract class MySharedPreferences {
         editor.apply();
     }
 
-    public static ArrayList<String> LoadStringArrayToSharedPreferences(String uid,Context context){
+    public static ArrayList<String> LoadStringArray(String uid, Context context){
 
         ArrayList<String> list;
 

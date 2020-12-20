@@ -129,12 +129,28 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        ArrayList<String> trash = MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST_TRASH,context);
+        ArrayList<String> trash = MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST_TRASH,context);
         trash.add(uid);
-        MySharedPreferences.SaveStringArrayToSharedPreferences(trash,Statics.KEY_NOTE_LIST_TRASH,context);
+        MySharedPreferences.SaveStringArray(trash,Statics.KEY_NOTE_LIST_TRASH,context);
 
         list.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void switchColor(int position, int newColor){
+
+        String uid = list.get(position).getUid();
+
+        for (Note<?> note : listFull) {
+            if (note.getUid().equals(uid)){
+                note.setColor(newColor);
+                note.save(getContext());
+                break;
+            }
+        }
+
+        list.get(position).setColor(newColor);
+        notifyItemChanged(position);
     }
 
     public void sortByTitle(boolean isDescending){

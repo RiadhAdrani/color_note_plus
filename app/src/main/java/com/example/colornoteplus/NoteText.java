@@ -30,13 +30,13 @@ public class NoteText extends Note<String> implements Serializable {
     @Override
     public void save(Context context) {
         setModificationDate();
-        MySharedPreferences.SaveTextNoteToSharedPreferences(this,context);
+        MySharedPreferences.SaveTextNote(this,context);
     }
 
     @Override
     public boolean hasChanged(Context context) {
 
-        NoteText original = MySharedPreferences.LoadTextNoteFromSharedPreferences(getUid(),context);
+        NoteText original = MySharedPreferences.LoadTextNote(getUid(),context);
 
         if (getColor() != original.getColor())
             return true;
@@ -52,7 +52,7 @@ public class NoteText extends Note<String> implements Serializable {
 
     @Override
     public void load(Context context) {
-        NoteText temp = MySharedPreferences.LoadTextNoteFromSharedPreferences(this.getUid(),context);
+        NoteText temp = MySharedPreferences.LoadTextNote(this.getUid(),context);
         setTitle(temp.getTitle());
         setContent(temp.getContent());
         setColor(temp.getColor());

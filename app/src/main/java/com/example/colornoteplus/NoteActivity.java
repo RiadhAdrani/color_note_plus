@@ -108,7 +108,7 @@ public class NoteActivity extends AppCompatActivity {
     private void getNoteFromIntent(){
 
         if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
-            note = MySharedPreferences.LoadTextNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = MySharedPreferences.LoadTextNote(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
             note = new NoteText();
         }
@@ -250,7 +250,7 @@ public class NoteActivity extends AppCompatActivity {
     // if old return true
     // else   return false
     private boolean isNoteOld(){
-        for (String n: MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
         }
         return false;
@@ -309,12 +309,12 @@ public class NoteActivity extends AppCompatActivity {
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        MySharedPreferences.LoadStringArrayToSharedPreferences(
+                        MySharedPreferences.LoadStringArray(
                                 Statics.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                MySharedPreferences.SaveStringArray(
                         noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

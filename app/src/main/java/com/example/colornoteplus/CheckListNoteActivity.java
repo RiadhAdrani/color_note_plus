@@ -56,7 +56,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // if the UID exists in the SharedPreference
             // Load the note
-            note = MySharedPreferences.LoadCheckListNoteFromSharedPreferences(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = MySharedPreferences.LoadCheckListNote(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
         }
         else {
 
@@ -347,7 +347,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     // if old return true
     // else   return false
     private boolean isNoteOld(String UID){
-        for (String n: MySharedPreferences.LoadStringArrayToSharedPreferences(Statics.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(UID)) return true;
         }
         return false;
@@ -392,12 +392,12 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        MySharedPreferences.LoadStringArrayToSharedPreferences(
+                        MySharedPreferences.LoadStringArray(
                                 Statics.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                MySharedPreferences.SaveStringArrayToSharedPreferences(
+                MySharedPreferences.SaveStringArray(
                         noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

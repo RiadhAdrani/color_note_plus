@@ -1,7 +1,6 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,13 +22,13 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
     @Override
     public void save(Context context) {
         setModificationDate();
-        MySharedPreferences.SaveCheckListNoteToSharedPreferences(this,context);
+        MySharedPreferences.SaveCheckListNote(this,context);
     }
 
     @Override
     public boolean hasChanged(Context context) {
 
-        NoteCheckList original = MySharedPreferences.LoadCheckListNoteFromSharedPreferences(getUid(),context);
+        NoteCheckList original = MySharedPreferences.LoadCheckListNote(getUid(),context);
 
         if (getColor() != original.getColor()) {
             return true;
