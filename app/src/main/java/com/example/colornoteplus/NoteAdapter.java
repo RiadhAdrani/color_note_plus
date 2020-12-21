@@ -2,12 +2,14 @@ package com.example.colornoteplus;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -18,10 +20,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.InflaterInputStream;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> implements Filterable {
 
     // display notes in a recycler view
+
+    enum SelectionMode{
+        NO_SELECTION,
+        SELECTION
+    }
+
+    private SelectionMode selectionMode = SelectionMode.NO_SELECTION;
+        public SelectionMode getSelectionMode() { return selectionMode; }
+        public void setSelectionMode(SelectionMode selectionMode) { this.selectionMode = selectionMode; }
+
+    private ArrayList<String> selectedItems = new ArrayList<>();
+        public ArrayList<String> getSelectedItems() { return selectedItems; }
+        public void setSelectedItems(ArrayList<String> selectedItems) { this.selectedItems = selectedItems; }
+
+    public boolean isSelected(String uid){
+            for (String item : selectedItems){
+                if (item.equals(uid)){
+                    return true;
+                }
+            }
+
+            return false;
+    }
 
     private final ArrayList<Note<?>> list;
 
@@ -84,8 +110,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             holder.contentView.setText(content);
         }
 
-        holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
-
         holder.itemView.setOnClickListener(view -> {
             if (listener != null) listener.OnClickListener(holder.getAdapterPosition());
         });
@@ -97,25 +121,48 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
         holder.line.setBackgroundColor(context.getResources().getColor(StyleManager.getColorSecondaryAccent(item.getColor())));
 
+        holder.moreOptionsView.setVisibility(View.VISIBLE);
         holder.moreOptionsView.setOnClickListener(view -> {
 
-            PopupMenu menu = new PopupMenu(context,holder.moreOptionsView);
-            menu.setOnMenuItemClickListener(menuItem -> {
+                PopupMenu menu = new PopupMenu(context,holder.moreOptionsView);
+                menu.setOnMenuItemClickListener(menuItem -> {
 
-                final int delete = R.id.item_option_delete;
-                final int color = R.id.item_option_color;
+                    final int delete = R.id.item_option_delete;
+                    final int color = R.id.item_option_color;
 
-                switch (menuItem.getItemId()){
-                    case delete: if (listener != null) listener.OnOptionOneClick(holder.getAdapterPosition()); return true;
-                    case color: if (listener != null) listener.OnOptionTwoClick(holder.getAdapterPosition()); return true;
-                }
+                    switch (menuItem.getItemId()){
+                        case delete: if (listener != null) listener.OnOptionOneClick(holder.getAdapterPosition()); return true;
+                        case color: if (listener != null) listener.OnOptionTwoClick(holder.getAdapterPosition()); return true;
+                    }
 
-                return false;
+                    return false;
+                });
+
+                menu.inflate(R.menu.menu_note_more_options);
+                menu.show();
             });
 
-            menu.inflate(R.menu.menu_note_more_options);
-            menu.show();
-        });
+        if (isSelected(item.getUid())){
+            holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundDark( item.getColor()) );
+        }
+        else {
+            holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
+        }
+
+        if (selectionMode == SelectionMode.SELECTION){
+            holder.moreOptionsView.setVisibility(View.INVISIBLE);
+            holder.selectionIcon.setVisibility(View.VISIBLE);
+            if (isSelected(item.getUid())){
+                holder.selectionIcon.setImageResource(R.drawable.ic_checked_circle);
+            }
+            else {
+                holder.selectionIcon.setImageResource(R.drawable.ic_unchecked_circle);
+            }
+        } else {
+            holder.moreOptionsView.setVisibility(View.VISIBLE);
+            holder.selectionIcon.setVisibility(View.GONE);
+        }
+
     }
 
     public void removeItem(int position){
@@ -222,6 +269,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         TextView titleView;
         TextView contentView;
         ImageButton moreOptionsView;
+        ImageView selectionIcon;
         View line;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -231,6 +279,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             contentView = itemView.findViewById(R.id.item_content);
             moreOptionsView = itemView.findViewById(R.id.item_more_options);
             line = itemView.findViewById(R.id.item_line);
+            selectionIcon = itemView.findViewById(R.id.item_selected);
         }
     }
 

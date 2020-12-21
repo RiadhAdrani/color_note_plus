@@ -2,14 +2,18 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity{
     // toolbar
     Toolbar toolbar;
 
+    ConstraintLayout selectionToolbar;
+
     // status variables
     Boolean areFABsVisible = false;
 
@@ -66,6 +72,33 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
+
+        selectionToolbar = findViewById(R.id.selection_toolbar);
+        ImageView toolbarCancel = selectionToolbar.findViewById(R.id.toolbar_cancel);
+        toolbarCancel.setOnClickListener( view -> exitSelectionMode() );
+
+        ImageView toolbarSelectAll = selectionToolbar.findViewById(R.id.toolbar_select_all);
+        toolbarSelectAll.setOnClickListener(view -> {
+
+            if (adapter.getSelectedItems().size() != adapter.getList().size()){
+                adapter.getSelectedItems().clear();
+                for(Note<?> note : adapter.getList()){
+                    adapter.getSelectedItems().add(note.getUid());
+                    Log.d("SelectedItems","Iteration -> Selected Items : "+adapter.getSelectedItems().size());
+                }
+            }
+            else {
+                adapter.getSelectedItems().clear();
+            }
+
+            Log.d("SelectedItems","All Items : "+adapter.getList().size());
+            Log.d("SelectedItems","Selected Items : "+adapter.getSelectedItems().size());
+
+            adapter.notifyDataSetChanged();
+        });
+
+        ImageView toolbarDelete = selectionToolbar.findViewById(R.id.toolbar_delete_selection);
+        ImageView toolbarChangeSelectionColor = selectionToolbar.findViewById(R.id.toolbar_change_selection_color);
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -132,6 +165,8 @@ public class MainActivity extends AppCompatActivity{
         initNoteState();
     }
 
+
+
     private void initNoteState(){
 
         noteList.clear();
@@ -150,11 +185,45 @@ public class MainActivity extends AppCompatActivity{
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
-                noteOnClickListener(position);
+
+                switch (adapter.getSelectionMode()){
+
+                    // selecting a note will open it
+                    case NO_SELECTION:
+                        noteOnClickListener(position);
+                        break;
+
+                    // selecting a note will add it to the list of selected items
+                    case SELECTION:
+
+                        // if note is not selected : select it
+                        if (!adapter.isSelected(noteList.get(position).getUid())) {
+                            adapter.getSelectedItems().add(noteList.get(position).getUid());
+                        }
+                        // if note is selected : deselect it
+                        else {
+                            adapter.getSelectedItems().remove(noteList.get(position).getUid());
+                        }
+
+                        adapter.notifyItemChanged(position);
+                        break;
+                }
+
             }
 
             @Override
             public void OnLongClickListener(int position) {
+
+                if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.NO_SELECTION){
+                    adapter.setSelectionMode(NoteAdapter.SelectionMode.SELECTION);
+                    enterSelectionMode();
+                }
+
+                if (!adapter.isSelected(noteList.get(position).getUid())){
+                    adapter.getSelectedItems().add(noteList.get(position).getUid());
+                    adapter.notifyItemChanged(position);
+                }
+
             }
 
             @Override
@@ -191,6 +260,8 @@ public class MainActivity extends AppCompatActivity{
         mainFAB.show();
 
         toolbar.setTitle(R.string.my_notes);
+
+        exitSelectionMode();
     }
 
     private void initRecyclerState(){
@@ -334,6 +405,8 @@ public class MainActivity extends AppCompatActivity{
         mainFAB.hide();
 
         toolbar.setTitle(R.string.recycler_bin);
+
+        exitSelectionMode();
     }
 
     @Override
@@ -341,6 +414,13 @@ public class MainActivity extends AppCompatActivity{
 
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
+        }
+
+        if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.SELECTION){
+            adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
+            adapter.setSelectedItems(new ArrayList<>());
+            adapter.notifyDataSetChanged();
+            exitSelectionMode();
         }
         else{
             super.onBackPressed();
@@ -514,6 +594,27 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    void enterSelectionMode(){
+        toolbar.setVisibility(View.INVISIBLE);
+        selectionToolbar.setVisibility(View.VISIBLE);
+        adapter.getSelectedItems().clear();
+        adapter.notifyDataSetChanged();
+        areFABsVisible = false;
+        checkListFAB.hide();
+        textFAB.hide();
+        mainFAB.shrink();
+        mainFAB.hide();
+    }
+
+    void exitSelectionMode(){
+        adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
+        toolbar.setVisibility(View.VISIBLE);
+        selectionToolbar.setVisibility(View.INVISIBLE);
+        adapter.getSelectedItems().clear();
+        adapter.notifyDataSetChanged();
+        mainFAB.show();
     }
 
 }

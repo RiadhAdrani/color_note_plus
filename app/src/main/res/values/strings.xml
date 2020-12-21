@@ -25,6 +25,9 @@
     <string name="restore">Restore</string>
     <string name="delete_permanently">Delete Permanently</string>
     <string name="discard">Discard</string>
+    <string name="select_all">Select/Deselect All</string>
+    <string name="delete_selection">Delete Selected</string>
+    <string name="change_selection_color">Change Selection</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>
