@@ -30,6 +30,8 @@
     <string name="change_selection_color">Change Selection</string>
     <string name="empty_bin">Permanently Delete All Items</string>
     <string name="no_item_selected">No Item Selected</string>
+    <string name="lighting_theme">Lighting Theme</string>
+    <string name="app_color">App Color</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>

@@ -10,9 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ColorNotePlus">
 
-        <activity android:name=".CheckListNoteActivity"
-                  >
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
 
+        <activity
+            android:name=".CheckListNoteActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
 
         <activity
@@ -26,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

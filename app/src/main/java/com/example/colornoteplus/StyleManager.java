@@ -1,5 +1,7 @@
 package com.example.colornoteplus;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -131,5 +133,21 @@ public abstract class StyleManager {
 
     public static int getNeutralColor(){
         return R.color.white;
+    }
+
+    public static int getLightTheme(Context context){
+        return MySharedPreferences.LoadInteger(Statics.KEY_LIGHT_THEME,context);
+    }
+
+    public static void setLightTheme(int theme, Context context){
+        MySharedPreferences.SaveInteger(theme,Statics.KEY_LIGHT_THEME,context);
+    }
+
+    public static int getAppColor(Context context){
+        return MySharedPreferences.LoadInteger(Statics.KEY_APP_COLOR,context);
+    }
+
+    public static void setAppColor(int theme, Context context){
+        MySharedPreferences.SaveInteger(theme,Statics.KEY_APP_COLOR,context);
     }
 }

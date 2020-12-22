@@ -110,7 +110,7 @@ public class NoteActivity extends AppCompatActivity {
         if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
             note = MySharedPreferences.LoadTextNote(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
-            note = new NoteText();
+            note = new NoteText(getApplicationContext());
         }
     }
 

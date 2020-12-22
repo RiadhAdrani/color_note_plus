@@ -62,7 +62,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // if it is new
             // create a new note
-            note = new NoteCheckList();
+            note = new NoteCheckList(getApplicationContext());
         }
 
         // change the theme of the activity

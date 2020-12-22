@@ -9,9 +9,9 @@ import java.util.UUID;
 public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
 
     // default constructor
-    public NoteCheckList(){
+    public NoteCheckList(Context context){
         setTitle(Statics.NOTE_PLACEHOLDER);
-        setColor(Statics.NOTE_DEFAULT_COLOR);
+        setColor(StyleManager.getAppColor(context));
         setContent(new ArrayList<>());
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());

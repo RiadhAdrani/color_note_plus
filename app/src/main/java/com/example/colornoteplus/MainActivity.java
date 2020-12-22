@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
     STATES state;
 
     // Activity theme
-    int theme = 3;
+    int theme ;
 
     // recycler view and its adapter
     RecyclerView rv;
@@ -69,15 +69,18 @@ public class MainActivity extends AppCompatActivity{
 
         state = STATES.NOTES;
 
-        setTheme(R.style.ThemeGrey);
+        theme = StyleManager.getAppColor(getApplicationContext());
+
+        setTheme(StyleManager.getTheme(theme));
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
 
-         recyclerSelectionToolbar = findViewById(R.id.recycler_selection_toolbar);
+        recyclerSelectionToolbar = findViewById(R.id.recycler_selection_toolbar);
+        recyclerSelectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
 
         ImageView rTCancel = recyclerSelectionToolbar.findViewById(R.id.toolbar_cancel);
         rTCancel.setOnClickListener( v -> exitRecyclerSelectionMode());
@@ -196,6 +199,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         selectionToolbar = findViewById(R.id.selection_toolbar);
+        selectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
         ImageView toolbarCancel = selectionToolbar.findViewById(R.id.toolbar_cancel);
         toolbarCancel.setOnClickListener( view -> exitSelectionMode() );
 
@@ -274,7 +278,9 @@ public class MainActivity extends AppCompatActivity{
                     startRecyclerBin();
                     break;
                 case settings:
-                    Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(),SettingsActivity.class);
+                    startActivity(i);
+                    finish();
                     break;
                 case about:
                     Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
@@ -383,7 +389,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void OnOptionOneClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        3, // TODO: make a global variable for color
+                        theme, // TODO: make a global variable for color
                         R.drawable.ic_delete,
                         getString(R.string.confirm_delete),
                         new DialogConfirm.OnConfirmClickListener() {
@@ -443,7 +449,7 @@ public class MainActivity extends AppCompatActivity{
 
                     // open a dialog asking the user for confirmation
                     DialogConfirm dialogConfirm = new DialogConfirm(
-                            3,
+                            theme,
                             R.drawable.ic_info,
                             getString(R.string.confirm_restore_open),
                             new DialogConfirm.OnConfirmClickListener() {
@@ -513,7 +519,7 @@ public class MainActivity extends AppCompatActivity{
             public void OnOptionOneClick(int position) {
                 // open a dialog asking the user for confirmation
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        3,
+                        theme,
                         R.drawable.ic_info,
                         getString(R.string.confirm_restore),
                         new DialogConfirm.OnConfirmClickListener() {
@@ -550,7 +556,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void OnOptionTwoClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        3,
+                        theme,
                         R.drawable.ic_delete,
                         getString(R.string.confirm_delete_permanently),
                         new DialogConfirm.OnConfirmClickListener() {

@@ -64,7 +64,7 @@ public abstract class MySharedPreferences {
         note = gson.fromJson(json,type);
 
         if (note == null){
-            return new NoteText();
+            return new NoteText(context);
         } else
             return note;
     }
@@ -97,7 +97,7 @@ public abstract class MySharedPreferences {
         note = gson.fromJson(json,type);
 
         if (note == null){
-            return new NoteCheckList();
+            return new NoteCheckList(context);
         } else
             return note;
     }
@@ -134,6 +134,19 @@ public abstract class MySharedPreferences {
             return new ArrayList<>();
         } else
             return list;
+    }
+
+    public static int LoadInteger(String key, Context context){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key,0);
+    }
+
+    public static void SaveInteger(int integer, String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,integer);
+        editor.apply();
     }
 
 }

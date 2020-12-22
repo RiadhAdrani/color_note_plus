@@ -88,7 +88,7 @@
         <!-- text, icon and button vectors-->
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/grey_dark_sonic_silver</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/grey_spanish</item>
     </style>
 
     <style name="ThemeOrangeYellow" parent="Theme.MaterialComponents.Light.NoActionBar">

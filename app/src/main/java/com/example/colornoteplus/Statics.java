@@ -13,11 +13,16 @@ public abstract class Statics {
     public final static String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 
     public final static int NOTE_TITLE_MINIMUM_LENGTH = 3;
+
     public final static String NOTE_TEXT_ID = "T";
     public final static String NOTE_CHECK_ID = "C";
+
     public final static String KEY_NOTE_ACTIVITY = "LOAD_NOTE";
     public final static String KEY_NOTE_LIST = "NOTE_LIST";
     public final static String KEY_NOTE_LIST_TRASH = "NOTE_LIST_TRASH";
+    public final static String KEY_LIGHT_THEME = "LIGHT_THEME";
+    public final static String KEY_APP_COLOR = "APP_COLOR";
+
     public final static String TAG_FRAGMENT_COLOR_PICK = "PICK_COLOR";
     public final static String TAG_FRAGMENT_ADD_CHECK_LIST_ITEM = "ADD_CHECK_LIST_ITEM";
     public final static String TAG_FRAGMENT_DATE_PICKER = "DATE_PICKER";
@@ -26,7 +31,8 @@ public abstract class Statics {
     public final static String NOTE_PLACEHOLDER = "New Note";
     public final static int NOTE_DEFAULT_COLOR = 0;
     public final static String NOTE_DEFAULT_UID = "NEW_NOTE";
-    public final static int  DEFAULT_TOOLBAR_COLOR = R.color.grey_dark_sonic_silver;
+    public final static int DEFAULT_LIGHT_THEME = 0;
+    public final static int DEFAULT_COLOR_THEME = 0;
 
     public final static ArrayList<Character> SPECIAL_STRINGS = new ArrayList<>(Arrays.asList(
             ' '));

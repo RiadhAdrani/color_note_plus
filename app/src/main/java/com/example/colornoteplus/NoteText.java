@@ -8,19 +8,9 @@ import java.util.UUID;
 
 public class NoteText extends Note<String> implements Serializable {
 
-    // public constructor
-    public NoteText(String name, int color){
-        setTitle(name);
-        setColor(color);
-        setContent(null);
-        setCreationDate(Calendar.getInstance().getTime().getTime());
-        setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(UUID.randomUUID().toString() + getCreationDate());
-    }
-
-    public NoteText(){
+    public NoteText(Context context){
         setTitle(Statics.NOTE_PLACEHOLDER);
-        setColor(Statics.NOTE_DEFAULT_COLOR);
+        setColor(StyleManager.getAppColor(context));
         setContent(null);
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
