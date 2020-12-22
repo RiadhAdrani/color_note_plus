@@ -67,7 +67,22 @@ public class NoteDeletedAdapter extends NoteAdapter {
             menu.show();
         });
 
-        holder.selectionIcon.setVisibility(View.GONE);
+        if (getSelectionMode() == SelectionMode.NO_SELECTION){
+            holder.selectionIcon.setVisibility(View.GONE);
+            holder.moreOptionsView.setVisibility(View.VISIBLE);
+        } else {
+            holder.selectionIcon.setVisibility(View.VISIBLE);
+            holder.moreOptionsView.setVisibility(View.INVISIBLE);
+            if (isSelected(item.getUid())){
+                holder.selectionIcon.setImageResource(R.drawable.ic_checked_circle);
+                holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundDark(item.getColor()));
+            }
+            else {
+                holder.selectionIcon.setImageResource(R.drawable.ic_unchecked_circle);
+                holder.backgroundView.setBackgroundResource( StyleManager.getBackground(item.getColor()));
+            }
+        }
+
     }
 
 }

@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
     Toolbar toolbar;
 
     ConstraintLayout selectionToolbar;
+    ConstraintLayout recyclerSelectionToolbar;
 
     // status variables
     Boolean areFABsVisible = false;
@@ -76,6 +76,124 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(Statics.DEFAULT_TOOLBAR_COLOR));
+
+         recyclerSelectionToolbar = findViewById(R.id.recycler_selection_toolbar);
+
+        ImageView rTCancel = recyclerSelectionToolbar.findViewById(R.id.toolbar_cancel);
+        rTCancel.setOnClickListener( v -> exitRecyclerSelectionMode());
+
+        ImageView rTSelectAll = recyclerSelectionToolbar.findViewById(R.id.toolbar_select_all);
+        rTSelectAll.setOnClickListener( v -> {
+            if (adapter.getSelectedItems().size() != adapter.getList().size()){
+                adapter.getSelectedItems().clear();
+                for(Note<?> note : adapter.getList()){
+                    adapter.getSelectedItems().add(note.getUid());
+                }
+            }
+            else {
+                adapter.getSelectedItems().clear();
+            }
+
+            adapter.notifyDataSetChanged();
+        });
+
+        ImageView rTEmptyBin = recyclerSelectionToolbar.findViewById(R.id.toolbar_empty_recycler);
+        rTEmptyBin.setOnClickListener(v -> {
+
+            DialogConfirm dialogConfirm = new DialogConfirm(
+                    theme,
+                    R.drawable.ic_info,
+                    getString(R.string.confirm_delete_permanently_all),
+                    new DialogConfirm.OnConfirmClickListener() {
+                        @Override
+                        public void OnPrimaryAction() {
+                            for (Note<?> note: adapter.getListFull()){
+                                MySharedPreferences.DeleteNote(note.getUid(),getApplicationContext());
+                            }
+                            adapter.getList().clear();
+                            adapter.getListFull().clear();
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void OnSecondaryAction() {
+                            // Unused
+                        }
+                    }
+            );
+
+            dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+        });
+
+        ImageView rTDeletePermanently = recyclerSelectionToolbar.findViewById(R.id.toolbar_delete_selection);
+        rTDeletePermanently.setOnClickListener( v -> {
+
+            if (adapter.getSelectedItems().isEmpty()){
+                Toast.makeText(this, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        theme,
+                        R.drawable.ic_info,
+                        getString(R.string.confirm_delete_permanently_selected),
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                for (int i = 0; i < adapter.getListFull().size() ; i++){
+                                    if (adapter.isSelected(adapter.getListFull().get(i).getUid())){
+                                        adapter.deleteItemPermanently(i);
+                                        i --;
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+                                // Unused
+                            }
+                        }
+                );
+
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+            }
+
+        });
+
+        ImageView rTRestore = recyclerSelectionToolbar.findViewById(R.id.toolbar_restore);
+        rTRestore.setOnClickListener( v -> {
+
+            if (adapter.getSelectedItems().isEmpty()){
+                Toast.makeText(this, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+            } else {
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        theme,
+                        R.drawable.ic_info,
+                        getString(R.string.confirm_restore_selected),
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                for (int i = 0; i < adapter.getListFull().size() ; i++){
+                                    if (adapter.isSelected(adapter.getListFull().get(i).getUid())){
+                                        adapter.restoreItem(i);
+                                        i --;
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+                                // Unused
+                            }
+                        }
+                );
+
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+            }
+        });
 
         selectionToolbar = findViewById(R.id.selection_toolbar);
         ImageView toolbarCancel = selectionToolbar.findViewById(R.id.toolbar_cancel);
@@ -99,18 +217,46 @@ public class MainActivity extends AppCompatActivity{
 
         ImageView toolbarDelete = selectionToolbar.findViewById(R.id.toolbar_delete_selection);
         toolbarDelete.setOnClickListener( v -> {
-            for (int i = 0; i < adapter.getList().size(); i++){
-                if (adapter.isSelected(adapter.getList().get(i).getUid())){
-                    adapter.removeItem(i);
-                    i--;
-                }
 
+            if (adapter.getSelectedItems().isEmpty()){
+                Toast.makeText(this, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+
+            } else {
+                DialogConfirm dialogConfirm = new DialogConfirm(
+                        theme,
+                        R.drawable.ic_info,
+                        getString(R.string.confirm_delete_selected),
+                        new DialogConfirm.OnConfirmClickListener() {
+                            @Override
+                            public void OnPrimaryAction() {
+                                for (int i = 0; i < adapter.getList().size(); i++){
+                                    if (adapter.isSelected(adapter.getList().get(i).getUid())){
+                                        adapter.removeItem(i);
+                                        i--;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void OnSecondaryAction() {
+
+                            }
+                        }
+                        );
+                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
             }
+
         });
 
         ImageView toolbarChangeSelectionColor = selectionToolbar.findViewById(R.id.toolbar_change_selection_color);
         toolbarChangeSelectionColor.setOnClickListener(
-                v -> buildColorPickDialog());
+                v -> {
+                    if (adapter.getSelectedItems().isEmpty()){
+                        Toast.makeText(this, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        buildColorPickDialog();
+                });
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -122,14 +268,10 @@ public class MainActivity extends AppCompatActivity{
 
             switch (item.getItemId()){
                 case notes:
-                    saveNoteList();
-                    initNoteState();
-                    state = STATES.NOTES;
+                    startMyNote();
                     break;
                 case recycler:
-                    saveNoteList();
-                    initRecyclerState();
-                    state = STATES.DELETED_NOTES;
+                    startRecyclerBin();
                     break;
                 case settings:
                     Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
@@ -274,6 +416,7 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setTitle(R.string.my_notes);
 
         exitSelectionMode();
+        exitRecyclerSelectionMode();
     }
 
     private void initRecyclerState(){
@@ -294,58 +437,75 @@ public class MainActivity extends AppCompatActivity{
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
-                // open a dialog asking the user for confirmation
-                DialogConfirm dialogConfirm = new DialogConfirm(
-                        3,
-                        R.drawable.ic_info,
-                        getString(R.string.confirm_restore_open),
-                        new DialogConfirm.OnConfirmClickListener() {
-                            @Override
-                            public void OnPrimaryAction() {
-                                ArrayList<String> temp = MySharedPreferences.LoadStringArray(
-                                        Statics.KEY_NOTE_LIST,
-                                        getApplicationContext()
-                                );
 
-                                temp.add(noteList.get(position).getUid());
+                // if selection mode is not active
+                if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.NO_SELECTION){
 
-                                MySharedPreferences.SaveStringArray(
-                                        temp,
-                                        Statics.KEY_NOTE_LIST,
-                                        getApplicationContext()
-                                );
+                    // open a dialog asking the user for confirmation
+                    DialogConfirm dialogConfirm = new DialogConfirm(
+                            3,
+                            R.drawable.ic_info,
+                            getString(R.string.confirm_restore_open),
+                            new DialogConfirm.OnConfirmClickListener() {
+                                @Override
+                                public void OnPrimaryAction() {
+                                    ArrayList<String> temp = MySharedPreferences.LoadStringArray(
+                                            Statics.KEY_NOTE_LIST,
+                                            getApplicationContext()
+                                    );
 
-                                Intent i;
+                                    temp.add(noteList.get(position).getUid());
 
-                                if (NoteText.class.equals(noteList.get(position).getClass())) {
+                                    MySharedPreferences.SaveStringArray(
+                                            temp,
+                                            Statics.KEY_NOTE_LIST,
+                                            getApplicationContext()
+                                    );
 
-                                    i = new Intent(getApplicationContext(),NoteActivity.class);
-                                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                                    startActivity(i);
-                                    finish();
+                                    Intent i;
+
+                                    if (NoteText.class.equals(noteList.get(position).getClass())) {
+
+                                        i = new Intent(getApplicationContext(),NoteActivity.class);
+                                        i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                        startActivity(i);
+                                        finish();
+                                    }
+
+                                    if (NoteCheckList.class.equals(noteList.get(position).getClass())){
+                                        i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
+                                        i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                        startActivity(i);
+                                        finish();
+                                    }
+
+                                    adapter.removeItem(position);
                                 }
 
-                                if (NoteCheckList.class.equals(noteList.get(position).getClass())){
-                                    i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
-                                    i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
-                                    startActivity(i);
-                                    finish();
+                                @Override
+                                public void OnSecondaryAction() {
+                                    buildColorPickDialog(position);
                                 }
-
-                                adapter.removeItem(position);
                             }
+                    );
+                    dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                }
 
-                            @Override
-                            public void OnSecondaryAction() {
-                                buildColorPickDialog(position);
-                            }
-                        }
-                );
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                // if selection mode is active
+                else {
+                    adapter.selectDeselectItem(position);
+                }
+
             }
 
             @Override
             public void OnLongClickListener(int position) {
+                if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.NO_SELECTION){
+                    adapter.setSelectionMode(NoteAdapter.SelectionMode.SELECTION);
+                    enterRecyclerSelectionMode();
+                }
+                adapter.selectDeselectItem(position);
+                adapter.notifyItemChanged(position);
             }
 
             // restore
@@ -418,7 +578,7 @@ public class MainActivity extends AppCompatActivity{
 
         toolbar.setTitle(R.string.recycler_bin);
 
-        exitSelectionMode();
+        exitRecyclerSelectionMode();
     }
 
     @Override
@@ -426,13 +586,20 @@ public class MainActivity extends AppCompatActivity{
 
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
+            return;
         }
 
         if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.SELECTION){
             adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
             adapter.setSelectedItems(new ArrayList<>());
             adapter.notifyDataSetChanged();
-            exitSelectionMode();
+            if (state == STATES.NOTES) exitSelectionMode();
+            if (state == STATES.DELETED_NOTES) exitRecyclerSelectionMode();
+            return;
+        }
+
+        if (adapter.getSelectionMode() == NoteAdapter.SelectionMode.NO_SELECTION && state == STATES.DELETED_NOTES){
+            startMyNote();
         }
         else{
             super.onBackPressed();
@@ -654,6 +821,33 @@ public class MainActivity extends AppCompatActivity{
         adapter.getSelectedItems().clear();
         adapter.notifyDataSetChanged();
         mainFAB.show();
+    }
+
+    void enterRecyclerSelectionMode(){
+        toolbar.setVisibility(View.INVISIBLE);
+        recyclerSelectionToolbar.setVisibility(View.VISIBLE);
+        adapter.getSelectedItems().clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    void exitRecyclerSelectionMode(){
+        adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
+        toolbar.setVisibility(View.VISIBLE);
+        recyclerSelectionToolbar.setVisibility(View.INVISIBLE);
+        adapter.getSelectedItems().clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    void startMyNote(){
+        saveNoteList();
+        initNoteState();
+        state = STATES.NOTES;
+    }
+
+    void startRecyclerBin(){
+        saveNoteList();
+        initRecyclerState();
+        state = STATES.DELETED_NOTES;
     }
 
 }

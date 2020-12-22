@@ -28,6 +28,8 @@
     <string name="select_all">Select/Deselect All</string>
     <string name="delete_selection">Delete Selected</string>
     <string name="change_selection_color">Change Selection</string>
+    <string name="empty_bin">Permanently Delete All Items</string>
+    <string name="no_item_selected">No Item Selected</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>
@@ -78,8 +80,12 @@
     <string name="dialog_text_placeholder">Confirm Action ?</string>
 
     <string name="confirm_delete">Are you sure you want to delete this item ?</string>
+    <string name="confirm_delete_selected">Are you sure you want to delete selected items ?</string>
     <string name="confirm_delete_permanently">Are you sure you want to delete this item permanently ?</string>
+    <string name="confirm_delete_permanently_all">Are you sure you want to delete all items permanently ?</string>
+    <string name="confirm_delete_permanently_selected">Are you sure you want to delete selected items permanently ?</string>
     <string name="confirm_restore">Are you sure you want to restore this item ?</string>
+    <string name="confirm_restore_selected">Are you sure you want to restore selected items ?</string>
     <string name="confirm_restore_open">Are you sure you want to restore this item and open it ?</string>
     <string name="confirm_unsaved_changes">There are some unsaved changes, would you like to save and exit ?</string>
 

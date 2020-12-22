@@ -184,6 +184,43 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         notifyItemRemoved(position);
     }
 
+    public void deleteItemPermanently(int position){
+
+        String uid = list.get(position).getUid();
+
+        for (Note<?> note : listFull) {
+            if (note.getUid().equals(uid)){
+                listFull.remove(note);
+                break;
+            }
+        }
+
+        MySharedPreferences.DeleteNote(uid,getContext());
+
+        list.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
+    public void restoreItem(int position){
+        String uid = list.get(position).getUid();
+
+        for (Note<?> note : listFull) {
+            if (note.getUid().equals(uid)){
+                listFull.remove(note);
+                break;
+            }
+        }
+
+        ArrayList<String> noteList = MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getContext());
+        noteList.add(uid);
+        MySharedPreferences.SaveStringArray(noteList,Statics.KEY_NOTE_LIST,getContext());
+
+        list.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
     public void switchColor(int position, int newColor){
 
         String uid = list.get(position).getUid();
@@ -222,6 +259,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         Collections.sort(list, (i1, i2) -> i1.getColor()-i2.getColor());
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
+    }
+
+    public void selectDeselectItem(int position){
+
+        if (!isSelected(list.get(position).getUid())){
+            selectedItems.add(list.get(position).getUid());
+        } else {
+            selectedItems.remove(list.get(position).getUid());
+        }
+        notifyItemChanged(position);
     }
 
     @Override
