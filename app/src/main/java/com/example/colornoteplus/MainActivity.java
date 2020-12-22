@@ -31,7 +31,11 @@ public class MainActivity extends AppCompatActivity{
         NOTES, DELETED_NOTES
     }
 
+    // Activity state
     STATES state;
+
+    // Activity theme
+    int theme = 3;
 
     // recycler view and its adapter
     RecyclerView rv;
@@ -84,21 +88,29 @@ public class MainActivity extends AppCompatActivity{
                 adapter.getSelectedItems().clear();
                 for(Note<?> note : adapter.getList()){
                     adapter.getSelectedItems().add(note.getUid());
-                    Log.d("SelectedItems","Iteration -> Selected Items : "+adapter.getSelectedItems().size());
                 }
             }
             else {
                 adapter.getSelectedItems().clear();
             }
 
-            Log.d("SelectedItems","All Items : "+adapter.getList().size());
-            Log.d("SelectedItems","Selected Items : "+adapter.getSelectedItems().size());
-
             adapter.notifyDataSetChanged();
         });
 
         ImageView toolbarDelete = selectionToolbar.findViewById(R.id.toolbar_delete_selection);
+        toolbarDelete.setOnClickListener( v -> {
+            for (int i = 0; i < adapter.getList().size(); i++){
+                if (adapter.isSelected(adapter.getList().get(i).getUid())){
+                    adapter.removeItem(i);
+                    i--;
+                }
+
+            }
+        });
+
         ImageView toolbarChangeSelectionColor = selectionToolbar.findViewById(R.id.toolbar_change_selection_color);
+        toolbarChangeSelectionColor.setOnClickListener(
+                v -> buildColorPickDialog());
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -571,6 +583,33 @@ public class MainActivity extends AppCompatActivity{
                 MySharedPreferences.SaveStringArray(mNoteList,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
                 break;
         }
+    }
+
+    // build the color picker dialog
+    private void buildColorPickDialog(){
+
+        FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,theme);
+
+        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+
+        fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
+            @Override
+            public void OnClickListener(int position) {
+
+                for (int i = 0;i < adapter.getList().size(); i++){
+                    if (adapter.isSelected(noteList.get(i).getUid())){
+                        adapter.switchColor(i,position);
+                    }
+                }
+                fragment.dismiss();
+            }
+
+            @Override
+            public void OnLongClickListener(int position) {
+
+            }
+        });
+
     }
 
     // build the color picker dialog

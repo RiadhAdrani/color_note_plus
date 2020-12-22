@@ -1,6 +1,7 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
@@ -65,6 +66,8 @@ public class NoteDeletedAdapter extends NoteAdapter {
             menu.inflate(R.menu.menu_recycler_bin);
             menu.show();
         });
+
+        holder.selectionIcon.setVisibility(View.GONE);
     }
 
 }

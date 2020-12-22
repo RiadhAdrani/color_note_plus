@@ -16,7 +16,7 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="45"
-                android:endColor="@color/pink_light"
+                android:endColor="@color/pink"
                 android:startColor="@color/pink"
                 android:type="linear" />
             <corners android:radius="10dp" />
