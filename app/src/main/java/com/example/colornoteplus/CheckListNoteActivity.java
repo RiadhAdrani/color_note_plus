@@ -165,31 +165,35 @@ public class CheckListNoteActivity extends AppCompatActivity{
         setContentView(R.layout.activity_check_list_note);
 
         // change status bar color
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(color)));
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
+
+        // change background color
+        findViewById(R.id.check_list_activity_background).setBackgroundColor(
+                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext())));
 
         // set up FAB action
         fab = findViewById(R.id.fab_add_item);
-        fab.setBackgroundColor(getResources().getColor(StyleManager.getColorPrimary(color)));
+        fab.setBackgroundColor(getResources().getColor(StyleManager.getColorPrimary(getApplicationContext(),color)));
         fab.setOnClickListener(view -> onFabClickListener());
 
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(color)));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(view -> onUpButtonPressed());
 
         // setting the note title
         titleView = findViewById(R.id.note_title_view);
         titleView.setText("");
-        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(color)));
-        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(color)));
+        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(getApplicationContext(),color)));
+        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getApplicationContext(),color)));
 
         // setting the character counter for the note title
         titleCharacterCount = findViewById(R.id.note_title_characters);
         String m = titleView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.title_max_length);
         titleCharacterCount.setText(m);
-        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(color)));
+        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
 
         titleView.addTextChangedListener(new TextWatcher()
         {
@@ -362,10 +366,10 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getColorPrimary(note.getColor()),
+                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getColorPrimary(note.getColor()),
+                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -405,10 +409,10 @@ public class CheckListNoteActivity extends AppCompatActivity{
             // alert user of the success
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getColorPrimary(note.getColor()),
+                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getColorPrimary(note.getColor()),
+                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
                     false);
         }
 

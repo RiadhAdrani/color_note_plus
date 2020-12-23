@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +38,13 @@ public class FragmentPickColor extends AppCompatDialogFragment {
         View dialog = getActivity().getLayoutInflater().inflate(R.layout.fragment_color_pick,null);
 
         builder.setView(dialog);
+
+        dialog.findViewById(R.id.fragment_pick_color_background).setBackgroundColor(
+                getResources().getColor(StyleManager.getNeutralColor(getContext()))
+        );
+
+        TextView text = dialog.findViewById(R.id.prompt_text);
+        text.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getContext())));
 
         Button cancel = dialog.findViewById(R.id.cancel_button);
         cancel.setOnClickListener(view -> dismiss());

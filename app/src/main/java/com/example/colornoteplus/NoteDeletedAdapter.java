@@ -75,7 +75,7 @@ public class NoteDeletedAdapter extends NoteAdapter {
             holder.moreOptionsView.setVisibility(View.INVISIBLE);
             if (isSelected(item.getUid())){
                 holder.selectionIcon.setImageResource(R.drawable.ic_checked_circle);
-                holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundDark(item.getColor()));
+                holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundPrimary(getContext(),item.getColor()));
             }
             else {
                 holder.selectionIcon.setImageResource(R.drawable.ic_unchecked_circle);

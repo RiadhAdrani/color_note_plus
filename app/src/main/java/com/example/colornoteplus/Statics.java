@@ -17,6 +17,9 @@ public abstract class Statics {
     public final static String NOTE_TEXT_ID = "T";
     public final static String NOTE_CHECK_ID = "C";
 
+    public final static int DAY_THEME = 0;
+    public final static int NIGHT_THEME = 1;
+
     public final static String KEY_NOTE_ACTIVITY = "LOAD_NOTE";
     public final static String KEY_NOTE_LIST = "NOTE_LIST";
     public final static String KEY_NOTE_LIST_TRASH = "NOTE_LIST_TRASH";

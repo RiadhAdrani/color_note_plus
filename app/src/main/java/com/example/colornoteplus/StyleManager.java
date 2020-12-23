@@ -2,10 +2,12 @@ package com.example.colornoteplus;
 
 import android.content.Context;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class StyleManager {
+public abstract class StyleManager extends AppCompatActivity {
 
     private static final ArrayList<BackgroundColor> backgroundColors = new ArrayList<>(Arrays.asList(
 
@@ -91,14 +93,24 @@ public abstract class StyleManager {
                 backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
     }
 
-    public static int getBackgroundLight(int index){
-        return index > 0 && index < backgroundColors.size() ?
+    public static int getBackgroundSecondary(Context context,int index){
+
+        if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getDrawableLight() : backgroundColors.get(0).getDrawableLight();
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
     }
 
-    public static int getBackgroundDark(int index){
-        return index > 0 && index < backgroundColors.size() ?
+    public static int getBackgroundPrimary(Context context,int index){
+        if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                backgroundColors.get(index).getDrawableLight() : backgroundColors.get(0).getDrawableLight();
+
     }
 
     public static int getTheme(int index){
@@ -106,33 +118,69 @@ public abstract class StyleManager {
                 backgroundColors.get(index).getTheme() : backgroundColors.get(0).getTheme();
     }
 
-    public static int getColorMain(int index){
+    public static int getColorMain(Context context, int index){
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
     }
 
-    public static int getColorSecondary(int index){
-        return index > 0 && index < backgroundColors.size() ?
+    public static int getColorSecondary(Context context, int index){
+        if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorLight() : backgroundColors.get(0).getColorLight();
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDark();
+
     }
 
-    public static int getColorSecondaryAccent(int index){
-        return index > 0 && index < backgroundColors.size() ?
+    public static int getColorSecondaryAccent(Context context, int index){
+
+        if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorLighter() : backgroundColors.get(0).getColorLighter();
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
     }
 
-    public static int getColorPrimary(int index){
-        return index > 0 && index < backgroundColors.size() ?
+    public static int getColorPrimary(Context context, int index){
+
+        if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDarker();
+
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getColorLight() : backgroundColors.get(0).getColorLight();
     }
 
-    public static int getColorPrimaryAccent(int index){
+    public static int getColorPrimaryAccent(Context context, int index){
+
+        if (getLightTheme(context) == 0)
         return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
+
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getColorLighter() : backgroundColors.get(0).getColorLighter();
     }
 
-    public static int getNeutralColor(){
-        return R.color.white;
+    public static int getNeutralColor(Context context){
+
+        if (getLightTheme(context) == 0)
+            return R.color.white;
+        else
+            return R.color.black;
+
+    }
+
+    public static int getNeutralTextColor(Context context){
+
+        if (getLightTheme(context) == 0)
+            return R.color.black;
+        else
+            return R.color.white;
+
     }
 
     public static int getLightTheme(Context context){

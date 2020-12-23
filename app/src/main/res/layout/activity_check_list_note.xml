@@ -5,13 +5,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ActivityBackgroundStyle"
+    android:id="@+id/check_list_activity_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/ActivityBackgroundStyle"
+        android:background="@android:color/transparent"
         android:layout_marginBottom="72dp">
 
         <include

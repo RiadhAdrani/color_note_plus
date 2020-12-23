@@ -1,7 +1,6 @@
 package com.example.colornoteplus;
 
 import android.content.Context;
-import android.renderscript.RenderScript;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.ArrayList;
-
 public class PriorityAdapter extends ArrayAdapter<CheckListItem.PRIORITY> {
 
-    private int color;
+    private final int color;
 
     public PriorityAdapter(Context context, CheckListItem.PRIORITY[] list, int color){
         super(context,0,list);
@@ -47,7 +44,7 @@ public class PriorityAdapter extends ArrayAdapter<CheckListItem.PRIORITY> {
         CheckListItem.PRIORITY priority = getItem(position);
 
         text.setText(CheckListItem.priorityToString(getContext(),priority));
-        text.setTextColor(getContext().getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
+        text.setTextColor(getContext().getResources().getColor(StyleManager.getColorPrimaryAccent(getContext(), color)));
 
         return convertView;
     }

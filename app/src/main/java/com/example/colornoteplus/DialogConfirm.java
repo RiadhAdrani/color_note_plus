@@ -61,18 +61,22 @@ public class DialogConfirm extends AppCompatDialogFragment {
         else
             icon.setVisibility(View.GONE);
 
+        dialog.findViewById(R.id.confirmation_dialog_background).setBackgroundColor(
+                getResources().getColor(StyleManager.getNeutralColor(getContext()))
+        );
+
         TextView text = dialog.findViewById(R.id.dialog_text);
         text.setText(this.text);
-        text.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
+        text.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(getContext(), color)));
 
         Button cancel = dialog.findViewById(R.id.dialog_cancel);
         cancel.setBackgroundResource(StyleManager.getBackground(color));
-        cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
+        cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         cancel.setOnClickListener(view -> dismiss());
 
         Button confirm = dialog.findViewById(R.id.dialog_confirm);
         confirm.setBackgroundResource(StyleManager.getBackground(color));
-        confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
+        confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         confirm.setOnClickListener(view -> {
             listener.OnPrimaryAction();
             dismiss();
@@ -80,7 +84,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
 
         Button secondaryAction = dialog.findViewById(R.id.dialog_secondary_action);
         secondaryAction.setBackgroundResource(StyleManager.getBackground(color));
-        secondaryAction.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(color)));
+        secondaryAction.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         secondaryAction.setOnClickListener(view -> {
             listener.OnSecondaryAction();
             dismiss();

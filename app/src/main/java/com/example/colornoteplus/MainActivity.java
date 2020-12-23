@@ -74,13 +74,17 @@ public class MainActivity extends AppCompatActivity{
         setTheme(StyleManager.getTheme(theme));
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.main_activity_background).setBackgroundColor(
+                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext()))
+        );
+
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
 
         recyclerSelectionToolbar = findViewById(R.id.recycler_selection_toolbar);
-        recyclerSelectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        recyclerSelectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
 
         ImageView rTCancel = recyclerSelectionToolbar.findViewById(R.id.toolbar_cancel);
         rTCancel.setOnClickListener( v -> exitRecyclerSelectionMode());
@@ -199,7 +203,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         selectionToolbar = findViewById(R.id.selection_toolbar);
-        selectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        selectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
         ImageView toolbarCancel = selectionToolbar.findViewById(R.id.toolbar_cancel);
         toolbarCancel.setOnClickListener( view -> exitSelectionMode() );
 

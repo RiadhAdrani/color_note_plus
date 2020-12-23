@@ -2,7 +2,6 @@ package com.example.colornoteplus;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.InflaterInputStream;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> implements Filterable {
 
@@ -119,7 +117,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             return true;
         });
 
-        holder.line.setBackgroundColor(context.getResources().getColor(StyleManager.getColorSecondaryAccent(item.getColor())));
+        holder.line.setBackgroundColor(context.getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),item.getColor())));
 
         holder.moreOptionsView.setVisibility(View.VISIBLE);
         holder.moreOptionsView.setOnClickListener(view -> {
@@ -143,7 +141,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             });
 
         if (isSelected(item.getUid())){
-            holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundDark( item.getColor()) );
+            holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundPrimary(context,item.getColor()) );
         }
         else {
             holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );

@@ -68,7 +68,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         CheckListItem currentItem = list.get(position);
 
         // change background color
-        holder.background.setBackgroundResource(StyleManager.getBackgroundLight(color));
+        holder.background.setBackgroundResource(StyleManager.getBackgroundSecondary(context,color));
 
         // initializing the checkbox
         holder.checkBox.setChecked(currentItem.isDone());
@@ -88,8 +88,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the description
-        holder.title.setTextColor(context.getResources().getColor(StyleManager.getColorPrimary(color)));
-        holder.title.setHintTextColor(context.getResources().getColor(StyleManager.getColorMain(color)));
+        holder.title.setTextColor(context.getResources().getColor(StyleManager.getColorPrimary(context,color)));
+        holder.title.setHintTextColor(context.getResources().getColor(StyleManager.getColorMain(context,color)));
         assert currentItem != null;
         holder.title.setText(currentItem.getDescription().trim());
         holder.title.addTextChangedListener(new TextWatcher() {
@@ -118,7 +118,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         }
 
         // initializing the due time
-        holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(color)));
+        holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(context, color)));
         holder.dueTimeText.setVisibility(View.GONE);
 
         // TODO: show remaining time instead of the due date

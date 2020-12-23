@@ -3,16 +3,18 @@ package com.example.colornoteplus;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private int theme = 2;
+    private int theme = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,16 @@ public class SettingsActivity extends AppCompatActivity {
         setTheme(StyleManager.getTheme(theme));
         setContentView(R.layout.activity_settings);
 
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+
+        ConstraintLayout background = findViewById(R.id.settings_background);
+        background.setBackgroundColor(
+                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext()))
+        );
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        toolbar.setTitle(R.string.settings);
+        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener( v -> {
@@ -51,8 +59,26 @@ public class SettingsActivity extends AppCompatActivity {
             finish();
         });
 
+        TextView lightSwitchLabel = findViewById(R.id.settings_theme_label);
+        lightSwitchLabel.setTextColor(getResources().getColor(
+                StyleManager.getColorPrimaryAccent(getApplicationContext(), theme)
+        ));
+
         SwitchCompat lightSwitch = findViewById(R.id.settings_theme_switch);
-        lightSwitch.setHighlightColor(getResources().getColor(StyleManager.getColorMain(theme)));
+        lightSwitch.setChecked(StyleManager.getLightTheme(getApplicationContext()) != Statics.DAY_THEME);
+        lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+                StyleManager.setLightTheme(Statics.NIGHT_THEME,getApplicationContext());
+            else
+                StyleManager.setLightTheme(Statics.DAY_THEME,getApplicationContext());
+
+            ApplyTheme(theme);
+        });
+
+        TextView appColorLabel = findViewById(R.id.settings_app_color_label);
+        appColorLabel.setTextColor(getResources().getColor(
+                StyleManager.getColorPrimaryAccent(getApplicationContext(), theme)
+        ));
 
         ImageView appColor = findViewById(R.id.settings_app_color);
         appColor.setBackgroundResource(StyleManager.getBackground(theme));
