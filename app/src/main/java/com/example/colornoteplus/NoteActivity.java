@@ -58,6 +58,8 @@ public class NoteActivity extends AppCompatActivity {
 
         getNoteFromIntent();
 
+        lock = isNoteOld();
+
         textUndoRedoHandler = new TextUndoRedo();
 
         initTheme();
@@ -82,6 +84,7 @@ public class NoteActivity extends AppCompatActivity {
         saveButton.setOnMenuItemClickListener(menuItem -> saveTextNote());
 
         MenuItem lockButton = menu.findItem(R.id.lock);
+        lockButton.setIcon(lock ? R.drawable.ic_locked : R.drawable.ic_unlocked);
         lockButton.setOnMenuItemClickListener(menuItem -> {
             if (lock) {
 
@@ -117,7 +120,7 @@ public class NoteActivity extends AppCompatActivity {
     // Method used to automatically configure color theme of the activity
     private void initTheme(){
 
-        setTheme(StyleManager.getTheme(note.getColor()));
+        setTheme(StyleManager.getTheme(getApplicationContext(),note.getColor()));
 
         setContentView(R.layout.activity_note);
 
@@ -134,7 +137,7 @@ public class NoteActivity extends AppCompatActivity {
         String textTemp = contentView.getText().toString().trim();
 
         // change theme
-        setTheme(StyleManager.getTheme(id));
+        setTheme(StyleManager.getTheme(getApplicationContext(),id));
         setContentView(R.layout.activity_note);
         getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),id)));
 
@@ -160,7 +163,7 @@ public class NoteActivity extends AppCompatActivity {
 
         titleView = findViewById(R.id.note_title_view);
         titleView.setText(note.getTitle());
-        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(getApplicationContext(),note.getColor())));
+        titleView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
         titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getApplicationContext(),note.getColor())));
 
         titleCharacterCount = findViewById(R.id.note_title_characters);
@@ -191,7 +194,7 @@ public class NoteActivity extends AppCompatActivity {
 
         contentView = findViewById(R.id.note_content_view);
         contentView.setText(note.getContent());
-        contentView.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(getApplicationContext(), note.getColor())));
+        contentView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
         contentView.setHintTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),note.getColor())));
         contentView.setScroller(new Scroller(getApplicationContext()));
         contentView.setVerticalScrollBarEnabled(true);
@@ -241,12 +244,11 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        contentView.setFocusableInTouchMode(false);
+        contentView.setFocusableInTouchMode(!lock);
         contentView.clearFocus();
-
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());
-        colorView.setBackgroundResource(StyleManager.getBackground(note.getColor()));
+        colorView.setBackgroundResource(StyleManager.getBackground(getApplicationContext(), note.getColor()));
 
     }
 

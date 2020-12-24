@@ -56,7 +56,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
         ImageView icon = dialog.findViewById(R.id.dialog_icon);
         if (this.icon > 0) {
             icon.setImageResource(this.icon);
-            icon.setBackgroundResource(StyleManager.getBackground(color));
+            icon.setBackgroundResource(StyleManager.getBackground(getContext(),color));
         }
         else
             icon.setVisibility(View.GONE);
@@ -70,12 +70,12 @@ public class DialogConfirm extends AppCompatDialogFragment {
         text.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(getContext(), color)));
 
         Button cancel = dialog.findViewById(R.id.dialog_cancel);
-        cancel.setBackgroundResource(StyleManager.getBackground(color));
+        cancel.setBackgroundResource(StyleManager.getBackground(getContext(),color));
         cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         cancel.setOnClickListener(view -> dismiss());
 
         Button confirm = dialog.findViewById(R.id.dialog_confirm);
-        confirm.setBackgroundResource(StyleManager.getBackground(color));
+        confirm.setBackgroundResource(StyleManager.getBackground(getContext(),color));
         confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         confirm.setOnClickListener(view -> {
             listener.OnPrimaryAction();
@@ -83,7 +83,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
         });
 
         Button secondaryAction = dialog.findViewById(R.id.dialog_secondary_action);
-        secondaryAction.setBackgroundResource(StyleManager.getBackground(color));
+        secondaryAction.setBackgroundResource(StyleManager.getBackground(getContext(),color));
         secondaryAction.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
         secondaryAction.setOnClickListener(view -> {
             listener.OnSecondaryAction();
@@ -91,7 +91,10 @@ public class DialogConfirm extends AppCompatDialogFragment {
         });
 
         if (buttonNumbers < 3) secondaryAction.setVisibility(View.GONE);
-        if (buttonNumbers < 2) confirm.setVisibility(View.GONE);
+        if (buttonNumbers < 2) {
+            confirm.setVisibility(View.GONE);
+            cancel.setText(R.string.ok);
+        }
 
         return builder.create();
     }

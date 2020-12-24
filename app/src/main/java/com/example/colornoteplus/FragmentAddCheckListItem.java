@@ -73,7 +73,7 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         });
 
         ImageButton setDueTime = dialog.findViewById(R.id.fragment_item_due_time_button);
-        setDueTime.setBackgroundResource(StyleManager.getBackground(color));
+        setDueTime.setBackgroundResource(StyleManager.getBackground(getContext(),color));
         setDueTime.setOnClickListener(view -> listener.onSetDueTimeClickListener());
         TextView dueTime = dialog.findViewById(R.id.fragment_item_due_time_text);
 

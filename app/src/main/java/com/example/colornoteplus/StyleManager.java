@@ -17,6 +17,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_default_light,
                     R.drawable.item_default_dark,
                     R.style.ThemeOrangeYellow,
+                    R.style.ThemeOrangeYellowDark,
                     R.color.orange_yellow_crayola_lighter,
                     R.color.orange_yellow_crayola_light,
                     R.color.orange_yellow_crayola,
@@ -29,6 +30,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_blue_light,
                     R.drawable.item_blue_dark,
                     R.style.ThemeBlueLiberty,
+                    R.style.ThemeBlueLibertyDark,
                     R.color.blue_liberty_lighter,
                     R.color.blue_liberty_light,
                     R.color.blue_liberty,
@@ -41,6 +43,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_green_light,
                     R.drawable.item_green_dark,
                     R.style.ThemeGreen,
+                    R.style.ThemeGreenDark,
                     R.color.green_lighter,
                     R.color.green_light,
                     R.color.green,
@@ -53,6 +56,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_grey_light,
                     R.drawable.item_grey_dark,
                     R.style.ThemeGrey,
+                    R.style.ThemeGreyDark,
                     R.color.grey_lighter_platinum,
                     R.color.grey_light_silver,
                     R.color.grey_spanish,
@@ -65,6 +69,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_red_light,
                     R.drawable.item_red_dark,
                     R.style.ThemeRedImperial,
+                    R.style.ThemeRedImperialDark,
                     R.color.red_imperial_lighter,
                     R.color.red_imperial_light,
                     R.color.red_imperial,
@@ -77,6 +82,7 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.drawable.item_pink_light,
                     R.drawable.item_pink_dark,
                     R.style.ThemePink,
+                    R.style.ThemePinkDark,
                     R.color.pink_lighter,
                     R.color.pink_light,
                     R.color.pink,
@@ -88,9 +94,14 @@ public abstract class StyleManager extends AppCompatActivity {
         return backgroundColors;
     }
 
-    public static int getBackground(int index){
-        return index > 0 && index < backgroundColors.size() ?
-                backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
+    public static int getBackground(Context context, int index){
+
+        // if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
+//        else
+//            return index > 0 && index < backgroundColors.size() ?
+//                    backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
     }
 
     public static int getBackgroundSecondary(Context context,int index){
@@ -113,14 +124,25 @@ public abstract class StyleManager extends AppCompatActivity {
 
     }
 
-    public static int getTheme(int index){
-        return index > 0 && index < backgroundColors.size() ?
-                backgroundColors.get(index).getTheme() : backgroundColors.get(0).getTheme();
+    public static int getTheme(Context context, int index){
+
+        if (getLightTheme(context) == 0){
+            return index > 0 && index < backgroundColors.size() ?
+                    backgroundColors.get(index).getTheme() : backgroundColors.get(0).getTheme();
+        }
+        else
+            return index > 0 && index < backgroundColors.size() ?
+                backgroundColors.get(index).getThemeDark() : backgroundColors.get(0).getThemeDark();
     }
 
     public static int getColorMain(Context context, int index){
-        return index > 0 && index < backgroundColors.size() ?
+        // if (getLightTheme(context) == 0)
+            return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
+//        else
+//            return index > 0 && index < backgroundColors.size() ?
+//                    backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDark();
+
     }
 
     public static int getColorSecondary(Context context, int index){

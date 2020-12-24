@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
 
         theme = StyleManager.getAppColor(getApplicationContext());
 
-        setTheme(StyleManager.getTheme(theme));
+        setTheme(StyleManager.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.main_activity_background).setBackgroundColor(
@@ -272,7 +272,12 @@ public class MainActivity extends AppCompatActivity{
         navigationView.setCheckedItem(R.id.nav_notes);
         navigationView.setNavigationItemSelectedListener(item -> {
 
-            final int notes = R.id.nav_notes, recycler = R.id.nav_recycler_bin, settings = R.id.nav_settings, about = R.id.nav_about;
+            final int
+                    notes = R.id.nav_notes,
+                    recycler = R.id.nav_recycler_bin,
+                    settings = R.id.nav_settings,
+                    about = R.id.nav_about,
+                    updates = R.id.nav_updates;
 
             switch (item.getItemId()){
                 case notes:
@@ -287,7 +292,9 @@ public class MainActivity extends AppCompatActivity{
                     finish();
                     break;
                 case about:
-                    Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
+                    about();
+                    break;
+                case updates:
                     break;
             }
 
@@ -345,6 +352,7 @@ public class MainActivity extends AppCompatActivity{
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
         adapter = new NoteAdapter(noteList,getApplicationContext());
+        adapter.getSelectedItems().clear();
 
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
@@ -443,6 +451,7 @@ public class MainActivity extends AppCompatActivity{
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
         adapter = new NoteDeletedAdapter(noteList,getApplicationContext());
+        adapter.getSelectedItems().clear();
 
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
@@ -584,7 +593,13 @@ public class MainActivity extends AppCompatActivity{
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
+        exitSelectionMode();
+
+        mainFAB.shrink();
         mainFAB.hide();
+        textFAB.hide();
+        checkListFAB.hide();
+        areFABsVisible = false;
 
         toolbar.setTitle(R.string.recycler_bin);
 
@@ -858,6 +873,26 @@ public class MainActivity extends AppCompatActivity{
         saveNoteList();
         initRecyclerState();
         state = STATES.DELETED_NOTES;
+    }
+
+    void about(){
+        DialogConfirm dialog = new DialogConfirm(
+                theme,
+                R.drawable.ic_info,
+                getString(R.string.about_12_2020),
+                1,
+                new DialogConfirm.OnConfirmClickListener() {
+                    @Override
+                    public void OnPrimaryAction() {
+
+                    }
+
+                    @Override
+                    public void OnSecondaryAction() {
+
+                    }
+                });
+        dialog.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
     }
 
 }

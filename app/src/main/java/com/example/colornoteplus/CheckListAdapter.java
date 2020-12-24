@@ -88,9 +88,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the description
-        holder.title.setTextColor(context.getResources().getColor(StyleManager.getColorPrimary(context,color)));
+        holder.title.setTextColor(context.getResources().getColor(StyleManager.getNeutralTextColor(context)));
         holder.title.setHintTextColor(context.getResources().getColor(StyleManager.getColorMain(context,color)));
-        assert currentItem != null;
         holder.title.setText(currentItem.getDescription().trim());
         holder.title.addTextChangedListener(new TextWatcher() {
             @Override
@@ -146,7 +145,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the delete button
-        holder.delete.setBackgroundResource(StyleManager.getBackground(color));
+        holder.delete.setBackgroundResource(StyleManager.getBackground(context,color));
         holder.delete.setOnClickListener(view -> listener.onDelete(holder.getAdapterPosition()));
     }
 

@@ -36,7 +36,7 @@ public class NoteDeletedAdapter extends NoteAdapter {
             holder.contentView.setText(content);
         }
 
-        holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
+        holder.backgroundView.setBackgroundResource( StyleManager.getBackground(getContext(), item.getColor()) );
 
         holder.itemView.setOnClickListener(view -> {
             if (getListener() != null) getListener().OnClickListener(holder.getAdapterPosition());
@@ -75,11 +75,20 @@ public class NoteDeletedAdapter extends NoteAdapter {
             holder.moreOptionsView.setVisibility(View.INVISIBLE);
             if (isSelected(item.getUid())){
                 holder.selectionIcon.setImageResource(R.drawable.ic_checked_circle);
-                holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundPrimary(getContext(),item.getColor()));
+                switch(StyleManager.getLightTheme(getContext())){
+                    case 0:
+                        holder.backgroundView.setBackgroundResource(
+                                StyleManager.getBackgroundPrimary(getContext(),item.getColor()) );
+                        break;
+                    case 1:
+                        holder.backgroundView.setBackgroundResource(
+                                StyleManager.getBackgroundSecondary(getContext(),item.getColor()) );
+                        break;
+                }
             }
             else {
                 holder.selectionIcon.setImageResource(R.drawable.ic_unchecked_circle);
-                holder.backgroundView.setBackgroundResource( StyleManager.getBackground(item.getColor()));
+                holder.backgroundView.setBackgroundResource( StyleManager.getBackground(getContext(), item.getColor()));
             }
         }
 

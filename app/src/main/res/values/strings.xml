@@ -79,6 +79,15 @@
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
 
+    <string name="what_is_new">What is new ?</string>
+    <string name="ok">OK</string>
+    <string name="about_12_2020">
+        Color Noter \n
+        Version : 0.9.12.2020 \n
+        Latest stable release : 12/2020 \n
+        Open Source Project
+    </string>
+
     <string name="dialog_text_placeholder">Confirm Action ?</string>
 
     <string name="confirm_delete">Are you sure you want to delete this item ?</string>

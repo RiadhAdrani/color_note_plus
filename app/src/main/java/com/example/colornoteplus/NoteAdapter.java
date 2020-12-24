@@ -141,10 +141,19 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             });
 
         if (isSelected(item.getUid())){
-            holder.backgroundView.setBackgroundResource( StyleManager.getBackgroundPrimary(context,item.getColor()) );
+            switch(StyleManager.getLightTheme(context)){
+                case 0:
+                    holder.backgroundView.setBackgroundResource(
+                            StyleManager.getBackgroundPrimary(context,item.getColor()) );
+                    break;
+                case 1:
+                    holder.backgroundView.setBackgroundResource(
+                            StyleManager.getBackgroundSecondary(context,item.getColor()) );
+                    break;
+            }
         }
         else {
-            holder.backgroundView.setBackgroundResource( StyleManager.getBackground( item.getColor()) );
+            holder.backgroundView.setBackgroundResource( StyleManager.getBackground( getContext(), item.getColor()) );
         }
 
         if (selectionMode == SelectionMode.SELECTION){

@@ -159,7 +159,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private void changeViewsColor(int color){
 
         // set the global theme
-        setTheme(StyleManager.getTheme(color));
+        setTheme(StyleManager.getTheme(getApplicationContext(),color));
 
         // set the appropriate layout
         setContentView(R.layout.activity_check_list_note);
@@ -186,7 +186,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
         // setting the note title
         titleView = findViewById(R.id.note_title_view);
         titleView.setText("");
-        titleView.setTextColor(getResources().getColor(StyleManager.getColorPrimary(getApplicationContext(),color)));
+        titleView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
         titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getApplicationContext(),color)));
 
         // setting the character counter for the note title
@@ -219,7 +219,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
         // setting the color view
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());
-        colorView.setBackgroundResource(StyleManager.getBackground(color));
+        colorView.setBackgroundResource(StyleManager.getBackground(getApplicationContext(),color));
 
         // check list items adapter
         adapter = new CheckListAdapter(getApplicationContext(),note.getContent(),color);
@@ -326,6 +326,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
             public void onConfirmClickListener() {
                 fragment.getItem().setDescription(fragment.getInputText());
                 adapter.addItem(fragment.getItem(),0);
+                contentView.scrollToPosition(0);
                 fragment.dismiss();
             }
 
@@ -366,10 +367,10 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
-                    R.color.white,
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    StyleManager.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -409,10 +410,10 @@ public class CheckListNoteActivity extends AppCompatActivity{
             // alert user of the success
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
-                    R.color.white,
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    StyleManager.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 

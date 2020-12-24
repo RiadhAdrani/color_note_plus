@@ -5,7 +5,8 @@
     tools:showIn="navigation_view"
     >
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_notes"
             android:title="@string/notes"
@@ -31,6 +32,12 @@
                 android:id="@+id/nav_about"
                 android:title="@string/about"
                 android:icon="@drawable/ic_info"
+                />
+
+            <item
+                android:id="@+id/nav_updates"
+                android:title="@string/what_is_new"
+                android:icon="@drawable/ic_text"
                 />
         </menu>
     </item>

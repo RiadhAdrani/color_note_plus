@@ -17,6 +17,9 @@ public class BackgroundColor {
     // the representing theme
     private final int theme;
 
+    // the dark theme
+    private final int themeDark;
+
         // the list of the colors
         private final int colorLighter;
         private final int colorLight;
@@ -24,26 +27,13 @@ public class BackgroundColor {
         private final int colorDark;
         private final int colorDarker;
 
-
-    // default constructor
-    public BackgroundColor(){
-            this.drawable = R.drawable.item_default_style;
-            this.drawableLight = R.drawable.item_default_light;
-            this.drawableDark = R.drawable.item_default_dark;
-            this.theme = R.style.Theme_ColorNotePlus;
-            this.colorLighter = R.color.orange_yellow_crayola_lighter;
-            this.colorLight = R.color.orange_yellow_crayola_light;
-            this.color = R.color.orange_yellow_crayola;
-            this.colorDark = R.color.orange_yellow_crayola_dark;
-            this.colorDarker = R.color.orange_yellow_crayola_darker;
-    }
-
     // custom constructor
-    public BackgroundColor(int drawable,int drawableLight,int drawableDark,int theme,int colorLighter,int colorLight,int color,int colorDark,int colorDarker){
+    public BackgroundColor(int drawable,int drawableLight,int drawableDark,int theme,int themeDark, int colorLighter,int colorLight,int color,int colorDark,int colorDarker){
         this.drawable = drawable;
         this.drawableLight = drawableLight;
         this.drawableDark = drawableDark;
         this.theme = theme;
+        this.themeDark = themeDark;
         this.colorLighter = colorLighter;
         this.colorLight = colorLight;
         this.color = color;
@@ -53,6 +43,8 @@ public class BackgroundColor {
 
     // getter for the theme
     public int getTheme() { return theme; }
+
+    public int getThemeDark() {return themeDark; }
 
     // getter for the lighter color
     public int getColorLighter() { return colorLighter; }

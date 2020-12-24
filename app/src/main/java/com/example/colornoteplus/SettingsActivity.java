@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     void ApplyTheme(int theme){
 
-        setTheme(StyleManager.getTheme(theme));
+        setTheme(StyleManager.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_settings);
 
         getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         ));
 
         ImageView appColor = findViewById(R.id.settings_app_color);
-        appColor.setBackgroundResource(StyleManager.getBackground(theme));
+        appColor.setBackgroundResource(StyleManager.getBackground(getApplicationContext(), theme));
         appColor.setOnClickListener( v -> buildColorPickDialog());
     }
 
