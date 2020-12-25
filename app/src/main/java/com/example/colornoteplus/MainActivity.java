@@ -31,37 +31,38 @@ public class MainActivity extends AppCompatActivity{
     }
 
     // Activity state
-    STATES state;
+    private STATES state;
 
     // Activity theme
-    int theme ;
+    private int theme ;
 
     // recycler view and its adapter
-    RecyclerView rv;
-    NoteAdapter adapter;
+    private RecyclerView rv;
+    private NoteAdapter adapter;
 
     // navigation drawer
     private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     // note list
-    ArrayList<Note<?>> noteList = new ArrayList<>();
+    private ArrayList<Note<?>> noteList = new ArrayList<>();
 
     // floating action buttons
-    ExtendedFloatingActionButton mainFAB;
-    FloatingActionButton textFAB;
-    FloatingActionButton checkListFAB;
+    private ExtendedFloatingActionButton mainFAB;
+    private FloatingActionButton textFAB;
+    private FloatingActionButton checkListFAB;
 
     // sortType
-    boolean sortType;
+    private boolean sortType ;
 
     // toolbar
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
-    ConstraintLayout selectionToolbar;
-    ConstraintLayout recyclerSelectionToolbar;
+    private ConstraintLayout selectionToolbar;
+    private ConstraintLayout recyclerSelectionToolbar;
 
     // status variables
-    Boolean areFABsVisible = false;
+    private Boolean areFABsVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity{
 
         drawer = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView = findViewById(R.id.navigation_view);
         navigationView.setCheckedItem(R.id.nav_notes);
         navigationView.setNavigationItemSelectedListener(item -> {
 
@@ -341,6 +342,8 @@ public class MainActivity extends AppCompatActivity{
     private void initNoteState(){
 
         noteList.clear();
+
+        navigationView.setCheckedItem(R.id.nav_notes);
 
         for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
@@ -440,6 +443,8 @@ public class MainActivity extends AppCompatActivity{
     private void initRecyclerState(){
 
         noteList.clear();
+
+        navigationView.setCheckedItem(R.id.nav_recycler_bin);
 
         for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST_TRASH,this)) {
             switch (Note.getNoteClass(s)){
