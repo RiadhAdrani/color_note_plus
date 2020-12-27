@@ -83,7 +83,7 @@ public abstract class MySharedPreferences {
 
     public static NoteCheckList LoadCheckListNote(String uid, Context context){
 
-        NoteCheckList note;
+        NoteCheckList note = null;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -94,7 +94,13 @@ public abstract class MySharedPreferences {
         String json = sharedPreferences.getString(uid,null);
 
         Type type = new TypeToken<NoteCheckList>() {}.getType();
-        note = gson.fromJson(json,type);
+
+        try{
+            note = gson.fromJson(json,type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         if (note == null){
             return new NoteCheckList(context);

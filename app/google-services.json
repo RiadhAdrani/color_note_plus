@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "12057113157",
+    "project_id": "color-noter",
+    "storage_bucket": "color-noter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12057113157:android:f6571c0b08ea4acccbe92c",
+        "android_client_info": {
+          "package_name": "com.example.colornoteplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12057113157-47k92mda6s3hatnv3ea2k93u99a01rk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJgqx7CK8_SNojk3DTTau0SfM23RqRyas"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12057113157-47k92mda6s3hatnv3ea2k93u99a01rk4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

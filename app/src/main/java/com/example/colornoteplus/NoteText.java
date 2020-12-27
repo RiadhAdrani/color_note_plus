@@ -14,7 +14,10 @@ public class NoteText extends Note<String> implements Serializable {
         setContent(null);
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(UUID.randomUUID().toString() + getCreationDate());
+        setUid(Statics.NOTE_TEXT_ID + UUID.randomUUID().toString() + getCreationDate());
+    }
+
+    public NoteText() {
     }
 
     @Override
@@ -50,6 +53,11 @@ public class NoteText extends Note<String> implements Serializable {
 
     @Override
     public void delete(Context context) {
+    }
+
+    @Override
+    public boolean containsString(String string) {
+        return getContent().toLowerCase().contains(string.toLowerCase());
     }
 
 }

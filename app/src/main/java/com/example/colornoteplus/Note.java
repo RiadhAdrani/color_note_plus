@@ -33,6 +33,15 @@ public abstract class Note<T> extends Object implements Serializable {
         return TYPE.TEXT_NOTE;
     }
 
+    public abstract boolean containsString(String string);
+
+    public static TYPE getNoteClass(Note<?> note){
+        if (note.getUid().startsWith(Statics.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
+        if (note.getUid().startsWith(Statics.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
+
+        return TYPE.TEXT_NOTE;
+    }
+
     public enum TYPE{
         TEXT_NOTE,
         CHECK_NOTE

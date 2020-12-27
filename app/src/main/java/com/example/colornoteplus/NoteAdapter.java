@@ -300,6 +300,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
                     if (item.getTitle().toLowerCase().contains(filterPattern)){
                         filteredList.add(item);
                     }
+                    else {
+                        if (item.containsString(filterPattern))
+                            filteredList.add(item);
+                    }
+
                 }
             }
 

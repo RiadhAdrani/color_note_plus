@@ -18,6 +18,9 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
         setUid(Statics.NOTE_CHECK_ID + UUID.randomUUID().toString() + getCreationDate());
     }
 
+    public NoteCheckList() {
+    }
+
     // save the note
     @Override
     public void save(Context context) {
@@ -81,6 +84,16 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
     @Override
     public void delete(Context context) {
 
+    }
+
+    @Override
+    public boolean containsString(String string) {
+        for (CheckListItem item : getContent()){
+            if (item.getDescription().toLowerCase().contains(string.toLowerCase()))
+                return true;
+        }
+
+        return false;
     }
 
 }

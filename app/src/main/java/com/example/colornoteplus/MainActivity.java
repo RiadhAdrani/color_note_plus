@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,8 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CyclicBarrier;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -351,7 +356,7 @@ public class MainActivity extends AppCompatActivity{
                 case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
             }
         }
-
+        
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
         adapter = new NoteAdapter(noteList,getApplicationContext());

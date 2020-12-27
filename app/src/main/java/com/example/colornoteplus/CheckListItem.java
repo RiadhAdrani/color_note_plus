@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class CheckListItem extends Object {
 
@@ -13,6 +14,9 @@ public class CheckListItem extends Object {
         MEDIUM,
         HIGH,
         URGENT
+    }
+
+    public CheckListItem() {
     }
 
     // description of the item
@@ -28,19 +32,17 @@ public class CheckListItem extends Object {
     // date in which the item was done
     private Long doneDate;
         public Long getDoneDate() {
-            return doneDate;
-        }
+            return doneDate; }
+        public void setDoneDate(Long doneDate) {
+            this.doneDate = doneDate;}
         public void setDone() {
             doneDate = Calendar.getInstance().getTime().getTime();
-            setModificationDate();
-        }
+            setModificationDate(); }
         public void setUnDone() {
             doneDate = -1L;
-            setModificationDate();
-        }
+            setModificationDate(); }
         public boolean isDone() {
-            return doneDate != -1L;
-        }
+            return doneDate != -1L; }
 
     // priority of the item
     private PRIORITY priority;
@@ -78,21 +80,8 @@ public class CheckListItem extends Object {
             setPriority(p);
             setDueDate(dueDate);
             setCreationDate(Calendar.getInstance().getTime().getTime());
+            setUid(UUID.randomUUID().toString()+ getCreationDate().toString() + UUID.randomUUID().toString());
             setModificationDate();
-    }
-
-    // (UNUSED)
-    // convert the priority of the current item to a string (UNUSED)
-    public String priorityToString(Context context){
-
-            switch (this.priority){
-                case LOW: return context.getResources().getString(R.string.low_priority);
-                case MEDIUM: return context.getResources().getString(R.string.medium_priority);
-                case HIGH: return context.getResources().getString(R.string.high_priority);
-                case URGENT: return context.getResources().getString(R.string.urgent_priority);
-            }
-
-        return context.getResources().getString(R.string.medium_priority);
     }
 
     // convert a given priority to a string
