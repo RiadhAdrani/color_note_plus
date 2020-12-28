@@ -71,12 +71,12 @@ public class DialogConfirm extends AppCompatDialogFragment {
 
         Button cancel = dialog.findViewById(R.id.dialog_cancel);
         cancel.setBackgroundResource(StyleManager.getBackground(getContext(),color));
-        cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
+        cancel.setTextColor(getResources().getColor(R.color.white));
         cancel.setOnClickListener(view -> dismiss());
 
         Button confirm = dialog.findViewById(R.id.dialog_confirm);
         confirm.setBackgroundResource(StyleManager.getBackground(getContext(),color));
-        confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
+        confirm.setTextColor(getResources().getColor(R.color.white));
         confirm.setOnClickListener(view -> {
             listener.OnPrimaryAction();
             dismiss();
@@ -84,7 +84,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
 
         Button secondaryAction = dialog.findViewById(R.id.dialog_secondary_action);
         secondaryAction.setBackgroundResource(StyleManager.getBackground(getContext(),color));
-        secondaryAction.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
+        secondaryAction.setTextColor(getResources().getColor(R.color.white));
         secondaryAction.setOnClickListener(view -> {
             listener.OnSecondaryAction();
             dismiss();
