@@ -49,12 +49,12 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         Button cancel = dialog.findViewById(R.id.fragment_cancel);
         cancel.setOnClickListener(view -> dismiss());
         cancel.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getContext(),color)));
-        cancel.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
+        cancel.setTextColor(getResources().getColor(StyleManager.getNeutralColor(getContext())));
 
         Button confirm = dialog.findViewById(R.id.fragment_add_item);
         confirm.setOnClickListener(view -> listener.onConfirmClickListener());
         confirm.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getContext(),color)));
-        confirm.setTextColor(getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),color)));
+        confirm.setTextColor(getResources().getColor(StyleManager.getNeutralColor(getContext())));
 
         Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
         PriorityAdapter adapter= new PriorityAdapter(getContext(), CheckListItem.PRIORITY.values(),color);

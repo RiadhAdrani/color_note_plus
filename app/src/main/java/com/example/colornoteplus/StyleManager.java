@@ -192,14 +192,14 @@ public abstract class StyleManager extends AppCompatActivity {
         if (getLightTheme(context) == 0)
             return R.color.white;
         else
-            return R.color.black;
+            return R.color.grey_darkest;
 
     }
 
     public static int getNeutralTextColor(Context context){
 
         if (getLightTheme(context) == 0)
-            return R.color.black;
+            return R.color.grey_darkest;
         else
             return R.color.white;
 

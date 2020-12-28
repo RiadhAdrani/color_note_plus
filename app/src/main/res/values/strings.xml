@@ -73,8 +73,8 @@
     <string name="check_list_note">Check List</string>
     <string name="check_list_note_hint">Create a check list note</string>
 
-    <string name="no_user_name">No user</string>
-    <string name="no_user_email">No email</string>
+    <string name="no_user_name">Beta Color Noter User</string>
+    <string name="no_user_email">Beta Color Noter Email</string>
 
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>

@@ -42,6 +42,7 @@
     <color name="grey_spanish">#999999</color>
     <color name="grey_dark_sonic_silver">#7A7A7A</color>
     <color name="grey_darker_davys">#525252</color>
+    <color name="grey_darkest">#201F1E</color>
 
     <!-- Orange -->
     <color name="orange_lighter">#FAD3B3</color>
