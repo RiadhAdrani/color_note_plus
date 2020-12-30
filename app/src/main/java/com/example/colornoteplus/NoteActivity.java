@@ -296,10 +296,10 @@ public class NoteActivity extends AppCompatActivity {
 
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
-                    R.color.white,
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    StyleManager.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -325,12 +325,13 @@ public class NoteActivity extends AppCompatActivity {
                 );
             }
 
+            // alert user of the success
             Statics.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
-                    R.color.white,
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    StyleManager.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class NoteText extends Note<String> implements Serializable {
@@ -17,8 +19,7 @@ public class NoteText extends Note<String> implements Serializable {
         setUid(Statics.NOTE_TEXT_ID + UUID.randomUUID().toString() + getCreationDate());
     }
 
-    public NoteText() {
-    }
+
 
     @Override
     public void save(Context context) {
@@ -44,15 +45,18 @@ public class NoteText extends Note<String> implements Serializable {
     }
 
     @Override
-    public void load(Context context) {
-        NoteText temp = MySharedPreferences.LoadTextNote(this.getUid(),context);
-        setTitle(temp.getTitle());
-        setContent(temp.getContent());
-        setColor(temp.getColor());
-    }
+    public Map<String, java.lang.Object> toMap() {
 
-    @Override
-    public void delete(Context context) {
+        Map<String, java.lang.Object> map = new HashMap<>();
+
+        map.put(Statics.DATABASE_OBJECT_UID, getUid());
+        map.put(Statics.DATABASE_OBJECT_CREATION_DATE, getCreationDate());
+        map.put(Statics.DATABASE_OBJECT_MODIFICATION_DATE, getModificationDate());
+        map.put(Statics.DATABASE_NOTE_TITLE, getTitle());
+        map.put(Statics.DATABASE_NOTE_COLOR, ""+getColor());
+        map.put(Statics.DATABASE_NOTE_CONTENT, getContent());
+
+        return map;
     }
 
     @Override

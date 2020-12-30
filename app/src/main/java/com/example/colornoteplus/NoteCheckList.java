@@ -4,11 +4,13 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
 
-    // default constructor
+    /// default constructor
     public NoteCheckList(Context context){
         setTitle(Statics.NOTE_PLACEHOLDER);
         setColor(StyleManager.getAppColor(context));
@@ -16,9 +18,6 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
         setUid(Statics.NOTE_CHECK_ID + UUID.randomUUID().toString() + getCreationDate());
-    }
-
-    public NoteCheckList() {
     }
 
     // save the note
@@ -72,18 +71,35 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
 
     }
 
-    // USELESS
-    // (UNUSED)
-    // load the note
     @Override
-    public void load(Context context) {
-    }
+    public Map<String, java.lang.Object> toMap() {
+        Map<String, java.lang.Object> map = new HashMap<>();
 
-    // (UNUSED)
-    // delete the note
-    @Override
-    public void delete(Context context) {
+        map.put(Statics.DATABASE_OBJECT_UID, getUid());
+        map.put(Statics.DATABASE_OBJECT_CREATION_DATE, getCreationDate());
+        map.put(Statics.DATABASE_OBJECT_MODIFICATION_DATE, getModificationDate());
+        map.put(Statics.DATABASE_NOTE_TITLE, getTitle());
+        map.put(Statics.DATABASE_NOTE_COLOR, ""+getColor());
 
+        ArrayList<Map<String, java.lang.Object>> content = new ArrayList<>();
+        for (CheckListItem item : getContent()){
+
+            Map<String, java.lang.Object> mappedItem = new HashMap<>();
+
+            mappedItem.put(Statics.DATABASE_OBJECT_UID, item.getUid());
+            mappedItem.put(Statics.DATABASE_CL_ITEM_DESCRIPTION, item.getDescription());
+            mappedItem.put(Statics.DATABASE_OBJECT_CREATION_DATE, item.getCreationDate());
+            mappedItem.put(Statics.DATABASE_OBJECT_MODIFICATION_DATE, item.getModificationDate());
+            mappedItem.put(Statics.DATABASE_CL_ITEM_DONE_DATE, item.getDoneDate());
+            mappedItem.put(Statics.DATABASE_CL_ITEM_DUE_DATE, item.getDueDate());
+            mappedItem.put(Statics.DATABASE_CL_ITEM_PRIORITY, item.getPriority());
+
+            content.add(mappedItem);
+        }
+
+        map.put(Statics.DATABASE_NOTE_CONTENT, content);
+
+        return map;
     }
 
     @Override

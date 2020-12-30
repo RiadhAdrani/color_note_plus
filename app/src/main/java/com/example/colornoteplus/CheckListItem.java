@@ -16,9 +16,6 @@ public class CheckListItem extends Object {
         URGENT
     }
 
-    public CheckListItem() {
-    }
-
     // description of the item
     private String description;
         public String getDescription() {
@@ -61,17 +58,6 @@ public class CheckListItem extends Object {
             this.dueDate = dueDate;
             setModificationDate();
         }
-
-    // (UNUSED)
-    // default constructor
-    public CheckListItem(String description){
-            setDescription(description);
-            setUnDone();
-            setDueDate(-1L);
-            setPriority(PRIORITY.MEDIUM);
-            setCreationDate(Calendar.getInstance().getTime().getTime());
-            setModificationDate();
-    }
 
     // custom constructor
     public CheckListItem(String description,Long dueDate,PRIORITY p){

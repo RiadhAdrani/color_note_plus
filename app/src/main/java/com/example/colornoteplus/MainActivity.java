@@ -26,8 +26,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Future;
@@ -79,15 +81,6 @@ public class MainActivity extends AppCompatActivity{
         state = STATES.NOTES;
 
         theme = StyleManager.getAppColor(getApplicationContext());
-
-        NoteText customText = new NoteText(this);
-        Sync.getNote(
-                this,
-                "Ta83d1596-dbf9-4ba2-ba72-d98a110c58aa1609337852579",
-                customText,
-                note -> {
-                    Log.d("SYNC","Note title is : "+note.getTitle());
-                });
 
         setTheme(StyleManager.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_main);
@@ -352,6 +345,37 @@ public class MainActivity extends AppCompatActivity{
         rv = findViewById(R.id.note_recycler_view);
 
         initNoteState();
+
+        NoteCheckList n = new NoteCheckList(this);
+
+//        for (Note<?> note : noteList){
+//            Sync.uploadNote(getApplicationContext(),note);
+//        }
+//
+////        Sync.getNote(
+////                this,
+////                "C2da0e738-3ef0-472f-ae93-817b5951f0581609247752853",
+////                n,
+////                new Sync.OnDataRetrieval() {
+////            @Override
+////            public void onSuccess(Note<?> note, DocumentSnapshot snapshot) {
+////
+////                try {
+////                    noteList.add(0,Note.fromMap(getApplicationContext(), Objects.requireNonNull(snapshot.getData())));
+////                    adapter.notifyItemInserted(0);
+////                    rv.scrollToPosition(0);
+////                } catch (Exception e) {
+////                    e.printStackTrace();
+////                    Toast.makeText(MainActivity.this, "Couldn't Load Note", Toast.LENGTH_SHORT).show();
+////                }
+////
+////            }
+////
+////            @Override
+////            public void onFailure() {
+////                Log.d("SYNC_NOTES","Sync failed");
+////            }
+////        });
     }
 
 
@@ -421,7 +445,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void OnOptionOneClick(int position) {
                 DialogConfirm dialogConfirm = new DialogConfirm(
-                        theme, // TODO: make a global variable for color
+                        theme,
                         R.drawable.ic_delete,
                         getString(R.string.confirm_delete),
                         new DialogConfirm.OnConfirmClickListener() {

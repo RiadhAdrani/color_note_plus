@@ -1,14 +1,11 @@
 package com.example.colornoteplus;
 
-import android.app.DatePickerDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -17,6 +14,7 @@ import java.util.Objects;
 
 abstract public class Sync {
 
+    @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore DB = FirebaseFirestore.getInstance();
     private static final String USERS = Statics.DATABASE_DATA_USERS;
     private static final String USER_INFO = Statics.DATABASE_USER_INFO;
@@ -35,55 +33,40 @@ abstract public class Sync {
     private static final String CL_ITEM_DUE_DATE = Statics.DATABASE_CL_ITEM_DUE_DATE;
 
     public interface OnDataRetrieval{
-        void onDataRetrieval(Note<?> note);
+        void onSuccess(Note<?> note, DocumentSnapshot snapshot);
+        void onFailure();
     }
 
     static void uploadNote(Context context, Note<?> note){
 
-        Map<String, Object> map = new HashMap<>();
-        map.put(note.getUid(),note);
-        DB.collection(USERS).document("test_user").set(map)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "Note syn success", Toast.LENGTH_SHORT).show();
-                        Log.d("SYNC","Operation success");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Note syn failed", Toast.LENGTH_SHORT).show();
-                        Log.d("SYNC","Operation failed");
-                    }
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context)
+                .getUsername()).collection(USER_NOTES)
+                .document(note.getUid())
+                .set(note.toMap())
+                .addOnSuccessListener(aVoid -> Log.d("SYNC","Operation success"))
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Note syn failed", Toast.LENGTH_SHORT).show();
+                    Log.d("SYNC","Operation failed");
                 });
 
         Log.d("SYNC","Operation Ended");
     }
 
-    static void getNote(Context context, String uid,Note<?> output, OnDataRetrieval onDataRetrieval){
+    static void getNote(Context context, String uid,final Note<?> output, OnDataRetrieval onDataRetrieval){
 
-        DB.collection(USERS).document("test_user").get()
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context)
+                .getUsername())
+                .collection(USER_NOTES).document(uid)
+                .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()){
 
-                        int color = Integer.parseInt(Objects.requireNonNull(documentSnapshot.get(NOTE_COLOR)).toString());
-                        String title = (String) documentSnapshot.get(NOTE_TITLE);
-                        Long creationDate = documentSnapshot.getLong(OBJECT_CREATION_DATE);
-
-                        output.setColor(color);
-                        output.setTitle(title);
-                        output.setCreationDate(creationDate);
-
-                        if (onDataRetrieval != null) onDataRetrieval.onDataRetrieval(output);
-
-                    }
-                    else {
-                        Log.d("SYNC","Does not exist");
-                    }
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(output,documentSnapshot);
                 })
                 .addOnFailureListener(e -> {
 
+                    if (onDataRetrieval != null) onDataRetrieval.onFailure();
                 });
     }
 

@@ -38,6 +38,6 @@ public class User {
 
     // return the current user
     static public User getCurrentUser(Context context){
-        return new User();
+        return new User("test_user","user@email.com",0L,0L);
     }
 }
