@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -78,6 +79,15 @@ public class MainActivity extends AppCompatActivity{
         state = STATES.NOTES;
 
         theme = StyleManager.getAppColor(getApplicationContext());
+
+        NoteText customText = new NoteText(this);
+        Sync.getNote(
+                this,
+                "Ta83d1596-dbf9-4ba2-ba72-d98a110c58aa1609337852579",
+                customText,
+                note -> {
+                    Log.d("SYNC","Note title is : "+note.getTitle());
+                });
 
         setTheme(StyleManager.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_main);
