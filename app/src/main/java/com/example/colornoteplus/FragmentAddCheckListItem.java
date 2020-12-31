@@ -44,17 +44,17 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
 
         builder.setView(dialog);
 
-        dialog.setBackgroundColor(getResources().getColor(StyleManager.getNeutralColor(getContext())));
+        dialog.setBackgroundColor(getResources().getColor(Style.getNeutralColor(getContext())));
 
         Button cancel = dialog.findViewById(R.id.fragment_cancel);
         cancel.setOnClickListener(view -> dismiss());
-        cancel.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getContext(),color)));
-        cancel.setTextColor(getResources().getColor(StyleManager.getNeutralColor(getContext())));
+        cancel.setBackgroundColor(getResources().getColor(Style.getColorMain(getContext(),color)));
+        cancel.setTextColor(getResources().getColor(Style.getNeutralColor(getContext())));
 
         Button confirm = dialog.findViewById(R.id.fragment_add_item);
         confirm.setOnClickListener(view -> listener.onConfirmClickListener());
-        confirm.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getContext(),color)));
-        confirm.setTextColor(getResources().getColor(StyleManager.getNeutralColor(getContext())));
+        confirm.setBackgroundColor(getResources().getColor(Style.getColorMain(getContext(),color)));
+        confirm.setTextColor(getResources().getColor(Style.getNeutralColor(getContext())));
 
         Spinner priority = dialog.findViewById(R.id.fragment_item_priority);
         PriorityAdapter adapter= new PriorityAdapter(getContext(), CheckListItem.PRIORITY.values(),color);
@@ -73,19 +73,19 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         });
 
         ImageButton setDueTime = dialog.findViewById(R.id.fragment_item_due_time_button);
-        setDueTime.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+        setDueTime.setBackgroundResource(Style.getBackground(getContext(),color));
         setDueTime.setOnClickListener(view -> listener.onSetDueTimeClickListener());
         TextView dueTime = dialog.findViewById(R.id.fragment_item_due_time_text);
 
-        dueTime.setTextColor((getResources().getColor(StyleManager.getColorMain(getContext(),color))));
-        dueTime.setHintTextColor((getResources().getColor(StyleManager.getColorSecondary(getContext(),color))));
+        dueTime.setTextColor((getResources().getColor(Style.getColorMain(getContext(),color))));
+        dueTime.setHintTextColor((getResources().getColor(Style.getColorSecondary(getContext(),color))));
         dueTime.setText(getString(R.string.set_reminder));
 
         EditText text = dialog.findViewById(R.id.fragment_item_text);
         text.setText(R.string.new_item);
         text.setHint(R.string.new_item);
-        text.setTextColor(getResources().getColor(StyleManager.getColorPrimary(getContext(),color)));
-        text.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getContext(),color)));
+        text.setTextColor(getResources().getColor(Style.getColorPrimary(getContext(),color)));
+        text.setHintTextColor(getResources().getColor(Style.getColorSecondary(getContext(),color)));
 
         priority.setVisibility(View.GONE);
         setDueTime.setVisibility(View.GONE);

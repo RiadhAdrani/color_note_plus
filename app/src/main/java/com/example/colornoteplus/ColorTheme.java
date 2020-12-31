@@ -1,6 +1,6 @@
 package com.example.colornoteplus;
 
-public class BackgroundColor {
+public class ColorTheme {
 
     // default drawable
     private final int drawable;
@@ -28,7 +28,7 @@ public class BackgroundColor {
         private final int colorDarker;
 
     // custom constructor
-    public BackgroundColor(int drawable,int drawableLight,int drawableDark,int theme,int themeDark, int colorLighter,int colorLight,int color,int colorDark,int colorDarker){
+    public ColorTheme(int drawable, int drawableLight, int drawableDark, int theme, int themeDark, int colorLighter, int colorLight, int color, int colorDark, int colorDarker){
         this.drawable = drawable;
         this.drawableLight = drawableLight;
         this.drawableDark = drawableDark;

@@ -1,6 +1,5 @@
 package com.example.colornoteplus;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,11 @@ import java.util.ArrayList;
 
 public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder> {
 
-    private final ArrayList<BackgroundColor> list;
+    private final ArrayList<ColorTheme> list;
 
     private OnItemClickListener listener;
 
-    public ColorAdapter(){ list = StyleManager.getBackgroundColors(); }
+    public ColorAdapter(){ list = Style.getThemes(); }
 
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
@@ -34,7 +33,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull ColorAdapter.MyViewHolder holder, int position) {
 
-        BackgroundColor currentItem = list.get(position);
+        ColorTheme currentItem = list.get(position);
 
         holder.backgroundView.setBackgroundResource(currentItem.getDrawable());
 

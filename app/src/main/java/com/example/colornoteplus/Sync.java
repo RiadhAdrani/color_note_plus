@@ -8,29 +8,25 @@ import android.widget.Toast;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 abstract public class Sync {
 
     @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore DB = FirebaseFirestore.getInstance();
-    private static final String USERS = Statics.DATABASE_DATA_USERS;
-    private static final String USER_INFO = Statics.DATABASE_USER_INFO;
-    private static final String USER_NOTES = Statics.DATABASE_USER_NOTES;
-    private static final String INFO = Statics.DATABASE_DATA_INFO;
-    private static final String INFO_APP_VERSION = Statics.DATABASE_DATA_APP_VERSION;
-    private static final String OBJECT_UID = Statics.DATABASE_OBJECT_UID;
-    private static final String OBJECT_CREATION_DATE = Statics.DATABASE_OBJECT_CREATION_DATE;
-    private static final String OBJECT_MODIFICATION_DATE = Statics.DATABASE_OBJECT_MODIFICATION_DATE;
-    private static final String NOTE_TITLE = Statics.DATABASE_NOTE_TITLE;
-    private static final String NOTE_COLOR = Statics.DATABASE_NOTE_COLOR;
-    private static final String NOTE_CONTENT = Statics.DATABASE_NOTE_CONTENT;
-    private static final String CL_ITEM_DESCRIPTION = Statics.DATABASE_CL_ITEM_DESCRIPTION;
-    private static final String CL_ITEM_PRIORITY = Statics.DATABASE_CL_ITEM_PRIORITY;
-    private static final String CL_ITEM_DONE_DATE = Statics.DATABASE_CL_ITEM_DONE_DATE;
-    private static final String CL_ITEM_DUE_DATE = Statics.DATABASE_CL_ITEM_DUE_DATE;
+    private static final String USERS = App.DATABASE_DATA_USERS;
+    private static final String USER_INFO = App.DATABASE_USER_INFO;
+    private static final String USER_NOTES = App.DATABASE_USER_NOTES;
+    private static final String INFO = App.DATABASE_DATA_INFO;
+    private static final String INFO_APP_VERSION = App.DATABASE_DATA_APP_VERSION;
+    private static final String OBJECT_UID = App.DATABASE_OBJECT_UID;
+    private static final String OBJECT_CREATION_DATE = App.DATABASE_OBJECT_CREATION_DATE;
+    private static final String OBJECT_MODIFICATION_DATE = App.DATABASE_OBJECT_MODIFICATION_DATE;
+    private static final String NOTE_TITLE = App.DATABASE_NOTE_TITLE;
+    private static final String NOTE_COLOR = App.DATABASE_NOTE_COLOR;
+    private static final String NOTE_CONTENT = App.DATABASE_NOTE_CONTENT;
+    private static final String CL_ITEM_DESCRIPTION = App.DATABASE_CL_ITEM_DESCRIPTION;
+    private static final String CL_ITEM_PRIORITY = App.DATABASE_CL_ITEM_PRIORITY;
+    private static final String CL_ITEM_DONE_DATE = App.DATABASE_CL_ITEM_DONE_DATE;
+    private static final String CL_ITEM_DUE_DATE = App.DATABASE_CL_ITEM_DUE_DATE;
 
     public interface OnDataRetrieval{
         void onSuccess(Note<?> note, DocumentSnapshot snapshot);

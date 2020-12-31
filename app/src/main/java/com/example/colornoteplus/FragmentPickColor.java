@@ -40,15 +40,15 @@ public class FragmentPickColor extends AppCompatDialogFragment {
         builder.setView(dialog);
 
         dialog.findViewById(R.id.fragment_pick_color_background).setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getContext()))
+                getResources().getColor(Style.getNeutralColor(getContext()))
         );
 
         TextView text = dialog.findViewById(R.id.prompt_text);
-        text.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getContext())));
+        text.setTextColor(getResources().getColor(Style.getNeutralTextColor(getContext())));
 
         Button cancel = dialog.findViewById(R.id.cancel_button);
         cancel.setOnClickListener(view -> dismiss());
-        cancel.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+        cancel.setBackgroundResource(Style.getBackground(getContext(),color));
 
         RecyclerView rv = dialog.findViewById(R.id.color_recyclerView);
         rv.setLayoutManager(new GridLayoutManager(getContext(),span));

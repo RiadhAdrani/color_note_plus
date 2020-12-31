@@ -1,9 +1,7 @@
 package com.example.colornoteplus;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,15 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -80,22 +70,22 @@ public class MainActivity extends AppCompatActivity{
 
         state = STATES.NOTES;
 
-        theme = StyleManager.getAppColor(getApplicationContext());
+        theme = Style.getAppColor(getApplicationContext());
 
-        setTheme(StyleManager.getTheme(getApplicationContext(),theme));
+        setTheme(Style.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.main_activity_background).setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext()))
+                getResources().getColor(Style.getNeutralColor(getApplicationContext()))
         );
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.my_notes);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+        toolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
 
         recyclerSelectionToolbar = findViewById(R.id.recycler_selection_toolbar);
-        recyclerSelectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+        recyclerSelectionToolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
 
         ImageView rTCancel = recyclerSelectionToolbar.findViewById(R.id.toolbar_cancel);
         rTCancel.setOnClickListener( v -> exitRecyclerSelectionMode());
@@ -140,7 +130,7 @@ public class MainActivity extends AppCompatActivity{
                     }
             );
 
-            dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+            dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
         });
 
         ImageView rTDeletePermanently = recyclerSelectionToolbar.findViewById(R.id.toolbar_delete_selection);
@@ -174,7 +164,7 @@ public class MainActivity extends AppCompatActivity{
                         }
                 );
 
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
 
         });
@@ -209,12 +199,12 @@ public class MainActivity extends AppCompatActivity{
                         }
                 );
 
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
         });
 
         selectionToolbar = findViewById(R.id.selection_toolbar);
-        selectionToolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+        selectionToolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
         ImageView toolbarCancel = selectionToolbar.findViewById(R.id.toolbar_cancel);
         toolbarCancel.setOnClickListener( view -> exitSelectionMode() );
 
@@ -262,7 +252,7 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                         );
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
 
         });
@@ -386,7 +376,7 @@ public class MainActivity extends AppCompatActivity{
 
         navigationView.setCheckedItem(R.id.nav_notes);
 
-        for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,this)) {
+        for (String s : MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
                 case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
                 case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
@@ -460,7 +450,7 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                 );
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
 
             @Override
@@ -487,7 +477,7 @@ public class MainActivity extends AppCompatActivity{
 
         navigationView.setCheckedItem(R.id.nav_recycler_bin);
 
-        for (String s : MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST_TRASH,this)) {
+        for (String s : MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST_TRASH,this)) {
             switch (Note.getNoteClass(s)){
                 case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
                 case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
@@ -515,7 +505,7 @@ public class MainActivity extends AppCompatActivity{
                                 @Override
                                 public void OnPrimaryAction() {
                                     ArrayList<String> temp = MySharedPreferences.LoadStringArray(
-                                            Statics.KEY_NOTE_LIST,
+                                            App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
@@ -523,7 +513,7 @@ public class MainActivity extends AppCompatActivity{
 
                                     MySharedPreferences.SaveStringArray(
                                             temp,
-                                            Statics.KEY_NOTE_LIST,
+                                            App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
@@ -532,14 +522,14 @@ public class MainActivity extends AppCompatActivity{
                                     if (NoteText.class.equals(noteList.get(position).getClass())) {
 
                                         i = new Intent(getApplicationContext(),NoteActivity.class);
-                                        i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                        i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                         startActivity(i);
                                         finish();
                                     }
 
                                     if (NoteCheckList.class.equals(noteList.get(position).getClass())){
                                         i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
-                                        i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+                                        i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                         startActivity(i);
                                         finish();
                                     }
@@ -553,7 +543,7 @@ public class MainActivity extends AppCompatActivity{
                                 }
                             }
                     );
-                    dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                    dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
                 }
 
                 // if selection mode is active
@@ -586,7 +576,7 @@ public class MainActivity extends AppCompatActivity{
                             public void OnPrimaryAction() {
                                 {
                                     ArrayList<String> temp = MySharedPreferences.LoadStringArray(
-                                            Statics.KEY_NOTE_LIST,
+                                            App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
@@ -594,7 +584,7 @@ public class MainActivity extends AppCompatActivity{
 
                                     MySharedPreferences.SaveStringArray(
                                             temp,
-                                            Statics.KEY_NOTE_LIST,
+                                            App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
@@ -608,7 +598,7 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                 );
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
 
             // delete permanently
@@ -631,7 +621,7 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                 );
-                dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+                dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
             }
 
         });
@@ -769,7 +759,7 @@ public class MainActivity extends AppCompatActivity{
     // in a new activity
     private void textFABOnClickListener(){
         Intent i = new Intent(this,NoteActivity.class);
-        i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
+        i.putExtra(App.KEY_NOTE_ACTIVITY, App.NOTE_DEFAULT_UID);
         startActivity(i);
         finish();
     }
@@ -778,7 +768,7 @@ public class MainActivity extends AppCompatActivity{
     // in a new activity
     private void checkListFABOnClickListener(){
         Intent i = new Intent(this,CheckListNoteActivity.class);
-        i.putExtra(Statics.KEY_NOTE_ACTIVITY, Statics.NOTE_DEFAULT_UID);
+        i.putExtra(App.KEY_NOTE_ACTIVITY, App.NOTE_DEFAULT_UID);
         startActivity(i);
         finish();
     }
@@ -793,14 +783,14 @@ public class MainActivity extends AppCompatActivity{
         if (NoteText.class.equals(noteList.get(position).getClass())) {
 
             i = new Intent(getApplicationContext(),NoteActivity.class);
-            i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+            i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
             finish();
         }
 
         if (NoteCheckList.class.equals(noteList.get(position).getClass())){
             i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
-            i.putExtra(Statics.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
+            i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
             finish();
         }
@@ -815,10 +805,10 @@ public class MainActivity extends AppCompatActivity{
 
         switch (state){
             case NOTES:
-                MySharedPreferences.SaveStringArray(mNoteList,Statics.KEY_NOTE_LIST,getApplicationContext());
+                MySharedPreferences.SaveStringArray(mNoteList, App.KEY_NOTE_LIST,getApplicationContext());
                 break;
             case DELETED_NOTES:
-                MySharedPreferences.SaveStringArray(mNoteList,Statics.KEY_NOTE_LIST_TRASH,getApplicationContext());
+                MySharedPreferences.SaveStringArray(mNoteList, App.KEY_NOTE_LIST_TRASH,getApplicationContext());
                 break;
         }
     }
@@ -828,7 +818,7 @@ public class MainActivity extends AppCompatActivity{
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,theme);
 
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_COLOR_PICK);
 
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
@@ -855,7 +845,7 @@ public class MainActivity extends AppCompatActivity{
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,noteList.get(notePosition).getColor());
 
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_COLOR_PICK);
 
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
@@ -938,7 +928,7 @@ public class MainActivity extends AppCompatActivity{
 
                     }
                 });
-        dialog.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+        dialog.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
     }
 
 }

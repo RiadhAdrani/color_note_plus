@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public abstract class MySharedPreferences {
 
     public static void DeleteNote(String key, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(key);
         editor.apply();
@@ -20,24 +20,24 @@ public abstract class MySharedPreferences {
 
     public static String LoadString(String key, Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");
     }
 
     public static void SaveString(String string, String key, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,string.trim());
         editor.apply();
     }
 
     public static Long LoadLong(String key,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(key,0L);
     }
 
     public static void SaveTextNote(NoteText note, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -52,7 +52,7 @@ public abstract class MySharedPreferences {
 
         NoteText note;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -70,7 +70,7 @@ public abstract class MySharedPreferences {
     }
 
     public static void SaveCheckListNote(NoteCheckList note, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -85,7 +85,7 @@ public abstract class MySharedPreferences {
 
         NoteCheckList note = null;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -110,7 +110,7 @@ public abstract class MySharedPreferences {
 
     public static void SaveStringArray(ArrayList<String> list, String key, Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -125,7 +125,7 @@ public abstract class MySharedPreferences {
 
         ArrayList<String> list;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         // The key of the Data
@@ -144,12 +144,12 @@ public abstract class MySharedPreferences {
 
     public static int LoadInteger(String key, Context context){
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key,0);
     }
 
     public static void SaveInteger(int integer, String key, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Statics.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key,integer);
         editor.apply();

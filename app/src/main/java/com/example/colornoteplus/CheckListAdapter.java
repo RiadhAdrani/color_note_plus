@@ -41,9 +41,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
     // current context
     final private Context context;
 
-    private Statics.SORT_ITEM sortBy;
-        public Statics.SORT_ITEM getSortBy(){ return sortBy;}
-        public void setSortBy(Statics.SORT_ITEM sort){ this.sortBy = sort;}
+    private App.SORT_ITEM sortBy;
+        public App.SORT_ITEM getSortBy(){ return sortBy;}
+        public void setSortBy(App.SORT_ITEM sort){ this.sortBy = sort;}
 
     // listener
     private OnItemClickListener listener;
@@ -68,7 +68,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         CheckListItem currentItem = list.get(position);
 
         // change background color
-        holder.background.setBackgroundResource(StyleManager.getBackgroundSecondary(context,color));
+        holder.background.setBackgroundResource(Style.getBackgroundSecondary(context,color));
 
         // initializing the checkbox
         holder.checkBox.setChecked(currentItem.isDone());
@@ -88,8 +88,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the description
-        holder.title.setTextColor(context.getResources().getColor(StyleManager.getNeutralTextColor(context)));
-        holder.title.setHintTextColor(context.getResources().getColor(StyleManager.getColorMain(context,color)));
+        holder.title.setTextColor(context.getResources().getColor(Style.getNeutralTextColor(context)));
+        holder.title.setHintTextColor(context.getResources().getColor(Style.getColorMain(context,color)));
         holder.title.setText(currentItem.getDescription().trim());
         holder.title.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,7 +117,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         }
 
         // initializing the due time
-        holder.dueTimeText.setTextColor(context.getResources().getColor(StyleManager.getColorPrimaryAccent(context, color)));
+        holder.dueTimeText.setTextColor(context.getResources().getColor(Style.getColorPrimaryAccent(context, color)));
         holder.dueTimeText.setVisibility(View.GONE);
 
         // TODO: show remaining time instead of the due date
@@ -145,7 +145,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         });
 
         // initializing the delete button
-        holder.delete.setBackgroundResource(StyleManager.getBackground(context,color));
+        holder.delete.setBackgroundResource(Style.getBackground(context,color));
         holder.delete.setOnClickListener(view -> listener.onDelete(holder.getAdapterPosition()));
     }
 

@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        theme = StyleManager.getAppColor(getApplicationContext());
+        theme = Style.getAppColor(getApplicationContext());
 
         ApplyTheme(theme);
 
@@ -38,19 +38,19 @@ public class SettingsActivity extends AppCompatActivity {
 
     void ApplyTheme(int theme){
 
-        setTheme(StyleManager.getTheme(getApplicationContext(),theme));
+        setTheme(Style.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_settings);
 
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+        getWindow().setStatusBarColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
 
         ConstraintLayout background = findViewById(R.id.settings_background);
         background.setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext()))
+                getResources().getColor(Style.getNeutralColor(getApplicationContext()))
         );
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.settings);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),theme)));
+        toolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener( v -> {
@@ -61,27 +61,27 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView lightSwitchLabel = findViewById(R.id.settings_theme_label);
         lightSwitchLabel.setTextColor(getResources().getColor(
-                StyleManager.getColorPrimaryAccent(getApplicationContext(), theme)
+                Style.getColorPrimaryAccent(getApplicationContext(), theme)
         ));
 
         SwitchCompat lightSwitch = findViewById(R.id.settings_theme_switch);
-        lightSwitch.setChecked(StyleManager.getLightTheme(getApplicationContext()) != Statics.DAY_THEME);
+        lightSwitch.setChecked(Style.getLightTheme(getApplicationContext()) != App.DAY_THEME);
         lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
-                StyleManager.setLightTheme(Statics.NIGHT_THEME,getApplicationContext());
+                Style.setLightTheme(App.NIGHT_THEME,getApplicationContext());
             else
-                StyleManager.setLightTheme(Statics.DAY_THEME,getApplicationContext());
+                Style.setLightTheme(App.DAY_THEME,getApplicationContext());
 
             ApplyTheme(theme);
         });
 
         TextView appColorLabel = findViewById(R.id.settings_app_color_label);
         appColorLabel.setTextColor(getResources().getColor(
-                StyleManager.getColorPrimaryAccent(getApplicationContext(), theme)
+                Style.getColorPrimaryAccent(getApplicationContext(), theme)
         ));
 
         ImageView appColor = findViewById(R.id.settings_app_color);
-        appColor.setBackgroundResource(StyleManager.getBackground(getApplicationContext(), theme));
+        appColor.setBackgroundResource(Style.getBackground(getApplicationContext(), theme));
         appColor.setOnClickListener( v -> buildColorPickDialog());
     }
 
@@ -90,13 +90,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,theme);
 
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_COLOR_PICK);
 
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
 
-                StyleManager.setAppColor(position,getApplicationContext());
+                Style.setAppColor(position,getApplicationContext());
                 ApplyTheme(position);
                 fragment.dismiss();
             }

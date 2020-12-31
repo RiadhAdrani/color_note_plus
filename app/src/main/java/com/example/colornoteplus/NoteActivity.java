@@ -110,8 +110,8 @@ public class NoteActivity extends AppCompatActivity {
     // get note from the intent
     private void getNoteFromIntent(){
 
-        if (!getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY).equals(Statics.NOTE_DEFAULT_UID)){
-            note = MySharedPreferences.LoadTextNote(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+        if (!getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY).equals(App.NOTE_DEFAULT_UID)){
+            note = MySharedPreferences.LoadTextNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
             note = new NoteText(getApplicationContext());
         }
@@ -120,7 +120,7 @@ public class NoteActivity extends AppCompatActivity {
     // Method used to automatically configure color theme of the activity
     private void initTheme(){
 
-        setTheme(StyleManager.getTheme(getApplicationContext(),note.getColor()));
+        setTheme(Style.getTheme(getApplicationContext(),note.getColor()));
 
         setContentView(R.layout.activity_note);
 
@@ -137,9 +137,9 @@ public class NoteActivity extends AppCompatActivity {
         String textTemp = contentView.getText().toString().trim();
 
         // change theme
-        setTheme(StyleManager.getTheme(getApplicationContext(),id));
+        setTheme(Style.getTheme(getApplicationContext(),id));
         setContentView(R.layout.activity_note);
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),id)));
+        getWindow().setStatusBarColor(getResources().getColor(Style.getColorMain(getApplicationContext(),id)));
 
         changeViewsColor();
 
@@ -153,23 +153,23 @@ public class NoteActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),note.getColor())));
+        toolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),note.getColor())));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(view -> onUpButtonPressed());
 
         findViewById(R.id.text_note_activity_background).setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext()))
+                getResources().getColor(Style.getNeutralColor(getApplicationContext()))
         );
 
         titleView = findViewById(R.id.note_title_view);
         titleView.setText(note.getTitle());
-        titleView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
-        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getApplicationContext(),note.getColor())));
+        titleView.setTextColor(getResources().getColor(Style.getNeutralTextColor(getApplicationContext())));
+        titleView.setHintTextColor(getResources().getColor(Style.getColorSecondary(getApplicationContext(),note.getColor())));
 
         titleCharacterCount = findViewById(R.id.note_title_characters);
         String m = titleView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.title_max_length);
         titleCharacterCount.setText(m);
-        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),note.getColor())));
+        titleCharacterCount.setTextColor(getResources().getColor(Style.getColorMain(getApplicationContext(),note.getColor())));
 
         titleView.addTextChangedListener(new TextWatcher()
         {
@@ -194,14 +194,14 @@ public class NoteActivity extends AppCompatActivity {
 
         contentView = findViewById(R.id.note_content_view);
         contentView.setText(note.getContent());
-        contentView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
-        contentView.setHintTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),note.getColor())));
+        contentView.setTextColor(getResources().getColor(Style.getNeutralTextColor(getApplicationContext())));
+        contentView.setHintTextColor(getResources().getColor(Style.getColorMain(getApplicationContext(),note.getColor())));
         contentView.setScroller(new Scroller(getApplicationContext()));
         contentView.setVerticalScrollBarEnabled(true);
         contentView.setMovementMethod(new ScrollingMovementMethod());
 
         contentCharacterCount = findViewById(R.id.note_content_characters);
-        contentCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),note.getColor())));
+        contentCharacterCount.setTextColor(getResources().getColor(Style.getColorMain(getApplicationContext(),note.getColor())));
         m = contentView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.content_max_length);
         contentCharacterCount.setText(m);
 
@@ -209,7 +209,7 @@ public class NoteActivity extends AppCompatActivity {
 
             if (i == KeyEvent.KEYCODE_DEL){
                 if (!contentView.getText().toString().isEmpty()){
-                    if (Statics.SPECIAL_STRINGS.contains(contentView.getText().toString().charAt(contentView.getText().toString().length() - 1))){
+                    if (App.SPECIAL_STRINGS.contains(contentView.getText().toString().charAt(contentView.getText().toString().length() - 1))){
                         deletedSpecialCharacter = true;
                         Log.d("UNDO_REDO","Deleted special Character");
                     }
@@ -248,7 +248,7 @@ public class NoteActivity extends AppCompatActivity {
         contentView.clearFocus();
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());
-        colorView.setBackgroundResource(StyleManager.getBackground(getApplicationContext(), note.getColor()));
+        colorView.setBackgroundResource(Style.getBackground(getApplicationContext(), note.getColor()));
 
     }
 
@@ -256,7 +256,7 @@ public class NoteActivity extends AppCompatActivity {
     // if old return true
     // else   return false
     private boolean isNoteOld(){
-        for (String n: MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
         }
         return false;
@@ -267,7 +267,7 @@ public class NoteActivity extends AppCompatActivity {
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
 
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_COLOR_PICK);
 
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
@@ -292,14 +292,14 @@ public class NoteActivity extends AppCompatActivity {
     // in the toolbar
     private boolean saveTextNote(){
 
-        if (titleView.getText().toString().trim().length() < Statics.NOTE_TITLE_MINIMUM_LENGTH){
+        if (titleView.getText().toString().trim().length() < App.NOTE_TITLE_MINIMUM_LENGTH){
 
-            Statics.StyleableToast(getApplicationContext(),
+            App.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
-                    StyleManager.getNeutralColor(getApplicationContext()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -316,22 +316,22 @@ public class NoteActivity extends AppCompatActivity {
 
                 ArrayList<String> noteList =
                         MySharedPreferences.LoadStringArray(
-                                Statics.KEY_NOTE_LIST,getApplicationContext()
+                                App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
                 MySharedPreferences.SaveStringArray(
-                        noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
+                        noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }
 
             // alert user of the success
-            Statics.StyleableToast(getApplicationContext(),
+            App.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
-                    StyleManager.getNeutralColor(getApplicationContext()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 
@@ -352,7 +352,7 @@ public class NoteActivity extends AppCompatActivity {
             return;
         }
 
-        if (Statics.SPECIAL_STRINGS.contains(lastCharacter)){
+        if (App.SPECIAL_STRINGS.contains(lastCharacter)){
 
                 textUndoRedoHandler.pushUndo(contentView.getText().toString().trim());
         }
@@ -375,12 +375,12 @@ public class NoteActivity extends AppCompatActivity {
 
                 textUndoRedoHandler.pushRedo(contentView.getText().toString().trim());
                 contentView.setText(textUndoRedoHandler.getUndoStack().firstElement());
-                Statics.StyleableToast(getApplicationContext(),
+                App.StyleableToast(getApplicationContext(),
                         getString(R.string.nothing_to_undo),
-                        StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                        Style.getColorPrimary(getApplicationContext(),note.getColor()),
                         R.color.white,
                         3,
-                        StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                        Style.getColorPrimary(getApplicationContext(),note.getColor()),
                         false);
             }
             else {
@@ -409,12 +409,12 @@ public class NoteActivity extends AppCompatActivity {
             deleteRedoStack = false;
         }
         else {
-            Statics.StyleableToast(getApplicationContext(),
+            App.StyleableToast(getApplicationContext(),
                     getString(R.string.nothing_to_redo),
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    Style.getColorPrimary(getApplicationContext(),note.getColor()),
                     R.color.white,
                     3,
-                    StyleManager.getColorPrimary(getApplicationContext(),note.getColor()),
+                    Style.getColorPrimary(getApplicationContext(),note.getColor()),
                     false);
         }
 
@@ -450,7 +450,7 @@ public class NoteActivity extends AppCompatActivity {
                         startMainActivity();
                     }
                 });
-        dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+        dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
     }
 
     private boolean onUpButtonPressed(){

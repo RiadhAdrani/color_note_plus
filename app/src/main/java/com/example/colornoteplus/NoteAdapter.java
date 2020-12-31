@@ -117,7 +117,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             return true;
         });
 
-        holder.line.setBackgroundColor(context.getResources().getColor(StyleManager.getColorSecondaryAccent(getContext(),item.getColor())));
+        holder.line.setBackgroundColor(context.getResources().getColor(Style.getColorSecondaryAccent(getContext(),item.getColor())));
 
         holder.moreOptionsView.setVisibility(View.VISIBLE);
         holder.moreOptionsView.setOnClickListener(view -> {
@@ -141,19 +141,19 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             });
 
         if (isSelected(item.getUid())){
-            switch(StyleManager.getLightTheme(context)){
+            switch(Style.getLightTheme(context)){
                 case 0:
                     holder.backgroundView.setBackgroundResource(
-                            StyleManager.getBackgroundPrimary(context,item.getColor()) );
+                            Style.getBackgroundPrimary(context,item.getColor()) );
                     break;
                 case 1:
                     holder.backgroundView.setBackgroundResource(
-                            StyleManager.getBackgroundSecondary(context,item.getColor()) );
+                            Style.getBackgroundSecondary(context,item.getColor()) );
                     break;
             }
         }
         else {
-            holder.backgroundView.setBackgroundResource( StyleManager.getBackground( getContext(), item.getColor()) );
+            holder.backgroundView.setBackgroundResource( Style.getBackground( getContext(), item.getColor()) );
         }
 
         if (selectionMode == SelectionMode.SELECTION){
@@ -183,9 +183,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        ArrayList<String> trash = MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST_TRASH,context);
+        ArrayList<String> trash = MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST_TRASH,context);
         trash.add(uid);
-        MySharedPreferences.SaveStringArray(trash,Statics.KEY_NOTE_LIST_TRASH,context);
+        MySharedPreferences.SaveStringArray(trash, App.KEY_NOTE_LIST_TRASH,context);
 
         list.remove(position);
         notifyItemRemoved(position);
@@ -219,9 +219,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        ArrayList<String> noteList = MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getContext());
+        ArrayList<String> noteList = MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,getContext());
         noteList.add(uid);
-        MySharedPreferences.SaveStringArray(noteList,Statics.KEY_NOTE_LIST,getContext());
+        MySharedPreferences.SaveStringArray(noteList, App.KEY_NOTE_LIST,getContext());
 
         list.remove(position);
         notifyItemRemoved(position);

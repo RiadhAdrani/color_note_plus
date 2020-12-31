@@ -56,26 +56,26 @@ public class DialogConfirm extends AppCompatDialogFragment {
         ImageView icon = dialog.findViewById(R.id.dialog_icon);
         if (this.icon > 0) {
             icon.setImageResource(this.icon);
-            icon.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+            icon.setBackgroundResource(Style.getBackground(getContext(),color));
         }
         else
             icon.setVisibility(View.GONE);
 
         dialog.findViewById(R.id.confirmation_dialog_background).setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getContext()))
+                getResources().getColor(Style.getNeutralColor(getContext()))
         );
 
         TextView text = dialog.findViewById(R.id.dialog_text);
         text.setText(this.text);
-        text.setTextColor(getResources().getColor(StyleManager.getColorPrimaryAccent(getContext(), color)));
+        text.setTextColor(getResources().getColor(Style.getColorPrimaryAccent(getContext(), color)));
 
         Button cancel = dialog.findViewById(R.id.dialog_cancel);
-        cancel.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+        cancel.setBackgroundResource(Style.getBackground(getContext(),color));
         cancel.setTextColor(getResources().getColor(R.color.white));
         cancel.setOnClickListener(view -> dismiss());
 
         Button confirm = dialog.findViewById(R.id.dialog_confirm);
-        confirm.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+        confirm.setBackgroundResource(Style.getBackground(getContext(),color));
         confirm.setTextColor(getResources().getColor(R.color.white));
         confirm.setOnClickListener(view -> {
             listener.OnPrimaryAction();
@@ -83,7 +83,7 @@ public class DialogConfirm extends AppCompatDialogFragment {
         });
 
         Button secondaryAction = dialog.findViewById(R.id.dialog_secondary_action);
-        secondaryAction.setBackgroundResource(StyleManager.getBackground(getContext(),color));
+        secondaryAction.setBackgroundResource(Style.getBackground(getContext(),color));
         secondaryAction.setTextColor(getResources().getColor(R.color.white));
         secondaryAction.setOnClickListener(view -> {
             listener.OnSecondaryAction();

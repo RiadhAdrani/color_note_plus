@@ -52,11 +52,11 @@ public class CheckListNoteActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         // set the note depending on the UID given from the Main Activity
-        if (isNoteOld(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY))){
+        if (isNoteOld(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY))){
 
             // if the UID exists in the SharedPreference
             // Load the note
-            note = MySharedPreferences.LoadCheckListNote(getIntent().getStringExtra(Statics.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = MySharedPreferences.LoadCheckListNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         }
         else {
 
@@ -159,41 +159,41 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private void changeViewsColor(int color){
 
         // set the global theme
-        setTheme(StyleManager.getTheme(getApplicationContext(),color));
+        setTheme(Style.getTheme(getApplicationContext(),color));
 
         // set the appropriate layout
         setContentView(R.layout.activity_check_list_note);
 
         // change status bar color
-        getWindow().setStatusBarColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
+        getWindow().setStatusBarColor(getResources().getColor(Style.getColorMain(getApplicationContext(),color)));
 
         // change background color
         findViewById(R.id.check_list_activity_background).setBackgroundColor(
-                getResources().getColor(StyleManager.getNeutralColor(getApplicationContext())));
+                getResources().getColor(Style.getNeutralColor(getApplicationContext())));
 
         // set up FAB action
         fab = findViewById(R.id.fab_add_item);
-        fab.setBackgroundColor(getResources().getColor(StyleManager.getColorPrimary(getApplicationContext(),color)));
+        fab.setBackgroundColor(getResources().getColor(Style.getColorPrimary(getApplicationContext(),color)));
         fab.setOnClickListener(view -> onFabClickListener());
 
         // setting the toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
+        toolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),color)));
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(view -> onUpButtonPressed());
 
         // setting the note title
         titleView = findViewById(R.id.note_title_view);
         titleView.setText("");
-        titleView.setTextColor(getResources().getColor(StyleManager.getNeutralTextColor(getApplicationContext())));
-        titleView.setHintTextColor(getResources().getColor(StyleManager.getColorSecondary(getApplicationContext(),color)));
+        titleView.setTextColor(getResources().getColor(Style.getNeutralTextColor(getApplicationContext())));
+        titleView.setHintTextColor(getResources().getColor(Style.getColorSecondary(getApplicationContext(),color)));
 
         // setting the character counter for the note title
         titleCharacterCount = findViewById(R.id.note_title_characters);
         String m = titleView.getText().toString().trim().length()+ getString(R.string.text_divider)+ getResources().getInteger(R.integer.title_max_length);
         titleCharacterCount.setText(m);
-        titleCharacterCount.setTextColor(getResources().getColor(StyleManager.getColorMain(getApplicationContext(),color)));
+        titleCharacterCount.setTextColor(getResources().getColor(Style.getColorMain(getApplicationContext(),color)));
 
         titleView.addTextChangedListener(new TextWatcher()
         {
@@ -219,7 +219,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
         // setting the color view
         colorView = findViewById(R.id.note_color_view);
         colorView.setOnClickListener(view -> buildColorPickDialog());
-        colorView.setBackgroundResource(StyleManager.getBackground(getApplicationContext(),color));
+        colorView.setBackgroundResource(Style.getBackground(getApplicationContext(),color));
 
         // check list items adapter
         adapter = new CheckListAdapter(getApplicationContext(),note.getContent(),color);
@@ -247,7 +247,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
             @Override
             public void onSetReminder(int position) {
                 FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
-                datePicker.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_DATE_PICKER);
+                datePicker.show(getSupportFragmentManager(), App.TAG_FRAGMENT_DATE_PICKER);
                 datePicker.setOnDateSet((year, month, day) -> {
                     Calendar c = Calendar.getInstance();
                     c.set(Calendar.YEAR,year);
@@ -294,7 +294,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_COLOR_PICK);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_COLOR_PICK);
         fragment.setOnItemClickListener(new ColorAdapter.OnItemClickListener() {
             @Override
             public void OnClickListener(int position) {
@@ -318,7 +318,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     // display a dialog fragment allowing the user to add a new item
     private void onFabClickListener(){
         FragmentAddCheckListItem fragment = new FragmentAddCheckListItem(note.getColor());
-        fragment.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
+        fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
         fragment.setOnClickListener(new FragmentAddCheckListItem.OnClickListener() {
 
             // add the item to the check list
@@ -335,7 +335,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
             @Override
             public void onSetDueTimeClickListener() {
                 FragmentDatePicker datePicker = new FragmentDatePicker(note.getColor());
-                datePicker.show(getSupportFragmentManager(),Statics.TAG_FRAGMENT_DATE_PICKER);
+                datePicker.show(getSupportFragmentManager(), App.TAG_FRAGMENT_DATE_PICKER);
                 datePicker.setOnDateSet((year, month, day) -> {
                     Calendar c = Calendar.getInstance();
                     c.set(Calendar.YEAR,year);
@@ -352,7 +352,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     // if old return true
     // else   return false
     private boolean isNoteOld(String UID){
-        for (String n: MySharedPreferences.LoadStringArray(Statics.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(UID)) return true;
         }
         return false;
@@ -363,14 +363,14 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private boolean saveNote(){
 
         // if the text is too short, alert the user
-        if (titleView.getText().toString().trim().length() < Statics.NOTE_TITLE_MINIMUM_LENGTH){
+        if (titleView.getText().toString().trim().length() < App.NOTE_TITLE_MINIMUM_LENGTH){
 
-            Statics.StyleableToast(getApplicationContext(),
+            App.StyleableToast(getApplicationContext(),
                     getString(R.string.title_short),
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
-                    StyleManager.getNeutralColor(getApplicationContext()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -398,22 +398,22 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
                 ArrayList<String> noteList =
                         MySharedPreferences.LoadStringArray(
-                                Statics.KEY_NOTE_LIST,getApplicationContext()
+                                App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
                 MySharedPreferences.SaveStringArray(
-                        noteList, Statics.KEY_NOTE_LIST,getApplicationContext()
+                        noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }
 
             // alert user of the success
-            Statics.StyleableToast(getApplicationContext(),
+            App.StyleableToast(getApplicationContext(),
                     getString(R.string.save_success),
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
-                    StyleManager.getNeutralColor(getApplicationContext()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getNeutralColor(getApplicationContext()),
                     3,
-                    StyleManager.getColorMain(getApplicationContext(),note.getColor()),
+                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 
@@ -450,7 +450,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
                         startMainActivity();
                     }
                 });
-        dialogConfirm.show(getSupportFragmentManager(),Statics.TAG_DIALOG_CONFIRM);
+        dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
     }
 
     private boolean onUpButtonPressed(){

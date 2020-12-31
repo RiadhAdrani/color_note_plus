@@ -8,7 +8,7 @@ import com.muddzdev.styleabletoast.StyleableToast;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Statics {
+public abstract class App {
 
     // -----------------------------------------------------------------------------------------------------------------
     //                                          DEFAULT KEYS & TAGS

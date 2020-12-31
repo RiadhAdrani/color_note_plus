@@ -31,19 +31,19 @@ public abstract class Note<T> extends Object implements Serializable {
 
     public static Note<?> fromMap(Context context, Map<String, java.lang.Object> map){
 
-        String uid = (String) map.get(Statics.DATABASE_OBJECT_UID);
-        String title = (String) map.get(Statics.DATABASE_NOTE_TITLE);
-        Long creationDate = (Long) map.get(Statics.DATABASE_OBJECT_CREATION_DATE);
-        Long modificationDate = (Long) map.get(Statics.DATABASE_OBJECT_MODIFICATION_DATE);
+        String uid = (String) map.get(App.DATABASE_OBJECT_UID);
+        String title = (String) map.get(App.DATABASE_NOTE_TITLE);
+        Long creationDate = (Long) map.get(App.DATABASE_OBJECT_CREATION_DATE);
+        Long modificationDate = (Long) map.get(App.DATABASE_OBJECT_MODIFICATION_DATE);
 
         if (uid == null) return null;
 
-        String color = (String) map.get(Statics.DATABASE_NOTE_COLOR);
+        String color = (String) map.get(App.DATABASE_NOTE_COLOR);
 
         switch (getNoteClass(uid)){
             case TEXT_NOTE:
 
-                String content = (String) map.get(Statics.DATABASE_NOTE_CONTENT);
+                String content = (String) map.get(App.DATABASE_NOTE_CONTENT);
 
                 NoteText textNote = new NoteText(context);
 
@@ -52,24 +52,24 @@ public abstract class Note<T> extends Object implements Serializable {
                 textNote.setCreationDate(creationDate);
                 textNote.setModificationDate(modificationDate);
                 textNote.setContent(content);
-                textNote.setColor(color != null ? Integer.parseInt(color) : StyleManager.getAppColor(context));
+                textNote.setColor(color != null ? Integer.parseInt(color) : Style.getAppColor(context));
 
                 return textNote;
 
             case CHECK_NOTE:
 
                 ArrayList<CheckListItem> items = new ArrayList<>();
-                ArrayList<Map<String, java.lang.Object>> contentMap = (ArrayList<Map<String, java.lang.Object>>) map.get(Statics.DATABASE_NOTE_CONTENT);
+                ArrayList<Map<String, java.lang.Object>> contentMap = (ArrayList<Map<String, java.lang.Object>>) map.get(App.DATABASE_NOTE_CONTENT);
 
                 if (contentMap == null ) return null;
 
                 for (Map<String, java.lang.Object> item : contentMap){
 
-                    String itemUID = (String) item.get(Statics.DATABASE_OBJECT_UID);
-                    String itemDescription = (String) item.get(Statics.DATABASE_CL_ITEM_DESCRIPTION);
-                    Long itemCreationDate = (Long) item.get(Statics.DATABASE_OBJECT_CREATION_DATE);
-                    Long itemModificationDate = (Long) item.get(Statics.DATABASE_OBJECT_MODIFICATION_DATE);
-                    Long itemDoneDate = (Long) item.get(Statics.DATABASE_CL_ITEM_DONE_DATE);
+                    String itemUID = (String) item.get(App.DATABASE_OBJECT_UID);
+                    String itemDescription = (String) item.get(App.DATABASE_CL_ITEM_DESCRIPTION);
+                    Long itemCreationDate = (Long) item.get(App.DATABASE_OBJECT_CREATION_DATE);
+                    Long itemModificationDate = (Long) item.get(App.DATABASE_OBJECT_MODIFICATION_DATE);
+                    Long itemDoneDate = (Long) item.get(App.DATABASE_CL_ITEM_DONE_DATE);
 
                     Long itemDueDate ;
                     RenderScript.Priority itemPriority;
@@ -90,7 +90,7 @@ public abstract class Note<T> extends Object implements Serializable {
                 checkNote.setTitle(title);
                 checkNote.setCreationDate(creationDate);
                 checkNote.setModificationDate(modificationDate);
-                checkNote.setColor(color != null ? Integer.parseInt(color) : StyleManager.getAppColor(context));
+                checkNote.setColor(color != null ? Integer.parseInt(color) : Style.getAppColor(context));
                 checkNote.setContent(items);
 
                 return checkNote;
@@ -100,15 +100,15 @@ public abstract class Note<T> extends Object implements Serializable {
     }
 
     public static TYPE getNoteClass(String uid){
-        if (uid.startsWith(Statics.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
-        if (uid.startsWith(Statics.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
+        if (uid.startsWith(App.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
+        if (uid.startsWith(App.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
 
         return TYPE.TEXT_NOTE;
     }
 
     public static TYPE getNoteClass(Note<?> note){
-        if (note.getUid().startsWith(Statics.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
-        if (note.getUid().startsWith(Statics.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
+        if (note.getUid().startsWith(App.NOTE_TEXT_ID)) return TYPE.TEXT_NOTE;
+        if (note.getUid().startsWith(App.NOTE_CHECK_ID)) return TYPE.CHECK_NOTE;
 
         return TYPE.TEXT_NOTE;
     }

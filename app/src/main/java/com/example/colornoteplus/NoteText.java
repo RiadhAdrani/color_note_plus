@@ -11,12 +11,12 @@ import java.util.UUID;
 public class NoteText extends Note<String> implements Serializable {
 
     public NoteText(Context context){
-        setTitle(Statics.NOTE_PLACEHOLDER);
-        setColor(StyleManager.getAppColor(context));
+        setTitle(App.NOTE_PLACEHOLDER);
+        setColor(Style.getAppColor(context));
         setContent(null);
         setCreationDate(Calendar.getInstance().getTime().getTime());
         setModificationDate(Calendar.getInstance().getTime().getTime());
-        setUid(Statics.NOTE_TEXT_ID + UUID.randomUUID().toString() + getCreationDate());
+        setUid(App.NOTE_TEXT_ID + UUID.randomUUID().toString() + getCreationDate());
     }
 
 
@@ -49,12 +49,12 @@ public class NoteText extends Note<String> implements Serializable {
 
         Map<String, java.lang.Object> map = new HashMap<>();
 
-        map.put(Statics.DATABASE_OBJECT_UID, getUid());
-        map.put(Statics.DATABASE_OBJECT_CREATION_DATE, getCreationDate());
-        map.put(Statics.DATABASE_OBJECT_MODIFICATION_DATE, getModificationDate());
-        map.put(Statics.DATABASE_NOTE_TITLE, getTitle());
-        map.put(Statics.DATABASE_NOTE_COLOR, ""+getColor());
-        map.put(Statics.DATABASE_NOTE_CONTENT, getContent());
+        map.put(App.DATABASE_OBJECT_UID, getUid());
+        map.put(App.DATABASE_OBJECT_CREATION_DATE, getCreationDate());
+        map.put(App.DATABASE_OBJECT_MODIFICATION_DATE, getModificationDate());
+        map.put(App.DATABASE_NOTE_TITLE, getTitle());
+        map.put(App.DATABASE_NOTE_COLOR, ""+getColor());
+        map.put(App.DATABASE_NOTE_CONTENT, getContent());
 
         return map;
     }

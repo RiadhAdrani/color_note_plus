@@ -44,7 +44,7 @@ public class PriorityAdapter extends ArrayAdapter<CheckListItem.PRIORITY> {
         CheckListItem.PRIORITY priority = getItem(position);
 
         text.setText(CheckListItem.priorityToString(getContext(),priority));
-        text.setTextColor(getContext().getResources().getColor(StyleManager.getColorPrimaryAccent(getContext(), color)));
+        text.setTextColor(getContext().getResources().getColor(Style.getColorPrimaryAccent(getContext(), color)));
 
         return convertView;
     }

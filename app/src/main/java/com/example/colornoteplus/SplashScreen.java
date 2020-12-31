@@ -17,11 +17,11 @@ public class SplashScreen extends AppCompatActivity {
         findViewById(R.id.splash_background)
                 .setBackgroundColor(
                         getResources().getColor(
-                                StyleManager.getNeutralColor(getApplicationContext())));
+                                Style.getNeutralColor(getApplicationContext())));
 
         TextView splashText = findViewById(R.id.splash_text);
         splashText.setTextColor(getResources().getColor(
-                StyleManager.getNeutralTextColor(getApplicationContext())
+                Style.getNeutralTextColor(getApplicationContext())
         ));
 
         Handler handler=new Handler();
