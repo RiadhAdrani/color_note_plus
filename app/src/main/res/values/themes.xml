@@ -262,6 +262,175 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/pink</item>
     </style>
 
+    <style name="ThemeOrange" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/orange_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/orange</item>
+
+        <item name="colorSecondaryVariant">@color/orange_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/orange</item>
+    </style>
+
+    <style name="ThemeOrangeDark" parent="ThemeOverlay.MaterialComponents.Dark">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/orange_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/orange</item>
+
+        <item name="colorSecondaryVariant">@color/orange_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/orange</item>
+    </style>
+
+    <style name="ThemeCharcoal" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/green_charcoal</item>
+        <item name="colorPrimaryVariant">@color/green_charcoal_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/green_charcoal_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/green_charcoal</item>
+
+        <item name="colorSecondaryVariant">@color/green_charcoal_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/green_charcoal</item>
+    </style>
+
+    <style name="ThemeCharcoalDark" parent="ThemeOverlay.MaterialComponents.Dark">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/green_charcoal</item>
+        <item name="colorPrimaryVariant">@color/green_charcoal_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/green_charcoal_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/green_charcoal</item>
+
+        <item name="colorSecondaryVariant">@color/green_charcoal_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/green_charcoal</item>
+    </style>
+
+    <style name="ThemeCyan" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/cyan</item>
+        <item name="colorPrimaryVariant">@color/cyan_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/cyan_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/cyan</item>
+
+        <item name="colorSecondaryVariant">@color/cyan_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/cyan</item>
+    </style>
+
+    <style name="ThemeCyanDark" parent="ThemeOverlay.MaterialComponents.Dark">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/cyan</item>
+        <item name="colorPrimaryVariant">@color/cyan_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/cyan_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/cyan</item>
+
+        <item name="colorSecondaryVariant">@color/cyan_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/cyan</item>
+    </style>
+
+    <style name="ThemeRedBordeaux" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/red_bordeaux</item>
+        <item name="colorPrimaryVariant">@color/red_bordeaux_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/red_bordeaux_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/red_bordeaux</item>
+
+        <item name="colorSecondaryVariant">@color/red_bordeaux_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/red_bordeaux</item>
+    </style>
+
+    <style name="ThemeRedBordeauxDark" parent="ThemeOverlay.MaterialComponents.Dark">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/red_bordeaux</item>
+        <item name="colorPrimaryVariant">@color/red_bordeaux_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/red_bordeaux_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/red_bordeaux</item>
+
+        <item name="colorSecondaryVariant">@color/red_bordeaux_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/red_bordeaux</item>
+    </style>
+
+    <style name="ThemePurple" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryVariant">@color/purple_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/purple_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/purple</item>
+
+        <item name="colorSecondaryVariant">@color/purple_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/purple</item>
+    </style>
+
+    <style name="ThemePurpleDark" parent="ThemeOverlay.MaterialComponents.Dark">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryVariant">@color/purple_light</item>
+        <!-- unknown -->
+        <item name="colorOnPrimary">@color/purple_dark</item>
+        <!-- Secondary brand color. -->
+        <!-- Button, FAB, Cursor etc ... -->
+        <item name="colorSecondary">@color/purple</item>
+        <item name="colorSecondaryVariant">@color/purple_darker</item>
+        <!-- text, icon and button vectors-->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/purple</item>
+    </style>
+
     <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
     <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
 

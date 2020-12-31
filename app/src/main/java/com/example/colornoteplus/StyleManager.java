@@ -87,21 +87,123 @@ public abstract class StyleManager extends AppCompatActivity {
                     R.color.pink_light,
                     R.color.pink,
                     R.color.pink_dark,
-                    R.color.pink_darker)
+                    R.color.pink_darker),
+
+            // Orange
+            new BackgroundColor(
+                    R.drawable.item_orange_style,
+                    R.drawable.item_orange_light,
+                    R.drawable.item_orange_dark,
+                    R.style.ThemeOrange,
+                    R.style.ThemeOrangeDark,
+                    R.color.orange_lighter,
+                    R.color.orange_light,
+                    R.color.orange,
+                    R.color.orange_dark,
+                    R.color.orange_darker
+                    ),
+
+            // Green Charcoal
+            new BackgroundColor(
+                    R.drawable.item_charcoal_style,
+                    R.drawable.item_charcoal_light,
+                    R.drawable.item_charcoal_dark,
+                    R.style.ThemeCharcoal,
+                    R.style.ThemeCharcoalDark,
+                    R.color.green_charcoal_lighter,
+                    R.color.green_charcoal_light,
+                    R.color.green_charcoal,
+                    R.color.green_charcoal_dark,
+                    R.color.green_charcoal_darker
+            ),
+
+            // Cyan
+            new BackgroundColor(
+                    R.drawable.item_cyan_style,
+                    R.drawable.item_cyan_light,
+                    R.drawable.item_cyan_dark,
+                    R.style.ThemeCyan,
+                    R.style.ThemeCyanDark,
+                    R.color.cyan_lighter,
+                    R.color.cyan_light,
+                    R.color.cyan,
+                    R.color.cyan_dark,
+                    R.color.cyan_darker
+            ),
+
+            // Red Bordeaux
+            new BackgroundColor(
+                    R.drawable.item_red_bordeaux_style,
+                    R.drawable.item_red_bordeaux_light,
+                    R.drawable.item_red_bordeaux_dark,
+                    R.style.ThemeRedBordeaux,
+                    R.style.ThemeRedBordeauxDark,
+                    R.color.red_bordeaux_lighter,
+                    R.color.red_bordeaux_light,
+                    R.color.red_bordeaux,
+                    R.color.red_bordeaux_dark,
+                    R.color.red_bordeaux_darker
+            ),
+
+            // Purple
+            new BackgroundColor(
+            R.drawable.item_purple_style,
+            R.drawable.item_purple_light,
+            R.drawable.item_purple_dark,
+            R.style.ThemePurple,
+            R.style.ThemePurpleDark,
+            R.color.purple_lighter,
+            R.color.purple_light,
+            R.color.purple,
+            R.color.purple_dark,
+            R.color.purple_darker
+            )
     ));
 
     public static ArrayList<BackgroundColor> getBackgroundColors(){
         return backgroundColors;
     }
 
+    public enum BACKGROUND { LIGHT, NORMAL, DARK }
+
+    public enum COLORS { LIGHTER, LIGHT, NORMAL, DARK, DARKER }
+
+    public static int getCustomBackground(Context context, int index, BACKGROUND lightThemeBackground, BACKGROUND darkThemeBackground){
+
+        if (getLightTheme(context) == 0){
+            switch (lightThemeBackground){
+                case LIGHT:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawableLight() : backgroundColors.get(0).getDrawableLight();
+                case NORMAL:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
+                case DARK:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
+            }
+        }
+
+        else
+            switch (darkThemeBackground){
+                case LIGHT:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawableLight() : backgroundColors.get(0).getDrawableLight();
+                case NORMAL:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
+                case DARK:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
+            }
+
+        return backgroundColors.get(0).getDrawable();
+    }
+
     public static int getBackground(Context context, int index){
 
-        // if (getLightTheme(context) == 0)
             return index > 0 && index < backgroundColors.size() ?
                     backgroundColors.get(index).getDrawable() : backgroundColors.get(0).getDrawable();
-//        else
-//            return index > 0 && index < backgroundColors.size() ?
-//                    backgroundColors.get(index).getDrawableDark() : backgroundColors.get(0).getDrawableDark();
     }
 
     public static int getBackgroundSecondary(Context context,int index){
@@ -135,13 +237,55 @@ public abstract class StyleManager extends AppCompatActivity {
                 backgroundColors.get(index).getThemeDark() : backgroundColors.get(0).getThemeDark();
     }
 
+    public static int getCustomColor(Context context, int index, COLORS lightThemeColor, COLORS darkThemeColor){
+
+        if (getLightTheme(context) == 0){
+
+            switch (lightThemeColor){
+                case LIGHTER:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorLighter() : backgroundColors.get(0).getColorLighter();
+                case LIGHT:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorLight() : backgroundColors.get(0).getColorLight();
+                case NORMAL:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
+                case DARK:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDark();
+                case DARKER:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
+            }
+        }
+
+        else
+            switch (darkThemeColor){
+                case LIGHTER:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorLighter() : backgroundColors.get(0).getColorLighter();
+                case LIGHT:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorLight() : backgroundColors.get(0).getColorLight();
+                case NORMAL:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
+                case DARK:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDark();
+                case DARKER:
+                    return index > 0 && index < backgroundColors.size() ?
+                            backgroundColors.get(index).getColorDarker() : backgroundColors.get(0).getColorDarker();
+            }
+
+        return backgroundColors.get(0).getColor();
+    }
+
     public static int getColorMain(Context context, int index){
-        // if (getLightTheme(context) == 0)
+
             return index > 0 && index < backgroundColors.size() ?
                 backgroundColors.get(index).getColor() : backgroundColors.get(0).getColor();
-//        else
-//            return index > 0 && index < backgroundColors.size() ?
-//                    backgroundColors.get(index).getColorDark() : backgroundColors.get(0).getColorDark();
 
     }
 

@@ -44,13 +44,6 @@
     <color name="grey_darker_davys">#525252</color>
     <color name="grey_darkest">#201F1E</color>
 
-    <!-- Orange -->
-    <color name="orange_lighter">#FAD3B3</color>
-    <color name="orange_light">#F5A666</color>
-    <color name="orange">#F07A19</color>
-    <color name="orange_dark">#C05D0C</color>
-    <color name="orange_darker">#864109</color>
-
     <!-- Green -->
     <color name="green_lighter">#C5E7D0</color>
     <color name="green_light">#8CCFA1</color>
@@ -64,5 +57,41 @@
     <color name="pink">#F426F7</color>
     <color name="pink_dark">#9B069D</color>
     <color name="pink_darker">#4D034F</color>
+
+    <!-- Orange -->
+    <color name="orange_lighter">#FAD3B3</color>
+    <color name="orange_light">#F5A666</color>
+    <color name="orange">#F07A19</color>
+    <color name="orange_dark">#C05D0C</color>
+    <color name="orange_darker">#864109</color>
+
+    <!-- Green Charcoal -->
+    <color name="green_charcoal_lighter">#BFEEE8</color>
+    <color name="green_charcoal_light">#6ED8CA</color>
+    <color name="green_charcoal">#2FB1A0</color>
+    <color name="green_charcoal_dark">#1A6157</color>
+    <color name="green_charcoal_darker">#12403B</color>
+
+    <!-- Cyan -->
+    <color name="cyan_lighter">#ADF1FF</color>
+    <color name="cyan_light">#5CE4FF</color>
+    <color name="cyan">#0099B8</color>
+    <color name="cyan_dark">#005566</color>
+    <color name="cyan_darker">#003D52</color>
+
+
+    <!-- Red Bordeaux -->
+    <color name="red_bordeaux_lighter">#F8C9CB</color>
+    <color name="red_bordeaux_light">#EA5D64</color>
+    <color name="red_bordeaux">#C71A22</color>
+    <color name="red_bordeaux_dark">#7E1016</color>
+    <color name="red_bordeaux_darker">#360709</color>
+
+    <!-- Purple -->
+    <color name="purple_lighter">#ECDCF9</color>
+    <color name="purple_light">#C696ED</color>
+    <color name="purple">#8D2EDC</color>
+    <color name="purple_dark">#621B9D</color>
+    <color name="purple_darker">#421269</color>
 
 </resources>
