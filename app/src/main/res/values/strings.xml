@@ -32,6 +32,7 @@
     <string name="no_item_selected">No Item Selected</string>
     <string name="lighting_theme">Lighting Theme</string>
     <string name="app_color">App Color</string>
+    <string name="syncing_now">Syncing now …</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>

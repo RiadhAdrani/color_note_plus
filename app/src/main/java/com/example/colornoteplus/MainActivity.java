@@ -336,36 +336,6 @@ public class MainActivity extends AppCompatActivity{
 
         initNoteState();
 
-        CheckListNote n = new CheckListNote(this);
-
-//        for (Note<?> note : noteList){
-//            Sync.uploadNote(getApplicationContext(),note);
-//        }
-//
-////        Sync.getNote(
-////                this,
-////                "C2da0e738-3ef0-472f-ae93-817b5951f0581609247752853",
-////                n,
-////                new Sync.OnDataRetrieval() {
-////            @Override
-////            public void onSuccess(Note<?> note, DocumentSnapshot snapshot) {
-////
-////                try {
-////                    noteList.add(0,Note.fromMap(getApplicationContext(), Objects.requireNonNull(snapshot.getData())));
-////                    adapter.notifyItemInserted(0);
-////                    rv.scrollToPosition(0);
-////                } catch (Exception e) {
-////                    e.printStackTrace();
-////                    Toast.makeText(MainActivity.this, "Couldn't Load Note", Toast.LENGTH_SHORT).show();
-////                }
-////
-////            }
-////
-////            @Override
-////            public void onFailure() {
-////                Log.d("SYNC_NOTES","Sync failed");
-////            }
-////        });
     }
 
 
@@ -733,22 +703,10 @@ public class MainActivity extends AppCompatActivity{
         if (!App.stringArrayEqualStringArray(
                 App.getNotesAsUIDFromList(noteList),
                 DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext()))
-        ) {
+        )
+        {
             saveNoteList();
         }
-
-        Sync.getModificationDate(getApplicationContext(), new Sync.OnLongRetrieval() {
-            @Override
-            public void onSuccess(Long value) {
-                Sync.performSync(getApplicationContext(),value,DatabaseManager.getDatabaseLastModificationDate(getApplicationContext()));
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
-
     }
 
     // handle the main FAB

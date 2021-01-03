@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/splash_text"
-        android:paddingTop="20dp"
+        android:layout_marginTop="16dp"
         android:textSize="28sp"
         android:textAllCaps="true"
         android:letterSpacing="0.2"
@@ -28,6 +28,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/splash_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/splash_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/splash_text"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"
+        />
+
+    <TextView
+        android:id="@+id/splash_sync_text"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:letterSpacing="0"
+        android:text="@string/syncing_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/splash_progress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

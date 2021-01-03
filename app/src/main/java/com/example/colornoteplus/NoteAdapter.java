@@ -57,10 +57,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         return listener;
     }
 
-    public void setListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
     public Context getContext() {
         return context;
     }
@@ -117,7 +113,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             return true;
         });
 
-        holder.line.setBackgroundColor(context.getResources().getColor(Style.getColorSecondaryAccent(getContext(),item.getColor())));
+        holder.line.setBackgroundColor(context.getResources().getColor(Style.getCustomColor(context,position, Style.COLORS.WHITE, Style.COLORS.WHITE)));
 
         holder.moreOptionsView.setVisibility(View.VISIBLE);
         holder.moreOptionsView.setOnClickListener(view -> {

@@ -166,7 +166,7 @@ public abstract class Style extends AppCompatActivity {
 
     public enum BACKGROUND { LIGHT, NORMAL, DARK }
 
-    public enum COLORS { LIGHTER, LIGHT, NORMAL, DARK, DARKER }
+    public enum COLORS { LIGHTER, LIGHT, NORMAL, DARK, DARKER, BLACK, WHITE }
 
     public static int getCustomBackground(Context context, int index, BACKGROUND lightThemeBackground, BACKGROUND darkThemeBackground){
 
@@ -257,6 +257,10 @@ public abstract class Style extends AppCompatActivity {
                 case DARKER:
                     return index > 0 && index < themes.size() ?
                             themes.get(index).getColorDarker() : themes.get(0).getColorDarker();
+                case WHITE:
+                    return getNeutralColor(context);
+                case BLACK:
+                    return getNeutralTextColor(context);
             }
         }
 
@@ -277,6 +281,10 @@ public abstract class Style extends AppCompatActivity {
                 case DARKER:
                     return index > 0 && index < themes.size() ?
                             themes.get(index).getColorDarker() : themes.get(0).getColorDarker();
+                case WHITE:
+                    return getNeutralTextColor(context);
+                case BLACK:
+                    return getNeutralColor(context);
             }
 
         return themes.get(0).getColor();
