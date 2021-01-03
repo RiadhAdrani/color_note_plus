@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class NoteText extends Note<String> implements Serializable {
+public class TextNote extends Note<String> implements Serializable {
 
-    public NoteText(Context context){
+    public TextNote(Context context){
         setTitle(App.NOTE_PLACEHOLDER);
         setColor(Style.getAppColor(context));
         setContent(null);
@@ -24,13 +24,13 @@ public class NoteText extends Note<String> implements Serializable {
     @Override
     public void save(Context context) {
         setModificationDate();
-        MySharedPreferences.SaveTextNote(this,context);
+        DatabaseManager.SaveTextNote(this,context);
     }
 
     @Override
     public boolean hasChanged(Context context) {
 
-        NoteText original = MySharedPreferences.LoadTextNote(getUid(),context);
+        TextNote original = DatabaseManager.LoadTextNote(getUid(),context);
 
         if (getColor() != original.getColor())
             return true;
@@ -42,6 +42,17 @@ public class NoteText extends Note<String> implements Serializable {
         if (original.getContent() == null) original.setContent("");
 
         return !getContent().trim().equals(original.getContent());
+    }
+
+    @Override
+    public boolean isEqualTo(Note<?> note) {
+
+        if (!note.getUid().equals(this.getUid())) return false;
+        if (!note.getTitle().equals(this.getTitle())) return false;
+        if (!note.getCreationDate().equals(this.getCreationDate())) return false;
+        if (!note.getModificationDate().equals(this.getModificationDate())) return false;
+        if (note.getColor() != this.getColor() ) return false;
+        return note.getContent().equals(this.getContent());
     }
 
     @Override

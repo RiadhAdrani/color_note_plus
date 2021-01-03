@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity{
                         @Override
                         public void OnPrimaryAction() {
                             for (Note<?> note: adapter.getListFull()){
-                                MySharedPreferences.DeleteNote(note.getUid(),getApplicationContext());
+                                DatabaseManager.DeleteNote(note.getUid(),getApplicationContext());
                             }
                             adapter.getList().clear();
                             adapter.getListFull().clear();
@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity{
 
         initNoteState();
 
-        NoteCheckList n = new NoteCheckList(this);
+        CheckListNote n = new CheckListNote(this);
 
 //        for (Note<?> note : noteList){
 //            Sync.uploadNote(getApplicationContext(),note);
@@ -376,10 +376,10 @@ public class MainActivity extends AppCompatActivity{
 
         navigationView.setCheckedItem(R.id.nav_notes);
 
-        for (String s : MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,this)) {
+        for (String s : DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
-                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
+                case TEXT_NOTE: noteList.add(DatabaseManager.LoadTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(DatabaseManager.LoadCheckListNote(s,this)); break;
             }
         }
         
@@ -477,16 +477,16 @@ public class MainActivity extends AppCompatActivity{
 
         navigationView.setCheckedItem(R.id.nav_recycler_bin);
 
-        for (String s : MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST_TRASH,this)) {
+        for (String s : DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST_TRASH,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(MySharedPreferences.LoadTextNote(s,this)); break;
-                case CHECK_NOTE: noteList.add(MySharedPreferences.LoadCheckListNote(s,this)); break;
+                case TEXT_NOTE: noteList.add(DatabaseManager.LoadTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(DatabaseManager.LoadCheckListNote(s,this)); break;
             }
         }
 
         // initializing the recycler view and its adapter
         // and displaying the list of the notes
-        adapter = new NoteDeletedAdapter(noteList,getApplicationContext());
+        adapter = new DeletedNoteAdapter(noteList,getApplicationContext());
         adapter.getSelectedItems().clear();
 
         adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
@@ -504,14 +504,14 @@ public class MainActivity extends AppCompatActivity{
                             new DialogConfirm.OnConfirmClickListener() {
                                 @Override
                                 public void OnPrimaryAction() {
-                                    ArrayList<String> temp = MySharedPreferences.LoadStringArray(
+                                    ArrayList<String> temp = DatabaseManager.LoadStringArray(
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
                                     temp.add(noteList.get(position).getUid());
 
-                                    MySharedPreferences.SaveStringArray(
+                                    DatabaseManager.SaveStringArray(
                                             temp,
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
@@ -519,15 +519,15 @@ public class MainActivity extends AppCompatActivity{
 
                                     Intent i;
 
-                                    if (NoteText.class.equals(noteList.get(position).getClass())) {
+                                    if (TextNote.class.equals(noteList.get(position).getClass())) {
 
-                                        i = new Intent(getApplicationContext(),NoteActivity.class);
+                                        i = new Intent(getApplicationContext(), TextNoteActivity.class);
                                         i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                         startActivity(i);
                                         finish();
                                     }
 
-                                    if (NoteCheckList.class.equals(noteList.get(position).getClass())){
+                                    if (CheckListNote.class.equals(noteList.get(position).getClass())){
                                         i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
                                         i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
                                         startActivity(i);
@@ -575,14 +575,14 @@ public class MainActivity extends AppCompatActivity{
                             @Override
                             public void OnPrimaryAction() {
                                 {
-                                    ArrayList<String> temp = MySharedPreferences.LoadStringArray(
+                                    ArrayList<String> temp = DatabaseManager.LoadStringArray(
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
                                     temp.add(noteList.get(position).getUid());
 
-                                    MySharedPreferences.SaveStringArray(
+                                    DatabaseManager.SaveStringArray(
                                             temp,
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
@@ -611,7 +611,7 @@ public class MainActivity extends AppCompatActivity{
                         new DialogConfirm.OnConfirmClickListener() {
                             @Override
                             public void OnPrimaryAction() {
-                                    MySharedPreferences.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
+                                    DatabaseManager.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
                                     adapter.removeItem(position);
                             }
 
@@ -729,7 +729,25 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
 
         noteList = new ArrayList<>(adapter.getListFull());
-        saveNoteList();
+
+        if (!App.stringArrayEqualStringArray(
+                App.getNotesAsUIDFromList(noteList),
+                DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext()))
+        ) {
+            saveNoteList();
+        }
+
+        Sync.getModificationDate(getApplicationContext(), new Sync.OnLongRetrieval() {
+            @Override
+            public void onSuccess(Long value) {
+                Sync.performSync(getApplicationContext(),value,DatabaseManager.getDatabaseLastModificationDate(getApplicationContext()));
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
     }
 
@@ -758,7 +776,7 @@ public class MainActivity extends AppCompatActivity{
     // create and open a note
     // in a new activity
     private void textFABOnClickListener(){
-        Intent i = new Intent(this,NoteActivity.class);
+        Intent i = new Intent(this, TextNoteActivity.class);
         i.putExtra(App.KEY_NOTE_ACTIVITY, App.NOTE_DEFAULT_UID);
         startActivity(i);
         finish();
@@ -780,15 +798,15 @@ public class MainActivity extends AppCompatActivity{
 
         Intent i;
 
-        if (NoteText.class.equals(noteList.get(position).getClass())) {
+        if (TextNote.class.equals(noteList.get(position).getClass())) {
 
-            i = new Intent(getApplicationContext(),NoteActivity.class);
+            i = new Intent(getApplicationContext(), TextNoteActivity.class);
             i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
             finish();
         }
 
-        if (NoteCheckList.class.equals(noteList.get(position).getClass())){
+        if (CheckListNote.class.equals(noteList.get(position).getClass())){
             i = new Intent(getApplicationContext(),CheckListNoteActivity.class);
             i.putExtra(App.KEY_NOTE_ACTIVITY,noteList.get(position).getUid());
             startActivity(i);
@@ -805,10 +823,10 @@ public class MainActivity extends AppCompatActivity{
 
         switch (state){
             case NOTES:
-                MySharedPreferences.SaveStringArray(mNoteList, App.KEY_NOTE_LIST,getApplicationContext());
+                DatabaseManager.SaveStringArray(mNoteList, App.KEY_NOTE_LIST,getApplicationContext());
                 break;
             case DELETED_NOTES:
-                MySharedPreferences.SaveStringArray(mNoteList, App.KEY_NOTE_LIST_TRASH,getApplicationContext());
+                DatabaseManager.SaveStringArray(mNoteList, App.KEY_NOTE_LIST_TRASH,getApplicationContext());
                 break;
         }
     }

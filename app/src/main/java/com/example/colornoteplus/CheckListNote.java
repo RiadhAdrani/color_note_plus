@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
+public class CheckListNote extends Note<ArrayList<CheckListItem>> {
 
     /// default constructor
-    public NoteCheckList(Context context){
+    public CheckListNote(Context context){
         setTitle(App.NOTE_PLACEHOLDER);
         setColor(Style.getAppColor(context));
         setContent(new ArrayList<>());
@@ -24,13 +24,13 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
     @Override
     public void save(Context context) {
         setModificationDate();
-        MySharedPreferences.SaveCheckListNote(this,context);
+        DatabaseManager.SaveCheckListNote(this,context);
     }
 
     @Override
     public boolean hasChanged(Context context) {
 
-        NoteCheckList original = MySharedPreferences.LoadCheckListNote(getUid(),context);
+        CheckListNote original = DatabaseManager.LoadCheckListNote(getUid(),context);
 
         if (getColor() != original.getColor()) {
             return true;
@@ -68,6 +68,27 @@ public class NoteCheckList extends Note<ArrayList<CheckListItem>> {
         }
 
         return false;
+
+    }
+
+    @Override
+    public boolean isEqualTo(Note<?> note) {
+
+        if (!note.getUid().equals(this.getUid())) return false;
+        if (!note.getTitle().equals(this.getTitle())) return false;
+        if (!note.getCreationDate().equals(this.getCreationDate())) return false;
+        if (!note.getModificationDate().equals(this.getModificationDate())) return false;
+        if (note.getColor() != this.getColor() ) return false;
+
+        CheckListNote checkNote = (CheckListNote) note;
+
+        if (checkNote.getContent().size() != this.getContent().size()) return false;
+
+        for (int i = 0; i < checkNote.getContent().size(); i++){
+            if (!checkNote.getContent().get(i).isEqualTo(this.getContent().get(i))) return false;
+        }
+
+        return true;
 
     }
 

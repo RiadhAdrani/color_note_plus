@@ -3,10 +3,16 @@ package com.example.colornoteplus;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 abstract public class Sync {
 
@@ -17,53 +23,288 @@ abstract public class Sync {
     private static final String USER_NOTES = App.DATABASE_USER_NOTES;
     private static final String INFO = App.DATABASE_DATA_INFO;
     private static final String INFO_APP_VERSION = App.DATABASE_DATA_APP_VERSION;
-    private static final String OBJECT_UID = App.DATABASE_OBJECT_UID;
-    private static final String OBJECT_CREATION_DATE = App.DATABASE_OBJECT_CREATION_DATE;
-    private static final String OBJECT_MODIFICATION_DATE = App.DATABASE_OBJECT_MODIFICATION_DATE;
-    private static final String NOTE_TITLE = App.DATABASE_NOTE_TITLE;
-    private static final String NOTE_COLOR = App.DATABASE_NOTE_COLOR;
-    private static final String NOTE_CONTENT = App.DATABASE_NOTE_CONTENT;
-    private static final String CL_ITEM_DESCRIPTION = App.DATABASE_CL_ITEM_DESCRIPTION;
-    private static final String CL_ITEM_PRIORITY = App.DATABASE_CL_ITEM_PRIORITY;
-    private static final String CL_ITEM_DONE_DATE = App.DATABASE_CL_ITEM_DONE_DATE;
-    private static final String CL_ITEM_DUE_DATE = App.DATABASE_CL_ITEM_DUE_DATE;
+    private static final String INFO_LAST_SYNC = App.DATABASE_USER_INFO_LAST_SYNC;
+    private static final String INFO_APP_COLOR = App.DATABASE_USER_COLOR;
+    private static final String INFO_APP_THEME = App.DATABASE_USER_THEME;
+
 
     public interface OnDataRetrieval{
-        void onSuccess(Note<?> note, DocumentSnapshot snapshot);
+        void onSuccess(DocumentSnapshot snapshot);
         void onFailure();
     }
 
-    static void uploadNote(Context context, Note<?> note){
+    public interface OnLongRetrieval{
+        void onSuccess(Long value);
+        void onFailure();
+    }
+
+    public interface OnQueryDataRetrieval{
+        void onSuccess(QuerySnapshot snapshot);
+        void onFailure();
+    }
+
+    public interface OnIntRetrieval{
+        void onSuccess(int value);
+        void onFailure();
+    }
+
+    public interface OnDataWiped{
+        void onDataWiped();
+    }
+
+    static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(snapshot.getLong(INFO_LAST_SYNC));
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onDataRetrieval != null) onDataRetrieval.onFailure();
+                });
+    }
+
+    static void setModificationDate(Context context, Long date){
+
+        Map<String, Long> map = new HashMap<>();
+        map.put(INFO_LAST_SYNC,date);
+
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .set(map,SetOptions.merge())
+                .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
+                .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
+    }
+
+    static void getAppColor(Context context, OnIntRetrieval onDataRetrieval){
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(Integer.parseInt(Objects.requireNonNull(snapshot.get(INFO_APP_COLOR)).toString()));
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onDataRetrieval != null) onDataRetrieval.onFailure();
+                });
+    }
+
+    static void setAppColor(Context context, int color){
+
+        Map<String, String> map = new HashMap<>();
+        map.put(INFO_APP_COLOR,""+color);
+
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .set(map, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
+                .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
+    }
+
+    static void getAppTheme(Context context, OnIntRetrieval onDataRetrieval){
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(Integer.parseInt(Objects.requireNonNull(snapshot.get(INFO_APP_THEME)).toString()));
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onDataRetrieval != null) onDataRetrieval.onFailure();
+                });
+    }
+
+    static void setAppTheme(Context context, int theme){
+
+        Map<String, String> map = new HashMap<>();
+        map.put(INFO_APP_THEME,""+theme);
+
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_INFO)
+                .document(INFO_LAST_SYNC)
+                .set(map, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
+                .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
+    }
+
+    static void getUserData(Context context, OnQueryDataRetrieval onDataRetrieval){
+
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context)
+                .getUsername()).
+                collection(USER_NOTES).
+                get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(queryDocumentSnapshots);
+                })
+                .addOnFailureListener(e -> {
+                    if (onDataRetrieval != null) onDataRetrieval.onFailure();
+                });
+    }
+
+    static void setNote(Context context, Note<?> note){
 
         DB.collection(USERS)
                 .document(User.getCurrentUser(context)
                 .getUsername()).collection(USER_NOTES)
                 .document(note.getUid())
                 .set(note.toMap())
-                .addOnSuccessListener(aVoid -> Log.d("SYNC","Operation success"))
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Note syn failed", Toast.LENGTH_SHORT).show();
-                    Log.d("SYNC","Operation failed");
-                });
+                .addOnSuccessListener(aVoid ->
+                        Log.d("SYNC","Synchronized successfully note : "+note.getUid()))
+                .addOnFailureListener(e ->
+                        Log.d("SYNC","Couldn't sync note : "+note.getUid())
+                );
 
-        Log.d("SYNC","Operation Ended");
     }
 
-    static void getNote(Context context, String uid,final Note<?> output, OnDataRetrieval onDataRetrieval){
+    static void getNote(Context context, String uid, OnDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context)
-                .getUsername())
+                .document(User.getCurrentUser(context).getUsername())
                 .collection(USER_NOTES).document(uid)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
 
-                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(output,documentSnapshot);
+                    if (onDataRetrieval != null) onDataRetrieval.onSuccess(documentSnapshot);
                 })
                 .addOnFailureListener(e -> {
 
                     if (onDataRetrieval != null) onDataRetrieval.onFailure();
                 });
+    }
+
+    static void wipeNotes(Context context, OnDataWiped onDataWiped){
+
+        DB.collection(USERS)
+                .document(User.getCurrentUser(context).getUsername())
+                .collection(USER_NOTES)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    ArrayList<String> list = new ArrayList<>();
+
+                    for (DocumentSnapshot doc : snapshot.getDocuments()){
+                        list.add(doc.getId());
+                    }
+
+                    for (String id: list){
+                        DB.collection(USERS)
+                                .document(User.getCurrentUser(context).getUsername())
+                                .collection(USER_NOTES)
+                                .document(id)
+                                .delete();
+                    }
+
+                    if (onDataWiped != null) onDataWiped.onDataWiped();
+
+                })
+                .addOnFailureListener(e -> {
+
+                });
+    }
+
+    static boolean getAutoSync(Context context){
+        return DatabaseManager.LoadInteger(App.KEY_AUTO_SYNC, context) == App.AUTO_SYNC_ON;
+    }
+
+    static void setAutoSync(Context context, boolean auto){
+        DatabaseManager.SaveInteger(auto ? App.AUTO_SYNC_ON : App.AUTO_SYNC_OFF,App.KEY_AUTO_SYNC,context);
+    }
+
+    static void performSync(Context context, Long cloudSync, Long localSync){
+
+        // both database are synced correctly
+        if (cloudSync.equals(localSync)) return;
+
+        // firebase firestore database is ahead
+        if (cloudSync > localSync){
+
+            getUserData(context, new OnQueryDataRetrieval() {
+                @Override
+                public void onSuccess(QuerySnapshot snapshot) {
+
+                    DatabaseManager.wipeDatabase(context);
+
+                    // get data from the FirebaseFirestore database
+                    ArrayList<Note<?>> notes = new ArrayList<>();
+
+                    for (DocumentSnapshot snap : snapshot.getDocuments()){
+                        Note<?> n = Note.fromMap(context, Objects.requireNonNull(snap.getData()));
+
+                        if (n != null) {
+                            n.save(context);
+                            notes.add(n);
+                        }
+                    }
+
+                    DatabaseManager.SaveStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
+
+                    Sync.getAppTheme(context, new OnIntRetrieval() {
+                        @Override
+                        public void onSuccess(int value) {
+                            Style.setAppTheme(value,context);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.d("SYNC_NOTES","Unable to get Theme : Firebase database is ahead of the local database ...");
+                        }
+                    });
+
+                    Sync.getAppColor(context, new OnIntRetrieval() {
+                        @Override
+                        public void onSuccess(int value) {
+                            Style.setAppColor(value,context);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.d("SYNC_NOTES","Unable to get App Color : Firebase database is ahead of the local database ...");
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.d("SYNC_NOTES","Unable to sync : Firebase database is ahead of the local database ...");
+                }
+            });
+
+            DatabaseManager.setDatabaseLastModificationDate(context, cloudSync);
+
+        }
+
+        // local database is ahead
+        else {
+
+            wipeNotes(context, () -> {
+                ArrayList<Note<?>> noteList = DatabaseManager.LoadAllNotes(context);
+                for (Note<?> note : noteList){
+                    setNote(context,note);
+                }
+            });
+
+            setAppTheme(context,Style.getAppTheme(context));
+            setAppColor(context,Style.getAppColor(context));
+            setModificationDate(context, DatabaseManager.getDatabaseLastModificationDate(context));
+
+        }
+
     }
 
 }

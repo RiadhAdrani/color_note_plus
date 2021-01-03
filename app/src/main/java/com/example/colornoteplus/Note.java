@@ -25,6 +25,8 @@ public abstract class Note<T> extends Object implements Serializable {
 
     public abstract boolean hasChanged(Context context);
 
+    public abstract boolean isEqualTo(Note<?> note);
+
     public abstract Map<String, java.lang.Object> toMap();
 
     public abstract boolean containsString(String string);
@@ -45,7 +47,7 @@ public abstract class Note<T> extends Object implements Serializable {
 
                 String content = (String) map.get(App.DATABASE_NOTE_CONTENT);
 
-                NoteText textNote = new NoteText(context);
+                TextNote textNote = new TextNote(context);
 
                 textNote.setUid(uid);
                 textNote.setTitle(title);
@@ -85,7 +87,7 @@ public abstract class Note<T> extends Object implements Serializable {
 
                 }
 
-                NoteCheckList checkNote = new NoteCheckList(context);
+                CheckListNote checkNote = new CheckListNote(context);
                 checkNote.setUid(uid);
                 checkNote.setTitle(title);
                 checkNote.setCreationDate(creationDate);

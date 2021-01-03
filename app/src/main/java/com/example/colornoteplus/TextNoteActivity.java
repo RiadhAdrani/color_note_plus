@@ -22,7 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class NoteActivity extends AppCompatActivity {
+public class TextNoteActivity extends AppCompatActivity {
 
     // note editable views
     private EditText titleView;
@@ -38,7 +38,7 @@ public class NoteActivity extends AppCompatActivity {
     private boolean lock = true;
 
     // Current note
-    private NoteText note;
+    private TextNote note;
 
     private boolean deletedSpecialCharacter = false;
     private boolean deleteRedoStack = false;
@@ -54,7 +54,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // note = new NoteText("MyNote",5);
+        // note = new TextNote("MyNote",5);
 
         getNoteFromIntent();
 
@@ -111,9 +111,9 @@ public class NoteActivity extends AppCompatActivity {
     private void getNoteFromIntent(){
 
         if (!getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY).equals(App.NOTE_DEFAULT_UID)){
-            note = MySharedPreferences.LoadTextNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = DatabaseManager.LoadTextNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
-            note = new NoteText(getApplicationContext());
+            note = new TextNote(getApplicationContext());
         }
     }
 
@@ -256,7 +256,7 @@ public class NoteActivity extends AppCompatActivity {
     // if old return true
     // else   return false
     private boolean isNoteOld(){
-        for (String n: MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
         }
         return false;
@@ -315,12 +315,12 @@ public class NoteActivity extends AppCompatActivity {
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        MySharedPreferences.LoadStringArray(
+                        DatabaseManager.LoadStringArray(
                                 App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                MySharedPreferences.SaveStringArray(
+                DatabaseManager.SaveStringArray(
                         noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

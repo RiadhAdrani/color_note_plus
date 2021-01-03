@@ -45,7 +45,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     private Toolbar toolbar;
 
     // Current note
-    private NoteCheckList note;
+    private CheckListNote note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,13 @@ public class CheckListNoteActivity extends AppCompatActivity{
 
             // if the UID exists in the SharedPreference
             // Load the note
-            note = MySharedPreferences.LoadCheckListNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = DatabaseManager.LoadCheckListNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         }
         else {
 
             // if it is new
             // create a new note
-            note = new NoteCheckList(getApplicationContext());
+            note = new CheckListNote(getApplicationContext());
         }
 
         // change the theme of the activity
@@ -352,7 +352,7 @@ public class CheckListNoteActivity extends AppCompatActivity{
     // if old return true
     // else   return false
     private boolean isNoteOld(String UID){
-        for (String n: MySharedPreferences.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(UID)) return true;
         }
         return false;
@@ -397,12 +397,12 @@ public class CheckListNoteActivity extends AppCompatActivity{
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        MySharedPreferences.LoadStringArray(
+                        DatabaseManager.LoadStringArray(
                                 App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                MySharedPreferences.SaveStringArray(
+                DatabaseManager.SaveStringArray(
                         noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

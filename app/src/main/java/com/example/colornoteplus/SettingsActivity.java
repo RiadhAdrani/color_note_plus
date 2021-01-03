@@ -65,12 +65,15 @@ public class SettingsActivity extends AppCompatActivity {
         ));
 
         SwitchCompat lightSwitch = findViewById(R.id.settings_theme_switch);
-        lightSwitch.setChecked(Style.getLightTheme(getApplicationContext()) != App.DAY_THEME);
+        lightSwitch.setChecked(Style.getAppTheme(getApplicationContext()) != App.DAY_THEME);
         lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
-                Style.setLightTheme(App.NIGHT_THEME,getApplicationContext());
-            else
-                Style.setLightTheme(App.DAY_THEME,getApplicationContext());
+            {
+                Style.setAppTheme(App.NIGHT_THEME, getApplicationContext());
+            }
+            else {
+                Style.setAppTheme(App.DAY_THEME, getApplicationContext());
+            }
 
             ApplyTheme(theme);
         });

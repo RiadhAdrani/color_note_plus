@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public class NoteDeletedAdapter extends NoteAdapter {
+public class DeletedNoteAdapter extends NoteAdapter {
 
 
-    public NoteDeletedAdapter(ArrayList<Note<?>> list, Context context) {
+    public DeletedNoteAdapter(ArrayList<Note<?>> list, Context context) {
         super(list, context);
     }
 
@@ -25,12 +25,12 @@ public class NoteDeletedAdapter extends NoteAdapter {
         Note<?> item = getList().get(position);
         holder.titleView.setText(item.getTitle());
 
-        if (item.getClass() == NoteText.class){
+        if (item.getClass() == TextNote.class){
             holder.contentView.setText((String) item.getContent());}
 
-        if (item.getClass() == NoteCheckList.class){
+        if (item.getClass() == CheckListNote.class){
             String content = "";
-            for (CheckListItem i: ((NoteCheckList) item).getContent()) {
+            for (CheckListItem i: ((CheckListNote) item).getContent()) {
                 content += "• " + i.getDescription()+"\n";
             }
             holder.contentView.setText(content);
@@ -75,7 +75,7 @@ public class NoteDeletedAdapter extends NoteAdapter {
             holder.moreOptionsView.setVisibility(View.INVISIBLE);
             if (isSelected(item.getUid())){
                 holder.selectionIcon.setImageResource(R.drawable.ic_checked_circle);
-                switch(Style.getLightTheme(getContext())){
+                switch(Style.getAppTheme(getContext())){
                     case 0:
                         holder.backgroundView.setBackgroundResource(
                                 Style.getBackgroundPrimary(getContext(),item.getColor()) );

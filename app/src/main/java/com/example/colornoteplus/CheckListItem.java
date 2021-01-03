@@ -91,4 +91,16 @@ public class CheckListItem extends Object {
         }
         return p;
     }
+
+    public boolean isEqualTo(CheckListItem item){
+
+            if (!item.getUid().equals(this.getUid())) return false;
+            if (!item.getDescription().equals(this.getDescription())) return false;
+            if (!item.getCreationDate().equals(this.getCreationDate())) return false;
+            if (!item.getModificationDate().equals(this.getModificationDate())) return false;
+            if (!item.getDoneDate().equals(this.getDoneDate())) return false;
+            if (!item.getPriority().equals(this.getPriority())) return false;
+            return item.getDueDate().equals(this.getDueDate());
+
+    }
 }

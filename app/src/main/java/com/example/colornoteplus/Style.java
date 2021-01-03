@@ -170,7 +170,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getCustomBackground(Context context, int index, BACKGROUND lightThemeBackground, BACKGROUND darkThemeBackground){
 
-        if (getLightTheme(context) == 0){
+        if (getAppTheme(context) == 0){
             switch (lightThemeBackground){
                 case LIGHT:
                     return index > 0 && index < themes.size() ?
@@ -208,7 +208,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getBackgroundSecondary(Context context,int index){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
                 themes.get(index).getDrawableLight() : themes.get(0).getDrawableLight();
         else
@@ -217,7 +217,7 @@ public abstract class Style extends AppCompatActivity {
     }
 
     public static int getBackgroundPrimary(Context context,int index){
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
                 themes.get(index).getDrawableDark() : themes.get(0).getDrawableDark();
         else
@@ -228,7 +228,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getTheme(Context context, int index){
 
-        if (getLightTheme(context) == 0){
+        if (getAppTheme(context) == 0){
             return index > 0 && index < themes.size() ?
                     themes.get(index).getTheme() : themes.get(0).getTheme();
         }
@@ -239,7 +239,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getCustomColor(Context context, int index, COLORS lightThemeColor, COLORS darkThemeColor){
 
-        if (getLightTheme(context) == 0){
+        if (getAppTheme(context) == 0){
 
             switch (lightThemeColor){
                 case LIGHTER:
@@ -290,7 +290,7 @@ public abstract class Style extends AppCompatActivity {
     }
 
     public static int getColorSecondary(Context context, int index){
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
                 themes.get(index).getColorLight() : themes.get(0).getColorLight();
         else
@@ -301,7 +301,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getColorSecondaryAccent(Context context, int index){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
                 themes.get(index).getColorLighter() : themes.get(0).getColorLighter();
         else
@@ -311,7 +311,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getColorPrimary(Context context, int index){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
                 themes.get(index).getColorDark() : themes.get(0).getColorDarker();
 
@@ -322,7 +322,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getColorPrimaryAccent(Context context, int index){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
         return index > 0 && index < themes.size() ?
                 themes.get(index).getColorDarker() : themes.get(0).getColorDarker();
 
@@ -333,7 +333,7 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getNeutralColor(Context context){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return R.color.white;
         else
             return R.color.grey_darkest;
@@ -342,26 +342,28 @@ public abstract class Style extends AppCompatActivity {
 
     public static int getNeutralTextColor(Context context){
 
-        if (getLightTheme(context) == 0)
+        if (getAppTheme(context) == 0)
             return R.color.grey_darkest;
         else
             return R.color.white;
 
     }
 
-    public static int getLightTheme(Context context){
-        return MySharedPreferences.LoadInteger(App.KEY_LIGHT_THEME,context);
+    public static int getAppTheme(Context context){
+        return DatabaseManager.LoadInteger(App.KEY_LIGHT_THEME,context);
     }
 
-    public static void setLightTheme(int theme, Context context){
-        MySharedPreferences.SaveInteger(theme, App.KEY_LIGHT_THEME,context);
+    public static void setAppTheme(int theme, Context context){
+        DatabaseManager.SaveInteger(theme, App.KEY_LIGHT_THEME,context);
+        DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
     public static int getAppColor(Context context){
-        return MySharedPreferences.LoadInteger(App.KEY_APP_COLOR,context);
+        return DatabaseManager.LoadInteger(App.KEY_APP_COLOR,context);
     }
 
     public static void setAppColor(int theme, Context context){
-        MySharedPreferences.SaveInteger(theme, App.KEY_APP_COLOR,context);
+        DatabaseManager.SaveInteger(theme, App.KEY_APP_COLOR,context);
+        DatabaseManager.setDatabaseLastModificationDate(context);
     }
 }
