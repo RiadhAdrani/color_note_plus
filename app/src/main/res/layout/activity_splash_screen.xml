@@ -47,7 +47,7 @@
         android:layout_marginTop="4dp"
         android:textSize="16sp"
         android:letterSpacing="0"
-        android:text="@string/syncing_now"
+        android:text="@string/sync_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/splash_progress"

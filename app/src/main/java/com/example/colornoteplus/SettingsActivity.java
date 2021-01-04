@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     private int theme = 0;
 
@@ -24,6 +24,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         ApplyTheme(theme);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Sync.performSync(this,null);
     }
 
     @Override

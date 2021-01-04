@@ -3,6 +3,7 @@ package com.example.colornoteplus;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,6 +51,11 @@ abstract public class Sync {
 
     public interface OnDataWiped{
         void onDataWiped();
+    }
+
+    public interface OnDataSynced{
+        void onDataUploaded();
+        void onDataDownloaded(ArrayList<Note<?>> notes);
     }
 
     static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
@@ -223,6 +229,104 @@ abstract public class Sync {
 
     static void setAutoSync(Context context, boolean auto){
         DatabaseManager.SaveInteger(auto ? App.AUTO_SYNC_ON : App.AUTO_SYNC_OFF,App.KEY_AUTO_SYNC,context);
+    }
+
+    static void performSync(Context context, OnDataSynced onDataSynced){
+
+        getModificationDate(context, new OnLongRetrieval() {
+            @Override
+            public void onSuccess(Long value) {
+
+                Long localSync = DatabaseManager.getDatabaseLastModificationDate(context);
+
+                if (!localSync.equals(value)) {
+                    // firebase firestore database is ahead
+                    if (value > localSync){
+
+                        getUserData(context, new OnQueryDataRetrieval() {
+                            @Override
+                            public void onSuccess(QuerySnapshot snapshot) {
+
+                                DatabaseManager.wipeDatabase(context);
+
+                                // get data from the FirebaseFirestore database
+                                ArrayList<Note<?>> notes = new ArrayList<>();
+
+                                for (DocumentSnapshot snap : snapshot.getDocuments()){
+                                    Note<?> n = Note.fromMap(context, Objects.requireNonNull(snap.getData()));
+
+                                    if (n != null) {
+                                        n.save(context);
+                                        notes.add(n);
+                                    }
+                                }
+
+                                DatabaseManager.SaveStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
+
+                                Sync.getAppTheme(context, new OnIntRetrieval() {
+                                    @Override
+                                    public void onSuccess(int value) {
+                                        Style.setAppTheme(value,context);
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+                                        Log.d("SYNC_NOTES","Unable to get Theme : Firebase database is ahead of the local database ...");
+                                    }
+                                });
+
+                                Sync.getAppColor(context, new OnIntRetrieval() {
+                                    @Override
+                                    public void onSuccess(int value) {
+                                        Style.setAppColor(value,context);
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+                                        Log.d("SYNC_NOTES","Unable to get App Color : Firebase database is ahead of the local database ...");
+                                    }
+                                });
+
+                                DatabaseManager.setDatabaseLastModificationDate(context, value);
+                                if (onDataSynced != null) onDataSynced.onDataDownloaded(notes);
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Log.d("SYNC_NOTES","Unable to sync : Firebase database is ahead of the local database ...");
+                            }
+                        });
+
+                    }
+
+                    // local database is ahead
+                    else {
+
+                        wipeNotes(context, () -> {
+                            ArrayList<Note<?>> noteList = DatabaseManager.LoadAllNotes(context);
+                            for (Note<?> note : noteList){
+                                setNote(context,note);
+                            }
+                        });
+
+                        setAppTheme(context,Style.getAppTheme(context));
+                        setAppColor(context,Style.getAppColor(context));
+                        setModificationDate(context, DatabaseManager.getDatabaseLastModificationDate(context));
+
+                        if (onDataSynced != null) onDataSynced.onDataUploaded();
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(context, context.getString(R.string.sync_unable), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     static void performSync(Context context, Long cloudSync, Long localSync){

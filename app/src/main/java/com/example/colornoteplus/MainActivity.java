@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,10 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends Activity{
 
     enum STATES {
         NOTES, DELETED_NOTES
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity{
     private ConstraintLayout selectionToolbar;
     private ConstraintLayout recyclerSelectionToolbar;
 
+    private CoordinatorLayout coordinatorLayout;
+
     // status variables
     private Boolean areFABsVisible = false;
 
@@ -74,6 +77,8 @@ public class MainActivity extends AppCompatActivity{
 
         setTheme(Style.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_main);
+
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
 
         findViewById(R.id.main_activity_background).setBackgroundColor(
                 getResources().getColor(Style.getNeutralColor(getApplicationContext()))
@@ -696,17 +701,15 @@ public class MainActivity extends AppCompatActivity{
     // when the activity is paused or suspended
     @Override
     protected void onPause() {
-        super.onPause();
-
         noteList = new ArrayList<>(adapter.getListFull());
 
-        if (!App.stringArrayEqualStringArray(
-                App.getNotesAsUIDFromList(noteList),
-                DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext()))
-        )
+        if (!App.stringArrayEqualStringArray(App.getNotesAsUIDFromList(noteList),
+                DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())))
         {
             saveNoteList();
         }
+
+        super.onPause();
     }
 
     // handle the main FAB

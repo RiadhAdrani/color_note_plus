@@ -16,13 +16,12 @@ import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class TextNoteActivity extends AppCompatActivity {
+public class TextNoteActivity extends Activity {
 
     // note editable views
     private EditText titleView;

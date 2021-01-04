@@ -28,7 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-public class CheckListNoteActivity extends AppCompatActivity{
+public class CheckListNoteActivity extends Activity {
 
     // note editable views
     private EditText titleView;

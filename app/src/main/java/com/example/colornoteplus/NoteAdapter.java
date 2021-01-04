@@ -185,6 +185,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
         list.remove(position);
         notifyItemRemoved(position);
+        DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
     public void deleteItemPermanently(int position){
@@ -221,6 +222,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
         list.remove(position);
         notifyItemRemoved(position);
+        DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
     public void switchColor(int position, int newColor){
@@ -237,6 +239,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
         list.get(position).setColor(newColor);
         notifyItemChanged(position);
+        DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
     public void sortByTitle(boolean isDescending){
