@@ -224,11 +224,12 @@ abstract public class Sync {
     }
 
     static boolean getAutoSync(Context context){
-        return DatabaseManager.LoadInteger(App.KEY_AUTO_SYNC, context) == App.AUTO_SYNC_ON;
+        return true;
+//        return DatabaseManager.LoadBoolean(App.KEY_AUTO_SYNC,context);
     }
 
     static void setAutoSync(Context context, boolean auto){
-        DatabaseManager.SaveInteger(auto ? App.AUTO_SYNC_ON : App.AUTO_SYNC_OFF,App.KEY_AUTO_SYNC,context);
+        DatabaseManager.SaveBoolean(auto,App.KEY_AUTO_SYNC,context);
     }
 
     static void performSync(Context context, OnDataSynced onDataSynced){

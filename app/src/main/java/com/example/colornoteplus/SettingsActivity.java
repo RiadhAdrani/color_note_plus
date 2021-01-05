@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,16 +46,20 @@ public class SettingsActivity extends Activity {
 
     void ApplyTheme(int theme){
 
+        // Theme & Layout
         setTheme(Style.getTheme(getApplicationContext(),theme));
         setContentView(R.layout.activity_settings);
 
+        // Status bar
         getWindow().setStatusBarColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
 
+        // background
         ConstraintLayout background = findViewById(R.id.settings_background);
         background.setBackgroundColor(
                 getResources().getColor(Style.getNeutralColor(getApplicationContext()))
         );
 
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.settings);
         toolbar.setBackgroundColor(getResources().getColor(Style.getColorMain(getApplicationContext(),theme)));
@@ -66,6 +71,7 @@ public class SettingsActivity extends Activity {
             finish();
         });
 
+        // App Theme
         TextView lightSwitchLabel = findViewById(R.id.settings_theme_label);
         lightSwitchLabel.setTextColor(getResources().getColor(
                 Style.getColorPrimaryAccent(getApplicationContext(), theme)
@@ -85,6 +91,7 @@ public class SettingsActivity extends Activity {
             ApplyTheme(theme);
         });
 
+        // App Color
         TextView appColorLabel = findViewById(R.id.settings_app_color_label);
         appColorLabel.setTextColor(getResources().getColor(
                 Style.getColorPrimaryAccent(getApplicationContext(), theme)
@@ -93,6 +100,20 @@ public class SettingsActivity extends Activity {
         ImageView appColor = findViewById(R.id.settings_app_color);
         appColor.setBackgroundResource(Style.getBackground(getApplicationContext(), theme));
         appColor.setOnClickListener( v -> buildColorPickDialog());
+
+        // Auto Sync
+        TextView autoSyncLabel = findViewById(R.id.settings_auto_sync_label);
+        autoSyncLabel.setTextColor(getResources().getColor(
+                Style.getColorPrimaryAccent(getApplicationContext(), theme)
+        ));
+
+        SwitchCompat autoSyncSwitch = findViewById(R.id.settings_auto_sync_switch);
+        autoSyncSwitch.setChecked(Sync.getAutoSync(getApplicationContext()));
+        autoSyncSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Sync.setAutoSync(getApplicationContext(), isChecked);
+            Log.d("AUTO_SYNC", "Auto Sync is :" + Sync.getAutoSync(getApplicationContext()));
+            ApplyTheme(theme);
+        });
     }
 
     // build the color picker dialog

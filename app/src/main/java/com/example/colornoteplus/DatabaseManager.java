@@ -141,6 +141,18 @@ public abstract class DatabaseManager {
         return sharedPreferences.getInt(key,0);
     }
 
+    public static void SaveBoolean(boolean bool, String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key,bool);
+        editor.apply();
+    }
+
+    public static boolean LoadBoolean(String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key,false);
+    }
+
     public static void SaveInteger(int integer, String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

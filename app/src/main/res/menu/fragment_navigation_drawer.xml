@@ -23,6 +23,12 @@
     <item android:title="@string/more">
         <menu>
             <item
+                android:id="@+id/nav_sync"
+                android:title="@string/sync"
+                android:icon="@drawable/ic_sync"
+                />
+
+            <item
                 android:id="@+id/nav_settings"
                 android:title="@string/settings"
                 android:icon="@drawable/ic_settings"

@@ -283,23 +283,52 @@ public class MainActivity extends Activity{
                     recycler = R.id.nav_recycler_bin,
                     settings = R.id.nav_settings,
                     about = R.id.nav_about,
-                    updates = R.id.nav_updates;
+                    updates = R.id.nav_updates,
+                    sync = R.id.nav_sync;
 
             switch (item.getItemId()){
+
                 case notes:
                     startMyNote();
                     break;
+
                 case recycler:
                     startRecyclerBin();
                     break;
+
+                case sync: Sync.performSync(getApplicationContext(), new Sync.OnDataSynced() {
+                    @Override
+                    public void onDataUploaded() {
+
+                    }
+
+                    @Override
+                    public void onDataDownloaded(ArrayList<Note<?>> notes) {
+
+                        Snackbar.make(
+                                coordinatorLayout,
+                                R.string.sync_success,
+                                Snackbar.LENGTH_LONG
+                                ).show();
+
+                        switch (state){
+                            case NOTES: startMyNote(); break;
+                            case DELETED_NOTES: startRecyclerBin(); break;
+                        }
+                    }
+                });
+                break;
+
                 case settings:
                     Intent i = new Intent(getApplicationContext(),SettingsActivity.class);
                     startActivity(i);
                     finish();
                     break;
+
                 case about:
                     about();
                     break;
+
                 case updates:
                     break;
             }

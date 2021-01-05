@@ -37,8 +37,6 @@ public abstract class App {
     public final static int NOTE_TITLE_MINIMUM_LENGTH = 3;
     public final static int DAY_THEME = 0;
     public final static int NIGHT_THEME = 1;
-    public final static int AUTO_SYNC_OFF = 0;
-    public final static int AUTO_SYNC_ON = 1;
     public final static String NOTE_PLACEHOLDER = "New Note";
     public final static int NOTE_DEFAULT_COLOR = 0;
     public final static String NOTE_DEFAULT_UID = "NEW_NOTE";

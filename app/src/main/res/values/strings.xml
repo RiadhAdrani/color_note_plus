@@ -32,9 +32,11 @@
     <string name="no_item_selected">No Item Selected</string>
     <string name="lighting_theme">Lighting Theme</string>
     <string name="app_color">App Color</string>
+    <string name="sync">Sync</string>
     <string name="sync_now">Syncing now …</string>
     <string name="sync_success">Synchronization Success</string>
     <string name="sync_unable">Unable to sync !</string>
+    <string name="sync_auto">Auto Sync</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>
