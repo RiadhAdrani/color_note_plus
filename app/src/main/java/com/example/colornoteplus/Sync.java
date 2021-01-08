@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Manages and handle syncing with the Firebase Firestore database
+ * @see App
+ * @see DatabaseManager
+ */
 abstract public class Sync {
 
     @SuppressLint("StaticFieldLeak")
@@ -29,35 +34,109 @@ abstract public class Sync {
     private static final String INFO_APP_THEME = App.DATABASE_USER_THEME;
 
 
+    /**
+     * Interface for data retrieval
+     */
     public interface OnDataRetrieval{
+
+        /**
+         * executes on success
+         * @param snapshot retrieved data
+         */
         void onSuccess(DocumentSnapshot snapshot);
+
+        /**
+         * executes when data retrieval fails
+         */
         void onFailure();
     }
 
+    /**
+     * Interface for Long object retrieval
+     */
     public interface OnLongRetrieval{
+
+        /**
+         * Executes on success
+         * @param value retrieved data
+         */
         void onSuccess(Long value);
+
+        /**
+         * executes on failure
+         */
         void onFailure();
     }
 
+    /**
+     * Interface for Specific data retrieval
+     */
     public interface OnQueryDataRetrieval{
+
+        /**
+         * executes on success
+         * @param snapshot retrieved data
+         */
         void onSuccess(QuerySnapshot snapshot);
+
+        /**
+         * executes on failure
+         */
         void onFailure();
     }
 
+    /**
+     * Interface for Integer value retrieval
+     */
     public interface OnIntRetrieval{
+
+        /**
+         * Executes on success
+         * @param value retrieved data
+         */
         void onSuccess(int value);
+
+        /**
+         * executes on failure
+         */
         void onFailure();
     }
 
+    /**
+     * Interface for action post-database-deletion
+     */
     public interface OnDataWiped{
+
+        /**
+         * Additional action after database clearing
+         */
         void onDataWiped();
     }
 
+    /**
+     * Interface for data syncing process.
+     */
     public interface OnDataSynced{
+
+        /**
+         * Additional action after data has been uploaded to the cloud server.
+         * and synced properly
+         */
         void onDataUploaded();
+
+        /**
+         * Additional action after data has been downloaded from the cloud server.
+         * @param notes retrieved notes.
+         */
         void onDataDownloaded(ArrayList<Note<?>> notes);
     }
 
+    /**
+     * get the modification date from the cloud server.
+     * @param context calling context
+     * @param onDataRetrieval post retrieval actions.
+     * @see OnDataRetrieval
+     */
     static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
         DB.collection(USERS)
                 .document(User.getCurrentUser(context).getUsername())
@@ -74,6 +153,11 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * Override modification date in the cloud database.
+     * @param context calling context
+     * @param date new date
+     */
     static void setModificationDate(Context context, Long date){
 
         Map<String, Long> map = new HashMap<>();
@@ -88,6 +172,11 @@ abstract public class Sync {
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
     }
 
+    /**
+     * Get the app color theme from the cloud database
+     * @param context calling context
+     * @param onDataRetrieval post retrieval actions
+     */
     static void getAppColor(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
                 .document(User.getCurrentUser(context).getUsername())
@@ -104,6 +193,11 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * Override app color theme in the cloud database
+     * @param context calling context
+     * @param color new color theme
+     */
     static void setAppColor(Context context, int color){
 
         Map<String, String> map = new HashMap<>();
@@ -118,6 +212,11 @@ abstract public class Sync {
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
     }
 
+    /**
+     * Get the app lighting theme from the cloud database
+     * @param context calling context
+     * @param onDataRetrieval post retrieval actions
+     */
     static void getAppTheme(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
                 .document(User.getCurrentUser(context).getUsername())
@@ -134,6 +233,11 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * Override app lighting theme with a new value
+     * @param context calling context
+     * @param theme new lighting theme
+     */
     static void setAppTheme(Context context, int theme){
 
         Map<String, String> map = new HashMap<>();
@@ -148,6 +252,11 @@ abstract public class Sync {
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
     }
 
+    /**
+     * Get current User data from the cloud
+     * @param context calling context
+     * @param onDataRetrieval post retrieval actions
+     */
     static void getUserData(Context context, OnQueryDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
@@ -163,6 +272,11 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * Save a note to the cloud database
+     * @param context calling context
+     * @param note note to be saved
+     */
     static void setNote(Context context, Note<?> note){
 
         DB.collection(USERS)
@@ -178,6 +292,13 @@ abstract public class Sync {
 
     }
 
+    /**
+     * @deprecated
+     * Retrieve a note from cloud
+     * @param context calling context
+     * @param uid note uid to be retrieved
+     * @param onDataRetrieval post retrieval actions
+     */
     static void getNote(Context context, String uid, OnDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
@@ -194,6 +315,11 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * Wipe User notes in the cloud database
+     * @param context calling context
+     * @param onDataWiped post data clearing actions
+     */
     static void wipeNotes(Context context, OnDataWiped onDataWiped){
 
         DB.collection(USERS)
@@ -223,15 +349,31 @@ abstract public class Sync {
                 });
     }
 
+    /**
+     * get the preference of auto syncing from the local database
+     * @see DatabaseManager
+     * @param context calling context
+     * @return On : true, Off : false
+     */
     static boolean getAutoSync(Context context){
         return true;
 //        return DatabaseManager.LoadBoolean(App.KEY_AUTO_SYNC,context);
     }
 
+    /**
+     * change auto syncing status
+     * @param context calling context
+     * @param auto new value
+     */
     static void setAutoSync(Context context, boolean auto){
         DatabaseManager.SaveBoolean(auto,App.KEY_AUTO_SYNC,context);
     }
 
+    /**
+     * Perform data syncing
+     * @param context calling context
+     * @param onDataSynced post data syncing actions
+     */
     static void performSync(Context context, OnDataSynced onDataSynced){
 
         getModificationDate(context, new OnLongRetrieval() {
@@ -330,6 +472,12 @@ abstract public class Sync {
 
     }
 
+    /**
+     * Perform syncing between local database and cloud storage
+     * @param context calling context
+     * @param cloudSync cloud last modification date
+     * @param localSync local last modification date
+     */
     static void performSync(Context context, Long cloudSync, Long localSync){
 
         // both database are synced correctly

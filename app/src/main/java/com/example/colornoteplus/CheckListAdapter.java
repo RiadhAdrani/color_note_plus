@@ -23,33 +23,79 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+/**
+ * Adapter managing how items (CheckListItems) are display in a recycler view.
+ * @see CheckListItem
+ * @see CheckListNote
+ * @see CheckListNoteActivity
+ */
 public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyViewHolder> {
 
-    // public constructor
+    /**
+     * Public constructor : Initialize a checkListAdapter
+     * @param context context in which the object is created
+     * @param list content to be displayed
+     * @param color color theme of the adapter. In most cases, it is the color of note
+     */
     public CheckListAdapter(Context context,ArrayList<CheckListItem> list, int color) {
         this.list = list;
         this.color = color;
         this.context = context;
     }
 
-    // list of objects
+    /**
+     * List of items to be displayed
+     * @see CheckListItem
+     */
     final private ArrayList<CheckListItem> list;
 
-    // the current theme of the activity
+    /**
+     * Color theme of the adapter
+     * @see Style
+     */
     final private int color;
 
-    // current context
+    /**
+     * Context
+     */
     final private Context context;
 
+    /**
+     * Sorting type of the items
+     * @see App.SORT_ITEM
+     */
     private App.SORT_ITEM sortBy;
-        public App.SORT_ITEM getSortBy(){ return sortBy;}
-        public void setSortBy(App.SORT_ITEM sort){ this.sortBy = sort;}
 
-    // listener
+    /**
+     * getter of CheckListAdapter.sortBy
+     * @see App.SORT_ITEM
+     * @return sortBy
+     */
+    public App.SORT_ITEM getSortBy(){
+        return sortBy;
+    }
+
+    /**
+     * setter for CheckListAdapter.sortBy
+     * @param sort new sorting type
+     * @see App.SORT_ITEM
+     */
+    public void setSortBy(App.SORT_ITEM sort){
+        this.sortBy = sort;
+    }
+
+    /**
+     * Listener for even and action made to the displayed items
+     */
     private OnItemClickListener listener;
 
 
-    // get the desired view for the current item
+    /**
+     *
+     * @param parent parent of the viewHolder
+     * @param viewType viewType
+     * @return the layout that will represent every single item
+     */
     @NonNull
     @Override
     public CheckListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,8 +105,11 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
                 inflate(R.layout.item_check_list_v2,parent,false));
     }
 
-    // bind data and display them in the desired view
-    // while applying the current theme
+    /**
+     * Fill the appropriate holder with the correspondent object data from the list items
+     * @param holder currently drawn layout
+     * @param position current position of the holder
+     */
     @Override
     public void onBindViewHolder(@NonNull CheckListAdapter.MyViewHolder holder, int position) {
 
@@ -149,13 +198,18 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         holder.delete.setOnClickListener(view -> listener.onDelete(holder.getAdapterPosition()));
     }
 
-    // get the size of the list
+    /**
+     * get the number of items in the list
+     * @return number of items in the given list
+     */
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-    // initializing elements in the view
+    /**
+     * Custom class for the viewHolder that will be displayed
+     */
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         CheckBox checkBox;
@@ -179,8 +233,11 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         }
     }
 
-    // add item to the list
-    // and play the animation
+    /**
+     * Add item to the list and refresh the display
+     * @param item element to be added
+     * @param position the index in which the item will be inserted
+     */
     public void addItem(CheckListItem item,int position){
 
         // if the position is negative, add the item at the bottom of the list
@@ -196,55 +253,94 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         }
     }
 
-    // delete item from the list
-    // and play a simple animation
+    /**
+     * Remove an item from the list and refresh the display
+     * @param position the index of the item that will be deleted
+     */
     public void removeItem(int position){
         list.remove(position);
         notifyItemRemoved(position);
     }
 
+    /**
+     * Sort items by their description
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByDescription(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getDescription().compareTo(i2.getDescription()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort items by their status (done or not)
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByStatus(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getDoneDate().compareTo(i2.getDoneDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort items by creation time
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByCreation(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getCreationDate().compareTo(i2.getCreationDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort items by modification time
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByModification(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getModificationDate().compareTo(i2.getModificationDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+
+    /**
+     * Sort items by due time
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByDue(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getDueDate().compareTo(i2.getDueDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort items by their priority
+     * @see CheckListItem
+     * @param isDescending indicate whether the sorting is descending or not
+     */
     public void sortByPriority(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getPriority().compareTo(i2.getPriority()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
-    // override the current listener
+    /**
+     * override the action of the listener
+     * @see OnItemClickListener
+     * @param listener new listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
 
-    // public interface
+    /**
+     * interface containing useful data that could be implemented to handle and edit check list items
+     */
     public interface OnItemClickListener{
         void onChecked(int position);
         void onUnchecked(int position);

@@ -13,18 +13,39 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Pick a color from the available colors in the app
+ * @see Style
+ * @see MainActivity
+ * @see TextNoteActivity
+ * @see CheckListNoteActivity
+ * @see SettingsActivity
+ */
 public class FragmentPickColor extends AppCompatDialogFragment {
 
     ColorAdapter adapter;
     int span;
     int color;
 
+    /**
+     * Public constructor
+     * @param adapter adapter displaying the color
+     * @param span number of colors per row
+     * @param color the current theme of the activity/app
+     * @see ColorAdapter
+     */
     public FragmentPickColor(ColorAdapter adapter, int span,int color){
         this.adapter = adapter;
         this.span = span;
         this.color = color;
     }
 
+    /**
+     * overriding the listener that handle clicks on elements
+     * @param listener new listener
+     * @see ColorAdapter
+     * @see ColorAdapter.OnItemClickListener
+     */
     public void setOnItemClickListener(ColorAdapter.OnItemClickListener listener){
         adapter.setOnItemClickListener(listener);
     }

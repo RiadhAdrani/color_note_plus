@@ -1,33 +1,100 @@
 package com.example.colornoteplus;
 
+/**
+ * Class describing a color theme object. contains variation of a single color with
+ * the addition of themes (day and night) and background drawables.
+ * @see App
+ * @see DatabaseManager
+ */
 public class ColorTheme {
 
-    // default drawable
+    /**
+     * Standard drawable
+     */
     private final int drawable;
-        public int getDrawable() { return drawable; }
 
-    // a lighter version of the default drawable
+    /**
+     * getter of the standard drawable
+     * @return drawable id
+     */
+    public int getDrawable() {
+        return drawable;
+    }
+
+    /**
+     * Light themed drawable
+     */
     private final int drawableLight;
-        public int getDrawableLight() { return drawableLight;}
 
-    // a darker version of the drawable
+    /**
+     * getter of the light themed drawable
+     * @return drawable id
+     */
+    public int getDrawableLight() {
+        return drawableLight;
+    }
+
+    /**
+     * Dark themed drawable
+     */
     private final int drawableDark;
-        public int getDrawableDark() {return drawableDark;}
 
-    // the representing theme
+    /**
+     * getter for the dark themed drawable
+     * @return drawable id
+     */
+    public int getDrawableDark() {
+        return drawableDark;
+    }
+
+    /**
+     * Day theme style id
+     */
     private final int theme;
 
-    // the dark theme
+    /**
+     * Night theme style id
+     */
     private final int themeDark;
 
-        // the list of the colors
-        private final int colorLighter;
-        private final int colorLight;
-        private final int color;
-        private final int colorDark;
-        private final int colorDarker;
+    /**
+     * lighter color variation id
+     */
+    private final int colorLighter;
 
-    // custom constructor
+    /**
+     * light color variation id
+     */
+    private final int colorLight;
+
+    /**
+     * main color id
+     */
+    private final int color;
+
+    /**
+     * dark color variation id
+     */
+    private final int colorDark;
+
+    /**
+     * darker color variation id
+     */
+    private final int colorDarker;
+
+    /**
+     * Color theme constructor
+     * @param drawable standard drawable id
+     * @param drawableLight light drawable id
+     * @param drawableDark dark drawable id
+     * @param theme theme style id in R.style
+     * @param themeDark dark theme style id in R.style
+     * @param colorLighter lighter color variation id in R.color
+     * @param colorLight light color variation id in R.color
+     * @param color main color id in R.color
+     * @param colorDark dark color variation id in R.color
+     * @param colorDarker darker color variation id in R.color
+     */
     public ColorTheme(int drawable, int drawableLight, int drawableDark, int theme, int themeDark, int colorLighter, int colorLight, int color, int colorDark, int colorDarker){
         this.drawable = drawable;
         this.drawableLight = drawableLight;
@@ -41,24 +108,46 @@ public class ColorTheme {
         this.colorDarker = colorDarker;
     }
 
-    // getter for the theme
+    /**
+     * getter of the current light theme
+     * @return theme id
+     */
     public int getTheme() { return theme; }
 
+    /**
+     * getter of the current dark theme
+     * @return theme id
+     */
     public int getThemeDark() {return themeDark; }
 
-    // getter for the lighter color
+    /**
+     * getter of the lighter color variation
+     * @return color id
+     */
     public int getColorLighter() { return colorLighter; }
 
-    // getter for the light color
+    /**
+     * getter of the light color variation
+     * @return color id
+     */
     public int getColorLight() { return colorLight; }
 
-    // getter for the main color
+    /**
+     * getter of the main color
+     * @return color id
+     */
     public int getColor() { return color; }
 
-    // getter for the dark color
+    /**
+     * getter of the dark color variation
+     * @return color id
+     */
     public int getColorDark() { return colorDark; }
 
-    // getter for the darker color
+    /**
+     * getter of the darker color variation
+     * @return color id
+     */
     public int getColorDarker() { return colorDarker; }
 
 }

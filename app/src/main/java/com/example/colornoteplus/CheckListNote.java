@@ -8,9 +8,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Blueprint class for the Check Note List object.
+ * a check list note contains a list of list of check list items as content.
+ * @see App
+ * @see Note
+ * @see Object
+ * @see CheckListItem
+ * @see Style
+ */
 public class CheckListNote extends Note<ArrayList<CheckListItem>> {
 
-    /// default constructor
+    /**
+     * Constructor of the CheckListNote object
+     * @param context context in which the note is created
+     */
     public CheckListNote(Context context){
         setTitle(App.NOTE_PLACEHOLDER);
         setColor(Style.getAppColor(context));
@@ -20,13 +32,26 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
         setUid(App.NOTE_CHECK_ID + UUID.randomUUID().toString() + getCreationDate());
     }
 
-    // save the note
+    /**
+     * Save note to the local database manager.
+     * update modification date of the object
+     * @param context context in which the function is called
+     * @see DatabaseManager
+     * @see Note
+     */
     @Override
     public void save(Context context) {
         setModificationDate();
         DatabaseManager.SaveCheckListNote(this,context);
     }
 
+    /**
+     * indicate if the note has changed comparing it to the saved instance in the database.
+     * @see DatabaseManager
+     * @see Note
+     * @param context context in which the function is called
+     * @return if the note has changed or not
+     */
     @Override
     public boolean hasChanged(Context context) {
 
@@ -71,6 +96,12 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
 
     }
 
+    /**
+     * Compare the current note to a given one.
+     * @param note note to be compared with
+     * @return the result of the comparison
+     * @see Note
+     */
     @Override
     public boolean isEqualTo(Note<?> note) {
 
@@ -92,6 +123,13 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
 
     }
 
+    /**
+     * Convert the current note to a map, for it later to be uploaded to cloud database.
+     * @see DatabaseManager
+     * @see Note
+     * @see Sync
+     * @return the resulting hash map
+     */
     @Override
     public Map<String, java.lang.Object> toMap() {
         Map<String, java.lang.Object> map = new HashMap<>();
@@ -123,8 +161,16 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
         return map;
     }
 
+    /**
+     * check if the current note contains a given string in its title or content
+     * @param string wanted string
+     * @return the result of the research
+     */
     @Override
     public boolean containsString(String string) {
+
+        if (getTitle().toLowerCase().contains(string)) return true;
+
         for (CheckListItem item : getContent()){
             if (item.getDescription().toLowerCase().contains(string.toLowerCase()))
                 return true;

@@ -28,23 +28,64 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Activity displaying a Check List Note
+ * @see Activity
+ * @see CheckListNote
+ * @see CheckListItem
+ * @see App
+ * @see Style
+ * @see DatabaseManager
+ * @see Sync
+ */
 public class CheckListNoteActivity extends Activity {
 
-    // note editable views
+    /**
+     * Title View
+     */
     private EditText titleView;
+
+    /**
+     * Title character count view
+     */
     private TextView titleCharacterCount;
+
+    /**
+     * Color switcher button
+     */
     private ImageButton colorView;
+
+    /**
+     * Recycler view for the checkListItems
+     * @see CheckListItem
+     * @see CheckListNote
+     */
     private RecyclerView contentView;
+
+    /**
+     * FAB (floating action button) allowing the addition of new check list items
+     * @see CheckListItem
+     */
     private FloatingActionButton fab;
 
+    /**
+     * Adapter for the recycler view displaying check list items
+     */
     CheckListAdapter adapter;
 
+    /**
+     * check list items sort Type
+     */
     private boolean sortType = false;
 
-    // toolbar
+    /**
+     * Activity Toolbar
+     */
     private Toolbar toolbar;
 
-    // Current note
+    /**
+     * Currently open note
+     */
     private CheckListNote note;
 
     @Override
@@ -88,8 +129,6 @@ public class CheckListNoteActivity extends Activity {
         startMainActivity();
     }
 
-    // Method used to add menus and configure button action
-    // like OnClickListeners ...
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -156,6 +195,10 @@ public class CheckListNoteActivity extends Activity {
         return true;
     }
 
+    /**
+     * Change the color of the views
+     * @param color new color value
+     */
     private void changeViewsColor(int color){
 
         // set the global theme
@@ -278,8 +321,10 @@ public class CheckListNoteActivity extends Activity {
 
     }
 
-    // switch the theme of the activity to the desired color
-    // while preserving data
+    /**
+     * Switch the color of the activity
+     * @param color new color value
+     */
     private void switchColor(int color){
 
         String tempTitle = titleView.getText().toString().trim();
@@ -288,9 +333,11 @@ public class CheckListNoteActivity extends Activity {
 
     }
 
-    // build the color picker dialog
-    // and allow user to pick and change the color of the note
-    // and the theme of the activity
+
+    /**
+     * Displaying a dialog allowing the user to switch the color of the note
+     * and the activity.
+     */
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
@@ -315,7 +362,11 @@ public class CheckListNoteActivity extends Activity {
 
     }
 
-    // display a dialog fragment allowing the user to add a new item
+    /**
+     * Handle click on the FAB : display a dialog box allowing the user to customize
+     * his new check list item
+     * @see CheckListItem
+     */
     private void onFabClickListener(){
         FragmentAddCheckListItem fragment = new FragmentAddCheckListItem(note.getColor());
         fragment.show(getSupportFragmentManager(), App.TAG_FRAGMENT_ADD_CHECK_LIST_ITEM);
@@ -348,9 +399,12 @@ public class CheckListNoteActivity extends Activity {
         });
     }
 
-    // check if the list is old or not
-    // if old return true
-    // else   return false
+    /**
+     * check if the note is old (already exists in the local database)
+     * @see DatabaseManager
+     * @param UID note uid
+     * @return the result of the checking
+     */
     private boolean isNoteOld(String UID){
         for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(UID)) return true;
@@ -358,8 +412,11 @@ public class CheckListNoteActivity extends Activity {
         return false;
     }
 
-    // save note when the user click on the save button
-    // in the toolbar
+    /**
+     * save note to the local database
+     * @return return if the operation succeeded or not
+     * (due to errors or some non-respected constraints).
+     */
     private boolean saveNote(){
 
         // if the text is too short, alert the user
@@ -421,13 +478,19 @@ public class CheckListNoteActivity extends Activity {
 
     }
 
-    // return to main activity
+    /**
+     * Start main activity
+     * @see MainActivity
+     */
     private void startMainActivity(){
         Intent i = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(i);
         finish();
     }
 
+    /**
+     * display an alert if the current note has changed ,just before leaving the activity
+     */
     private void unsavedChangesAlert(){
         DialogConfirm dialogConfirm = new DialogConfirm(
                 note.getColor(),
@@ -453,6 +516,10 @@ public class CheckListNoteActivity extends Activity {
         dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
     }
 
+    /**
+     * checking to be executed before exiting the activity
+     * @return return true
+     */
     private boolean onUpButtonPressed(){
         // save the note
         note.setTitle(titleView.getText().toString().trim());

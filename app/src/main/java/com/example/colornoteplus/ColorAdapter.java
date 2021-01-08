@@ -9,14 +9,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for Color theme
+ * @see ColorTheme
+ */
 public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder> {
 
+    /**
+     * list of colors to be displayed
+     */
     private final ArrayList<ColorTheme> list;
 
+    /**
+     * listener handling events & action on items
+     */
     private OnItemClickListener listener;
 
+    /**
+     * Default constructor
+     */
     public ColorAdapter(){ list = Style.getThemes(); }
 
+    /**
+     * Allow the overriding of the listener
+     * @param listener new listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
@@ -61,10 +78,21 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.MyViewHolder
         }
     }
 
+    /**
+     * Interface allowing the manipulation and edition of items in the list
+     */
     public interface OnItemClickListener{
+
+        /**
+         * on item click listener
+         * @param position index of the item
+         */
         void OnClickListener(int position);
 
-        // (UNUSED)
+        /**
+         * on item Long click/press listener
+         * @param position index of the item in the list
+         */
         void OnLongClickListener(int position);
     }
 

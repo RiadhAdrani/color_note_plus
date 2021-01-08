@@ -13,8 +13,15 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
+/**
+ * Activity allowing the user to change global or specific settings in the app
+ * @see Style
+ */
 public class SettingsActivity extends Activity {
 
+    /**
+     * App theme
+     */
     private int theme = 0;
 
     @Override
@@ -44,6 +51,10 @@ public class SettingsActivity extends Activity {
         super.onBackPressed();
     }
 
+    /**
+     * Apply current theme and build the layout
+     * @param theme current app theme
+     */
     void ApplyTheme(int theme){
 
         // Theme & Layout
@@ -116,7 +127,11 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    // build the color picker dialog
+    /**
+     * Allow the user to pick a color from a list
+     * @see FragmentPickColor
+     * @see Style
+     */
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,theme);

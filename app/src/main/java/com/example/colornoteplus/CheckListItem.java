@@ -6,9 +6,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * Blueprint class for the check list item object.
+ * @see Object
+ * @see CheckListNote
+ */
 public class CheckListItem extends Object {
 
-    // enumerated list containing the possible priorities
+    /**
+     * Contains possible priorities for a given check list item
+     */
     public enum PRIORITY{
         LOW,
         MEDIUM,
@@ -16,50 +23,133 @@ public class CheckListItem extends Object {
         URGENT
     }
 
-    // description of the item
+    /**
+     * Description of the item
+     */
     private String description;
-        public String getDescription() {
-            return description;
-        }
-        public void setDescription(String description) {
-            this.description = description;
-            setModificationDate();
-        }
 
-    // date in which the item was done
+    /**
+     * getter for CheckListItem.description
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * setter for CheckListItem.description.
+     * update modification date automatically
+     * @param description new description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+        setModificationDate();
+    }
+
+    /**
+     * the date of the achievement of this item
+     */
     private Long doneDate;
-        public Long getDoneDate() {
-            return doneDate; }
-        public void setDoneDate(Long doneDate) {
-            this.doneDate = doneDate;}
-        public void setDone() {
-            doneDate = Calendar.getInstance().getTime().getTime();
-            setModificationDate(); }
-        public void setUnDone() {
-            doneDate = -1L;
-            setModificationDate(); }
-        public boolean isDone() {
-            return doneDate != -1L; }
 
-    // priority of the item
+    /**
+     * getter for CheckListItem.doneDate
+     * @return doneDate
+     */
+    public Long getDoneDate() {
+        return doneDate;
+    }
+
+    /**
+     * setter for CheckListItem.doneDate
+     * @param doneDate new done date
+     */
+    public void setDoneDate(Long doneDate) {
+        this.doneDate = doneDate;
+    }
+
+    /**
+     * Custom setter for CheckListItem.doneDate.
+     * set the doneDate to the exact current time
+     */
+    public void setDone() {
+        doneDate = Calendar.getInstance().getTime().getTime();
+        setModificationDate();
+    }
+
+    /**
+     * Custom setter for CheckListItem.doneDate.
+     * set the doneDate to undone
+     */
+    public void setUnDone() {
+        doneDate = -1L;
+        setModificationDate();
+    }
+
+    /**
+     * return the status of the item, if doneDate is equal to -1L : return false,
+     * otherwise return true
+     * @return whether the item is done or not
+     */
+    public boolean isDone() {
+        return doneDate != -1L;
+    }
+
+    /**
+     * priority of the item
+     * @see PRIORITY
+     */
     private PRIORITY priority;
-        public PRIORITY getPriority() {
-            return priority;
-        }
-        public void setPriority(PRIORITY priority) {
-            this.priority = priority;
-            setModificationDate();
-        }
 
-    // the date before which the item should be done
+    /**
+     * getter of CheckListItem.priority
+     * @return priority
+     * @see PRIORITY
+     */
+    public PRIORITY getPriority() {
+        return priority;
+    }
+
+    /**
+     * setter for CheckListItem.priority.
+     * Update modification date too.
+     * @see PRIORITY
+     * @param priority new priority value
+     */
+    public void setPriority(PRIORITY priority) {
+        this.priority = priority;
+        setModificationDate();
+    }
+
+    /**
+     * the date in which the item is due
+     */
     private Long dueDate;
-        public Long getDueDate() { return dueDate; }
-        public void setDueDate(Long dueDate) {
-            this.dueDate = dueDate;
-            setModificationDate();
-        }
 
-    // custom constructor
+    /**
+     * getter of CheckListItem.dueDate
+     * @return dueDate
+     */
+    public Long getDueDate() {
+        return dueDate;
+    }
+
+    /**
+     * setter for CheckListItem.dueDate.
+     * Update modification date too.
+     * @param dueDate new due date value
+     */
+    public void setDueDate(Long dueDate) {
+        this.dueDate = dueDate;
+        setModificationDate();
+    }
+
+    /**
+     * Custom constructor
+     * @param description item description value
+     * @param dueDate due date value
+     * @param p priority value
+     * @see PRIORITY
+     */
     public CheckListItem(String description,Long dueDate,PRIORITY p){
             setDescription(description);
             setUnDone();
@@ -70,7 +160,13 @@ public class CheckListItem extends Object {
             setModificationDate();
     }
 
-    // convert a given priority to a string
+    /**
+     * convert a given priority to string
+     * @see PRIORITY
+     * @param context context in which the function is called
+     * @param p priority to be converted
+     * @return priority as String
+     */
     public static String priorityToString(Context context, PRIORITY p){
         switch (p){
             case LOW: return context.getResources().getString(R.string.low_priority);
@@ -82,8 +178,12 @@ public class CheckListItem extends Object {
         return context.getResources().getString(R.string.medium_priority);
     }
 
-    // (UNUSED)
-    // convert the list of priorities to an ArrayList
+    /**
+     * @deprecated
+     * return all priorities as an Array list of strings
+     * @param context context in which the function is called
+     * @return Array list of Strings of all priorities
+     */
     public static ArrayList<String> getPriorities(Context context){
         ArrayList<String> p = new ArrayList<>();
         for (PRIORITY e: PRIORITY.values()) {
@@ -92,6 +192,11 @@ public class CheckListItem extends Object {
         return p;
     }
 
+    /**
+     * Compare the current item to another item
+     * @param item item to be compared with
+     * @return true if both items are identical, false otherwise.
+     */
     public boolean isEqualTo(CheckListItem item){
 
             if (!item.getUid().equals(this.getUid())) return false;

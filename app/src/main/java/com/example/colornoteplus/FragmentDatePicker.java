@@ -11,16 +11,30 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * Allow to pick a date for the addition of a check list item
+ * @see CheckListItem
+ * @see FragmentAddCheckListItem
+ * @see CheckListNoteActivity
+ */
 public class FragmentDatePicker extends DialogFragment {
 
     private int color;
 
+    /**
+     * Public constructor
+     * @param color activity theme
+     */
     public FragmentDatePicker(int color){
         this.color = color;
     }
 
     private OnDateSet listener;
 
+    /**
+     * Override the event happening after picking a new date
+     * @param listener new listener
+     */
     public void setOnDateSet(OnDateSet listener){
         this.listener = listener;
     }
@@ -37,7 +51,17 @@ public class FragmentDatePicker extends DialogFragment {
         return datePickerDialog;
     }
 
+    /**
+     * Allow the overriding of actions made after picking a date
+     */
     public interface OnDateSet{
+
+        /**
+         * Allow the use and manipulation of the picked date time
+         * @param year picked year
+         * @param month picked month
+         * @param day picked day
+         */
         void onDateSetListener(int year,int month,int day);
     }
 

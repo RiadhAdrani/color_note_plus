@@ -4,40 +4,68 @@ import android.content.Context;
 
 public class User {
 
-    private String username; // username of the user
-    private String email; // email of the user
-    private Long dataBaseLastModified; // the last time the local database has been updated or modified
-    private Long lastSynced; // the last time the local database has been synced with the cloud db
+    /**
+     * user name
+     */
+    private String username;
 
-    public User(String username, String email, Long dataBaseLastModified, Long lastSynced) {
+    /**
+     * user email
+     */
+    private String email;
+
+
+    /**
+     * Public constructor
+     * @param username name
+     * @param email email
+     */
+    public User(String username, String email) {
         this.username = username;
         this.email = email;
-        this.dataBaseLastModified = dataBaseLastModified;
-        this.lastSynced = lastSynced;
     }
 
+    /**
+     * @deprecated
+     * public empty constructor
+     */
     public User(){
 
     }
 
+    /**
+     * getter for username
+     * @return username
+     */
     public String getUsername() { return username; }
 
+    /**
+     * @deprecated
+     * setter for username
+     * @param username new name
+     */
     public void setUsername(String username) { this.username = username; }
 
+    /**
+     * @deprecated
+     * getter for email
+     * @return email
+     */
     public String getEmail() { return email; }
 
+    /**
+     * @deprecated
+     * setter for email
+     * @param email new email
+     */
     public void setEmail(String email) { this.email = email; }
 
-    public Long getDataBaseLastModified() { return dataBaseLastModified; }
-
-    public void setDataBaseLastModified(Long dataBaseLastModified) { this.dataBaseLastModified = dataBaseLastModified; }
-
-    public Long getLastSynced() { return lastSynced; }
-
-    public void setLastSynced(Long lastSynced) { this.lastSynced = lastSynced; }
-
-    // return the current user
+    /**
+     * Get the current username info
+     * @param context calling context
+     * @return current user
+     */
     static public User getCurrentUser(Context context){
-        return new User("test_user","user@email.com",0L,0L);
+        return new User("test_user","user@email.com");
     }
 }

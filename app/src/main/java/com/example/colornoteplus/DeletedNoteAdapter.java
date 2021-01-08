@@ -8,9 +8,22 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter managing how deleted notes are display in a recycler view, extends NoteAdapter.
+ * @see NoteAdapter
+ * @see CheckListNote
+ * @see TextNote
+ * @see Note
+ * @see MainActivity
+ */
 public class DeletedNoteAdapter extends NoteAdapter {
 
 
+    /**
+     * Public Constructor
+     * @param list content to be displayed
+     * @param context creation context
+     */
     public DeletedNoteAdapter(ArrayList<Note<?>> list, Context context) {
         super(list, context);
     }

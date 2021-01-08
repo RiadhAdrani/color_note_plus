@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Note having a text as its content.
+ * @see Note
+ */
 public class TextNote extends Note<String> implements Serializable {
 
     public TextNote(Context context){
@@ -18,8 +22,6 @@ public class TextNote extends Note<String> implements Serializable {
         setModificationDate(Calendar.getInstance().getTime().getTime());
         setUid(App.NOTE_TEXT_ID + UUID.randomUUID().toString() + getCreationDate());
     }
-
-
 
     @Override
     public void save(Context context) {

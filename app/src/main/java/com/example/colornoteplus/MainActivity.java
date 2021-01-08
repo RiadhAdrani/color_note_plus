@@ -25,8 +25,21 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+/**
+ * Main Activity displayed after the splash screen. Composed of two parts : MyNote section
+ * and Recycled Notes section. Both section could be switched between using the navigator from the
+ * toolbar menu.
+ * @see Activity
+ * @see Style
+ * @see NoteAdapter
+ */
 public class MainActivity extends Activity{
 
+    /**
+     * States in the main activity
+     * NOTES = user notes
+     * DELETED_NOTES = deleted notes
+     */
     enum STATES {
         NOTES, DELETED_NOTES
     }
@@ -372,8 +385,10 @@ public class MainActivity extends Activity{
 
     }
 
-
-
+    /**
+     * Initialize the note states displaying the notes created by the user
+     * @see NoteAdapter
+     */
     private void initNoteState(){
 
         noteList.clear();
@@ -475,6 +490,10 @@ public class MainActivity extends Activity{
         exitRecyclerSelectionMode();
     }
 
+    /**
+     * Start the Recycled notes status that displays the deleted notes.
+     * @see DeletedNoteAdapter
+     */
     private void initRecyclerState(){
 
         noteList.clear();
@@ -741,8 +760,9 @@ public class MainActivity extends Activity{
         super.onPause();
     }
 
-    // handle the main FAB
-    // and the animations
+    /**
+     * Manages the showing and hiding of the sub FABs.
+     */
     private void mainFABHandler(){
         if (!areFABsVisible){
 
@@ -763,8 +783,11 @@ public class MainActivity extends Activity{
         }
     }
 
-    // create and open a note
-    // in a new activity
+    /**
+     * Event triggered when clicking on the add text note FAB.
+     * Create a new TextNote and open it in the Text Note Activity
+     * @see TextNoteActivity
+     */
     private void textFABOnClickListener(){
         Intent i = new Intent(this, TextNoteActivity.class);
         i.putExtra(App.KEY_NOTE_ACTIVITY, App.NOTE_DEFAULT_UID);
@@ -772,8 +795,11 @@ public class MainActivity extends Activity{
         finish();
     }
 
-    // create and open a check list
-    // in a new activity
+    /**
+     * Event triggered when clicking on the add check list note FAB.
+     * Create a new CheckListNote and open it in the Check List Note Activity
+     * @see CheckListNoteActivity
+     */
     private void checkListFABOnClickListener(){
         Intent i = new Intent(this,CheckListNoteActivity.class);
         i.putExtra(App.KEY_NOTE_ACTIVITY, App.NOTE_DEFAULT_UID);
@@ -781,9 +807,11 @@ public class MainActivity extends Activity{
         finish();
     }
 
-    // open the note activity
-    // of a note at a given position
-    // in note list
+    /**
+     * Events for onClick listener of a note in the MyNote status
+     * @param position position of the note in the recycler
+     * @see NoteAdapter
+     */
     private void noteOnClickListener(int position){
 
         Intent i;
@@ -804,8 +832,10 @@ public class MainActivity extends Activity{
         }
     }
 
-    // collect the UIDs of the notes
-    // and save them to the shared preferences
+    /**
+     * Save the list of notes and save it to the database.
+     * @see DatabaseManager
+     */
     private void saveNoteList(){
 
         ArrayList<String> mNoteList = new ArrayList<>();
@@ -821,7 +851,12 @@ public class MainActivity extends Activity{
         }
     }
 
-    // build the color picker dialog
+    /**
+     * Allow the user to pick a color from a list
+     * @see FragmentPickColor
+     * @see Style
+     * @see NoteAdapter
+     */
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,theme);
@@ -848,7 +883,13 @@ public class MainActivity extends Activity{
 
     }
 
-    // build the color picker dialog
+    /**
+     * Allow the user to pick a color from a list
+     * @see FragmentPickColor
+     * @see Style
+     * @see NoteAdapter
+     * @param notePosition position of a note in the adapter
+     */
     private void buildColorPickDialog(int notePosition){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,noteList.get(notePosition).getColor());
@@ -871,6 +912,9 @@ public class MainActivity extends Activity{
 
     }
 
+    /**
+     * Change the mode to selection mode for MyNotes
+     */
     void enterSelectionMode(){
         toolbar.setVisibility(View.INVISIBLE);
         selectionToolbar.setVisibility(View.VISIBLE);
@@ -883,6 +927,9 @@ public class MainActivity extends Activity{
         mainFAB.hide();
     }
 
+    /**
+     * Exit selection mode in MyNotes
+     */
     void exitSelectionMode(){
         adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
         toolbar.setVisibility(View.VISIBLE);
@@ -892,6 +939,9 @@ public class MainActivity extends Activity{
         mainFAB.show();
     }
 
+    /**
+     * Change the mode to selection mode for Recycled Notes
+     */
     void enterRecyclerSelectionMode(){
         toolbar.setVisibility(View.INVISIBLE);
         recyclerSelectionToolbar.setVisibility(View.VISIBLE);
@@ -899,6 +949,9 @@ public class MainActivity extends Activity{
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Exit selection mode in Recycled Notes
+     */
     void exitRecyclerSelectionMode(){
         adapter.setSelectionMode(NoteAdapter.SelectionMode.NO_SELECTION);
         toolbar.setVisibility(View.VISIBLE);
@@ -907,18 +960,28 @@ public class MainActivity extends Activity{
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Start MyNotes
+     */
     void startMyNote(){
         saveNoteList();
         initNoteState();
         state = STATES.NOTES;
     }
 
+    /**
+     * Start Recycled Notes
+     */
     void startRecyclerBin(){
         saveNoteList();
         initRecyclerState();
         state = STATES.DELETED_NOTES;
     }
 
+    /**
+     * Open an about dialog
+     * @see DialogConfirm
+     */
     void about(){
         DialogConfirm dialog = new DialogConfirm(
                 theme,

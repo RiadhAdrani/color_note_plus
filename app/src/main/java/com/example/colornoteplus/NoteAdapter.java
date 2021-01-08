@@ -20,23 +20,70 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Adapter allowing the display of notes
+ * @see Note
+ */
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> implements Filterable {
 
     // display notes in a recycler view
 
+    /**
+     * Adapter selection modes
+     */
     enum SelectionMode{
+
+        /**
+         * Normal mode
+         */
         NO_SELECTION,
+
+        /**
+         * Allow selection of multiple items in the adapter
+         */
         SELECTION
     }
 
+    /**
+     * Selection mode
+     * @see SelectionMode
+     */
     private SelectionMode selectionMode = SelectionMode.NO_SELECTION;
-        public SelectionMode getSelectionMode() { return selectionMode; }
-        public void setSelectionMode(SelectionMode selectionMode) { this.selectionMode = selectionMode; }
 
+    /**
+     * getter for selection mode
+     * @return current selection mode
+     */
+    public SelectionMode getSelectionMode() { return selectionMode; }
+
+    /**
+     * setter for selection mode
+     * @param selectionMode new selection mode
+     */
+    public void setSelectionMode(SelectionMode selectionMode) { this.selectionMode = selectionMode; }
+
+    /**
+     * selected items
+     */
     private ArrayList<String> selectedItems = new ArrayList<>();
-        public ArrayList<String> getSelectedItems() { return selectedItems; }
-        public void setSelectedItems(ArrayList<String> selectedItems) { this.selectedItems = selectedItems; }
 
+    /**
+     * getter for selected items
+     * @return selected items
+     */
+    public ArrayList<String> getSelectedItems() { return selectedItems; }
+
+    /**
+     * setter for selected items
+     * @param selectedItems new selected items
+     */
+    public void setSelectedItems(ArrayList<String> selectedItems) { this.selectedItems = selectedItems; }
+
+    /**
+     * check if an item (note) is selected
+     * @param uid note uid in question
+     * @return true if it is selected, else false
+     */
     public boolean isSelected(String uid){
             for (String item : selectedItems){
                 if (item.equals(uid)){
@@ -47,24 +94,57 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             return false;
     }
 
+    /**
+     * content to be displayed
+     */
     private final ArrayList<Note<?>> list;
 
+    /**
+     * get the list of displayed content
+     * @return note list
+     */
     public ArrayList<Note<?>> getList() {
         return list;
     }
 
+    /**
+     * get the adapter listener
+     * @see DeletedNoteAdapter
+     * @return listener
+     */
     public OnItemClickListener getListener() {
         return listener;
     }
 
+    /**
+     * get adapter creation context
+     * @see DeletedNoteAdapter
+     * @return creation context
+     */
     public Context getContext() {
         return context;
     }
 
+    /**
+     * The full list of the content
+     */
     private final ArrayList<Note<?>> listFull;
+
+    /**
+     * adapter listener
+     */
     private OnItemClickListener listener;
+
+    /**
+     * Creation context
+     */
     private final Context context;
 
+    /**
+     * public constructor
+     * @param list a list of notes to be displayed
+     * @param context creation context
+     */
     public NoteAdapter(ArrayList<Note<?>> list, Context context){
 
         this.list = list;
@@ -72,8 +152,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         this.context = context;
     }
 
+    /**
+     * getter for the full list of items
+     * @return the full list
+     */
     public ArrayList<Note<?>> getListFull() {return listFull;}
 
+    /**
+     * allow the overriding of the listener
+     * @param listener new listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
@@ -168,6 +256,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
     }
 
+    /**
+     * remove and item from the list and update the adapter
+     * and send it to the recycled notes bin.
+     * @see DatabaseManager
+     * @param position index of the item to be removed
+     */
     public void removeItem(int position){
 
         String uid = list.get(position).getUid();
@@ -188,6 +282,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * remove and delete an item permanently from the storage.
+     * @see DatabaseManager
+     * @param position index of the item to be deleted
+     */
     public void deleteItemPermanently(int position){
 
         String uid = list.get(position).getUid();
@@ -206,6 +305,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
     }
 
+    /**
+     * Restore an item from the recycled notes bin into my notes.
+     * @see DatabaseManager
+     * @param position index of the item to be restored
+     */
     public void restoreItem(int position){
         String uid = list.get(position).getUid();
 
@@ -225,6 +329,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * change the color of an item.
+     * @see Style
+     * @see Note
+     * @param position note index
+     * @param newColor override with new color
+     */
     public void switchColor(int position, int newColor){
 
         String uid = list.get(position).getUid();
@@ -242,30 +353,50 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * Sort notes by title
+     * @param isDescending indicate if sorting is descending or not
+     */
     public void sortByTitle(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getTitle().compareTo(i2.getTitle()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort notes by creation date
+     * @param isDescending indicate if sorting is descending or not
+     */
     public void sortByCreation(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getCreationDate().compareTo(i2.getCreationDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort notes by modification date
+     * @param isDescending indicate if sorting is descending or not
+     */
     public void sortByModification(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getModificationDate().compareTo(i2.getModificationDate()));
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Sort notes by their color index
+     * @param isDescending indicate if sorting is descending or not
+     */
     public void sortByColor(boolean isDescending){
         Collections.sort(list, (i1, i2) -> i1.getColor()-i2.getColor());
         if (isDescending) Collections.reverse(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * Select and deselect items depending on their status
+     * @param position selected item position
+     */
     public void selectDeselectItem(int position){
 
         if (!isSelected(list.get(position).getUid())){
@@ -295,14 +426,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             } else {
                 String filterPattern = charSequence.toString().toLowerCase();
                 for (Note<?> item: listFull){
-                    if (item.getTitle().toLowerCase().contains(filterPattern)){
+                    if (item.containsString(filterPattern))
                         filteredList.add(item);
-                    }
-                    else {
-                        if (item.containsString(filterPattern))
-                            filteredList.add(item);
-                    }
-
                 }
             }
 

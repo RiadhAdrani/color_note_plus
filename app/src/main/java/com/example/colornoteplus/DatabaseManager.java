@@ -10,15 +10,34 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Class handling data saving and retrieval to and from the local database.
+ * @see App
+ */
 public abstract class DatabaseManager {
 
+    /**
+     * Key of the shared preference data containing the value of the last modification time of
+     * the local database
+     */
     public static final String LAST_UPDATE = App.KEY_DATABASE_LAST_UPDATE;
 
+    /**
+     * retrieve the date of the last modification of the local database as a Long
+     * @see App
+     * @param context context of calling
+     * @return date as Long
+     */
     public static Long getDatabaseLastModificationDate(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(LAST_UPDATE,0L);
     }
 
+    /**
+     * update the date of the last modification with the current exact time as Long
+     * @see App
+     * @param context context of calling
+     */
     public static void setDatabaseLastModificationDate(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -26,6 +45,12 @@ public abstract class DatabaseManager {
         editor.apply();
     }
 
+    /**
+     * update the date of the last modification
+     * @see App
+     * @param context context of calling
+     * @param date new date
+     */
     public static void setDatabaseLastModificationDate(Context context, Long date){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -33,6 +58,12 @@ public abstract class DatabaseManager {
         editor.apply();
     }
 
+    /**
+     * delete an existing note from the local database
+     * @see App
+     * @param key uid of the note
+     * @param context context of calling
+     */
     public static void DeleteNote(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -41,6 +72,13 @@ public abstract class DatabaseManager {
         setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * save a text note
+     * @see App
+     * @see TextNote
+     * @param note text note to be saved
+     * @param context context of calling
+     */
     public static void SaveTextNote(TextNote note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,6 +89,14 @@ public abstract class DatabaseManager {
         setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * load a text note
+     * @see App
+     * @see TextNote
+     * @param uid note uid
+     * @param context context of calling
+     * @return the wanted text note
+     */
     public static TextNote LoadTextNote(String uid, Context context){
 
         TextNote note;
@@ -72,6 +118,13 @@ public abstract class DatabaseManager {
             return note;
     }
 
+    /**
+     * save a check list note
+     * @see App
+     * @see CheckListNote
+     * @param note note to be saved
+     * @param context calling context
+     */
     public static void SaveCheckListNote(CheckListNote note, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -82,6 +135,13 @@ public abstract class DatabaseManager {
         setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * load a check list note
+     * @see App
+     * @param uid note id
+     * @param context calling context
+     * @return return check list note
+     */
     public static CheckListNote LoadCheckListNote(String uid, Context context){
 
         CheckListNote note = null;
@@ -109,6 +169,13 @@ public abstract class DatabaseManager {
             return note;
     }
 
+    /**
+     * Save a string array to the database
+     * @see App
+     * @param list list to be saved
+     * @param key list id
+     * @param context calling context
+     */
     public static void SaveStringArray(ArrayList<String> list, String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -119,6 +186,13 @@ public abstract class DatabaseManager {
         setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * Load a string array from the database
+     * @see App
+     * @param uid array key
+     * @param context calling context
+     * @return array list of strings
+     */
     public static ArrayList<String> LoadStringArray(String uid, Context context){
 
         ArrayList<String> list;
@@ -136,11 +210,25 @@ public abstract class DatabaseManager {
             return list;
     }
 
+    /**
+     * Load an int from the local database
+     * @see App
+     * @param key int id
+     * @param context calling context
+     * @return an int
+     */
     public static int LoadInteger(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key,0);
     }
 
+    /**
+     * Save a boolean in the database
+     * @see App
+     * @param bool value to be saved
+     * @param key value id
+     * @param context calling context
+     */
     public static void SaveBoolean(boolean bool, String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -148,11 +236,25 @@ public abstract class DatabaseManager {
         editor.apply();
     }
 
+    /**
+     * @deprecated
+     * @see App
+     * @param key value id
+     * @param context calling context
+     * @return return boolean
+     */
     public static boolean LoadBoolean(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(key,false);
     }
 
+    /**
+     * Save an integer to the database
+     * @see App
+     * @param integer value to be saved
+     * @param key value id
+     * @param context calling context
+     */
     public static void SaveInteger(int integer, String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -160,6 +262,13 @@ public abstract class DatabaseManager {
         editor.apply();
     }
 
+    /**
+     * get all the notes in the database
+     * @see App
+     * @see Note
+     * @param context calling context
+     * @return array list of all the notes
+     */
     public static ArrayList<Note<?>> LoadAllNotes(Context context){
 
         ArrayList<Note<?>> notes = new ArrayList<>();
@@ -174,6 +283,11 @@ public abstract class DatabaseManager {
         return notes;
     }
 
+    /**
+     * erase all data from the database
+     * @see App
+     * @param context calling context
+     */
     public static void wipeDatabase(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();

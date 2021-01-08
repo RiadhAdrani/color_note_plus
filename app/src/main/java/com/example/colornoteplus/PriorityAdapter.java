@@ -11,10 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+/**
+ * Display check list item priority
+ */
 public class PriorityAdapter extends ArrayAdapter<CheckListItem.PRIORITY> {
 
+    /**
+     * Adapter color
+     */
     private final int color;
 
+    /**
+     * Public constructor
+     * @param context creation context
+     * @param list list of priorities
+     * @param color color theme
+     */
     public PriorityAdapter(Context context, CheckListItem.PRIORITY[] list, int color){
         super(context,0,list);
         this.color = color;
@@ -31,6 +43,13 @@ public class PriorityAdapter extends ArrayAdapter<CheckListItem.PRIORITY> {
         return initView(position, convertView, parent);
     }
 
+    /**
+     * Initialize the adapter.
+     * @param position position
+     * @param convertView view
+     * @param parent parent
+     * @return the view
+     */
     private View initView(int position,View convertView, ViewGroup parent){
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(

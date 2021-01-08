@@ -8,6 +8,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Splash screen allowing the synchronization of data between the local database
+ * and the Firebase Firestore database.
+ * @see Sync
+ * @see DatabaseManager
+ */
 public class SplashScreen extends AppCompatActivity {
 
     @Override
@@ -39,13 +45,13 @@ public class SplashScreen extends AppCompatActivity {
 
                 Sync.performSync(getApplicationContext(),value,localSync);
 
-                delayedStart(1000L);
+                delayedStart(5L);
 
             }
             @Override
             public void onFailure() {
                 Log.d("SYNC_NOTES","Unable to get Data");
-                delayedStart(500L);
+                delayedStart(10L);
             }
         });
 
@@ -58,6 +64,11 @@ public class SplashScreen extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Start the main activity after a delay.
+     * @param delay delay time
+     * @see MainActivity
+     */
     private void delayedStart(Long delay){
         Handler handler=new Handler();
         handler.postDelayed(() -> {

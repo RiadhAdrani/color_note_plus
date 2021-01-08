@@ -8,6 +8,13 @@ import com.muddzdev.styleabletoast.StyleableToast;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Contains necessary data and setting values for the app to function correctly.
+ * @see User
+ * @see Style
+ * @see DatabaseManager
+ * @see Sync
+ */
 public abstract class App {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -73,6 +80,17 @@ public abstract class App {
     //                                          CUSTOM METHODS
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Display a customized styleable Toast.
+     * @see StyleableToast
+     * @param context context in which the app is created
+     * @param text text to be displayed
+     * @param textColor color of the text
+     * @param bgColor background color of the toast
+     * @param strokeWidth stroke of the toast
+     * @param strokeColor stroke color
+     * @param isLong display toast for a long time or not
+     */
     public static void StyleableToast(Context context, String text, int textColor, int bgColor, int strokeWidth, int strokeColor,boolean isLong){
 
         new StyleableToast
@@ -85,6 +103,15 @@ public abstract class App {
                 .show();
     }
 
+    /**
+     * @deprecated
+     * Convert a string to the appropriate priority
+     * @see CheckListItem.PRIORITY
+     * @see CheckListItem
+     * @param context the context in which the function is called
+     * @param string string to be converted
+     * @return priority
+     */
     public static CheckListItem.PRIORITY stringToPriority(Context context, String string){
 
         final String
@@ -101,6 +128,12 @@ public abstract class App {
         return CheckListItem.PRIORITY.MEDIUM;
     }
 
+    /**
+     * Return if a given note exists by UID in a given note list.
+     * @param note given note
+     * @param list given list
+     * @return true if uid exists, false otherwise
+     */
     public static boolean isNoteByUidInList(Note<?> note, ArrayList<Note<?>> list){
 
         for (Note<?> n : list){
@@ -111,6 +144,13 @@ public abstract class App {
 
     }
 
+    /**
+     * @deprecated
+     * return the index of a note (if it exists) by its id
+     * @param note given note
+     * @param list given list
+     * @return index of the note in question
+     */
     public static int getNoteIndexByUidInList(Note<?> note, ArrayList<Note<?>> list){
 
         if (!isNoteByUidInList(note,list)) return -1;
@@ -122,6 +162,11 @@ public abstract class App {
         return -1;
     }
 
+    /**
+     * Return a list of notes as an Array list of Strings of their UID
+     * @param list array list of notes
+     * @return Array List of Strings
+     */
     public static ArrayList<String> getNotesAsUIDFromList(ArrayList<Note<?>> list){
 
         ArrayList<String> uidList = new ArrayList<>();
@@ -133,6 +178,12 @@ public abstract class App {
         return uidList;
     }
 
+    /**
+     * return the result of the comparison of two Array Lists of strings
+     * @param listOne first array list
+     * @param listTwo second array list
+     * @return the result of comparison of listOne & listTwo
+     */
     public static boolean stringArrayEqualStringArray(ArrayList<String> listOne, ArrayList<String> listTwo){
 
         if (listOne.size() != listTwo.size()) return false;

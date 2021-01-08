@@ -21,6 +21,10 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Display Text Note in the activity
+ * @see TextNote
+ */
 public class TextNoteActivity extends Activity {
 
     // note editable views
@@ -105,8 +109,9 @@ public class TextNoteActivity extends Activity {
     }
 
 
-
-    // get note from the intent
+    /**
+     * Return Text Note from the last intent.
+     */
     private void getNoteFromIntent(){
 
         if (!getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY).equals(App.NOTE_DEFAULT_UID)){
@@ -116,7 +121,9 @@ public class TextNoteActivity extends Activity {
         }
     }
 
-    // Method used to automatically configure color theme of the activity
+    /**
+     * Initialize activity theme
+     */
     private void initTheme(){
 
         setTheme(Style.getTheme(getApplicationContext(),note.getColor()));
@@ -128,8 +135,10 @@ public class TextNoteActivity extends Activity {
         textUndoRedoHandler.pushUndo(contentView.getText().toString().trim());
     }
 
-    // switch theme when the user
-    // click on a new color
+    /**
+     * Switch activity and note color themes
+     * @param id new color theme
+     */
     private void switchTheme(int id){
 
         String titleTemp = titleView.getText().toString().trim();
@@ -147,7 +156,9 @@ public class TextNoteActivity extends Activity {
 
     }
 
-    // switch colors and themes
+    /**
+     * Change views coloring to the current color theme
+     */
     private void changeViewsColor(){
 
         toolbar = findViewById(R.id.toolbar);
@@ -251,9 +262,11 @@ public class TextNoteActivity extends Activity {
 
     }
 
-    // check if the list is old or not
-    // if old return true
-    // else   return false
+    /**
+     * Check whether the note is newly created or not
+     * @return true if it exists in the local database, else false
+     * @see DatabaseManager
+     */
     private boolean isNoteOld(){
         for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
@@ -261,7 +274,11 @@ public class TextNoteActivity extends Activity {
         return false;
     }
 
-    // build the color picker dialog
+    /**
+     * Allow the user to pick a color from a list
+     * @see FragmentPickColor
+     * @see Style
+     */
     private void buildColorPickDialog(){
 
         FragmentPickColor fragment = new FragmentPickColor(new ColorAdapter(),5,note.getColor());
@@ -287,8 +304,10 @@ public class TextNoteActivity extends Activity {
 
     }
 
-    // save note when the user click on the save button
-    // in the toolbar
+    /**
+     * Save the current text note
+     * @return true if the operation succeeded, false for failure
+     */
     private boolean saveTextNote(){
 
         if (titleView.getText().toString().trim().length() < App.NOTE_TITLE_MINIMUM_LENGTH){
@@ -338,7 +357,11 @@ public class TextNoteActivity extends Activity {
 
     }
 
-    // update Undo stack when text changes
+    /**
+     * perform update for the undo/redo stacks depending on the last character, deleted or added
+     * @param lastCharacter last character deleted/added
+     * @see TextUndoRedo
+     */
     private void myUpdateUndo(char lastCharacter){
 
         if (deletedSpecialCharacter){
@@ -360,8 +383,11 @@ public class TextNoteActivity extends Activity {
         Log.d("UNDO_REDO","Elements in Undo Stack: "+textUndoRedoHandler.getUndoStack().size());
     }
 
-    // perform undo action
-    // when the button is clicked
+    /**
+     * Undo last action made for the content text
+     * @return true
+     * @see TextUndoRedo
+     */
     private boolean undo(){
 
         if (!textUndoRedoHandler.getUndoStack().empty()) {
@@ -396,8 +422,11 @@ public class TextNoteActivity extends Activity {
         return true;
     }
 
-    // perform redo action
-    // when the button is clicked
+    /**
+     * Redo the previously undone action
+     * @return true
+     * @see TextUndoRedo
+     */
     private boolean redo(){
 
 
@@ -420,13 +449,19 @@ public class TextNoteActivity extends Activity {
         return true;
     }
 
-    // return to main activity
+    /**
+     * Return to main activity
+     * @see MainActivity
+     */
     private void startMainActivity(){
         Intent i = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(i);
         finish();
     }
 
+    /**
+     * Display an alert in case there is some unsaved modifications
+     */
     private void unsavedChangesAlert(){
         DialogConfirm dialogConfirm = new DialogConfirm(
                 note.getColor(),
@@ -452,7 +487,10 @@ public class TextNoteActivity extends Activity {
         dialogConfirm.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
     }
 
-    private boolean onUpButtonPressed(){
+    /**
+     * Action executed upon pressing up button from the toolbar
+     */
+    private void onUpButtonPressed(){
 
         // save the note
         note.setTitle(titleView.getText().toString().trim());
@@ -460,11 +498,10 @@ public class TextNoteActivity extends Activity {
 
         if (note.hasChanged(getApplicationContext())){
             unsavedChangesAlert();
-            return true;
+            return;
         }
 
         startMainActivity();
-        return true;
     }
 
     @Override

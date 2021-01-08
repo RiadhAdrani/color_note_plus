@@ -7,8 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Manages Style in the app.
+ */
 public abstract class Style extends AppCompatActivity {
 
+    /**
+     * List of available themes.
+     * @see ColorTheme
+     */
     private static final ArrayList<ColorTheme> themes = new ArrayList<>(Arrays.asList(
 
             // Default Color : Orange Yellow
@@ -160,14 +167,33 @@ public abstract class Style extends AppCompatActivity {
             )
     ));
 
+    /**
+     * getter for available themes
+     * @return themes
+     */
     public static ArrayList<ColorTheme> getThemes(){
         return themes;
     }
 
+    /**
+     * Drawable background types
+     */
     public enum BACKGROUND { LIGHT, NORMAL, DARK }
 
+    /**
+     * Color background types
+     */
     public enum COLORS { LIGHTER, LIGHT, NORMAL, DARK, DARKER, BLACK, WHITE }
 
+    /**
+     * @deprecated
+     * Return a custom background drawable depending on the app lighting theme.
+     * @param context calling context
+     * @param index color theme index
+     * @param lightThemeBackground drawable for light theme
+     * @param darkThemeBackground drawable for dark theme
+     * @return drawable id
+     */
     public static int getCustomBackground(Context context, int index, BACKGROUND lightThemeBackground, BACKGROUND darkThemeBackground){
 
         if (getAppTheme(context) == 0){
@@ -200,12 +226,24 @@ public abstract class Style extends AppCompatActivity {
         return themes.get(0).getDrawable();
     }
 
+    /**
+     * getter for the default background
+     * @param context calling context
+     * @param index color theme index
+     * @return drawable id
+     */
     public static int getBackground(Context context, int index){
 
             return index > 0 && index < themes.size() ?
                     themes.get(index).getDrawable() : themes.get(0).getDrawable();
     }
 
+    /**
+     * getter for the secondary background drawable.
+     * @param context calling context
+     * @param index color theme index
+     * @return light drawable (light theme), dark drawable (dark theme)
+     */
     public static int getBackgroundSecondary(Context context,int index){
 
         if (getAppTheme(context) == 0)
@@ -216,6 +254,12 @@ public abstract class Style extends AppCompatActivity {
                     themes.get(index).getDrawableDark() : themes.get(0).getDrawableDark();
     }
 
+    /**
+     * getter for the primary background drawable.
+     * @param context calling context
+     * @param index color theme index
+     * @return  dark drawable (dark theme), light drawable (light theme)
+     */
     public static int getBackgroundPrimary(Context context,int index){
         if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
@@ -226,6 +270,13 @@ public abstract class Style extends AppCompatActivity {
 
     }
 
+    /**
+     * getter for the current app theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return theme id (dark/light)
+     * @see R.style
+     */
     public static int getTheme(Context context, int index){
 
         if (getAppTheme(context) == 0){
@@ -237,6 +288,14 @@ public abstract class Style extends AppCompatActivity {
                 themes.get(index).getThemeDark() : themes.get(0).getThemeDark();
     }
 
+    /**
+     * Return a custom color depending on the app lighting theme
+     * @param context calling context
+     * @param index color theme index
+     * @param lightThemeColor color for light theme
+     * @param darkThemeColor color for dark theme
+     * @return color id
+     */
     public static int getCustomColor(Context context, int index, COLORS lightThemeColor, COLORS darkThemeColor){
 
         if (getAppTheme(context) == 0){
@@ -290,6 +349,12 @@ public abstract class Style extends AppCompatActivity {
         return themes.get(0).getColor();
     }
 
+    /**
+     * return the main color of the theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return color id
+     */
     public static int getColorMain(Context context, int index){
 
             return index > 0 && index < themes.size() ?
@@ -297,6 +362,12 @@ public abstract class Style extends AppCompatActivity {
 
     }
 
+    /**
+     * return the secondary color of the theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return light color for light theme, dark color for dark theme
+     */
     public static int getColorSecondary(Context context, int index){
         if (getAppTheme(context) == 0)
             return index > 0 && index < themes.size() ?
@@ -307,6 +378,13 @@ public abstract class Style extends AppCompatActivity {
 
     }
 
+    /**
+     * @deprecated
+     * return the variation of the secondary color of the theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return lighter color for light theme, darker color for dark theme
+     */
     public static int getColorSecondaryAccent(Context context, int index){
 
         if (getAppTheme(context) == 0)
@@ -317,6 +395,12 @@ public abstract class Style extends AppCompatActivity {
                     themes.get(index).getColorDarker() : themes.get(0).getColorDarker();
     }
 
+    /**
+     * return the primary color of the theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return dark color for light theme, light color for dark theme
+     */
     public static int getColorPrimary(Context context, int index){
 
         if (getAppTheme(context) == 0)
@@ -328,6 +412,12 @@ public abstract class Style extends AppCompatActivity {
                     themes.get(index).getColorLight() : themes.get(0).getColorLight();
     }
 
+    /**
+     * return a variation of the primary color of the theme.
+     * @param context calling context
+     * @param index color theme index
+     * @return darker color for light theme, lighter color for dark theme
+     */
     public static int getColorPrimaryAccent(Context context, int index){
 
         if (getAppTheme(context) == 0)
@@ -339,6 +429,11 @@ public abstract class Style extends AppCompatActivity {
                     themes.get(index).getColorLighter() : themes.get(0).getColorLighter();
     }
 
+    /**
+     * return a neutral color (black and white) depending on the current lighting theme
+     * @param context calling context
+     * @return white if light theme, darkest_grey for dark theme
+     */
     public static int getNeutralColor(Context context){
 
         if (getAppTheme(context) == 0)
@@ -348,6 +443,11 @@ public abstract class Style extends AppCompatActivity {
 
     }
 
+    /**
+     * return a neutral color (black and white) depending on the current lighting theme
+     * @param context calling context
+     * @return darkest_grey if light theme, white for dark theme
+     */
     public static int getNeutralTextColor(Context context){
 
         if (getAppTheme(context) == 0)
@@ -357,19 +457,40 @@ public abstract class Style extends AppCompatActivity {
 
     }
 
+    /**
+     * get app lighting theme from the local database
+     * @param context calling context
+     * @return current app theme
+     */
     public static int getAppTheme(Context context){
         return DatabaseManager.LoadInteger(App.KEY_LIGHT_THEME,context);
     }
 
+    /**
+     * set and save a new lighting theme in the local database.
+     * 0 => Light theme, 1 => Dark Theme
+     * @param theme new theme
+     * @param context calling context
+     */
     public static void setAppTheme(int theme, Context context){
         DatabaseManager.SaveInteger(theme, App.KEY_LIGHT_THEME,context);
         DatabaseManager.setDatabaseLastModificationDate(context);
     }
 
+    /**
+     * get the app theme from the local database
+     * @param context calling context
+     * @return current color theme
+     */
     public static int getAppColor(Context context){
         return DatabaseManager.LoadInteger(App.KEY_APP_COLOR,context);
     }
 
+    /**
+     * set and save a new color theme in the local database.
+     * @param theme new color theme
+     * @param context calling context
+     */
     public static void setAppColor(int theme, Context context){
         DatabaseManager.SaveInteger(theme, App.KEY_APP_COLOR,context);
         DatabaseManager.setDatabaseLastModificationDate(context);

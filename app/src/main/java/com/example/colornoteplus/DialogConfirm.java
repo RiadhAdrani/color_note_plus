@@ -14,6 +14,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import java.util.Objects;
 
+/**
+ * Display a dialog fragment box offering the user to make an action.
+ * From one (1 : Cancel/Ok) up to three (3) buttons could be used and customized
+ * to set the better options.
+ * @see OnConfirmClickListener
+ */
 public class DialogConfirm extends AppCompatDialogFragment {
 
     private final int color;
@@ -22,11 +28,31 @@ public class DialogConfirm extends AppCompatDialogFragment {
     private final int buttonNumbers;
     private final OnConfirmClickListener listener;
 
+    /**
+     * Allow the overriding of the second and third options.
+     * @see DialogConfirm
+     */
     public interface OnConfirmClickListener{
+
+        /**
+         * Primary action for the confirm dialog
+         * @see DialogConfirm
+         */
         void OnPrimaryAction();
+
+        /**
+         * Secondary action for the confirm dialog
+         */
         void OnSecondaryAction();
     }
 
+    /**
+     * Public Constructor (3 Buttons)
+     * @param color app theme
+     * @param icon id of the icon to be displayed , set to -1 for none
+     * @param text text to be displayed
+     * @param listener override action for button 1 and 2
+     */
     public DialogConfirm(int color, int icon, String text, OnConfirmClickListener listener) {
         this.color = color;
         this.icon = icon;
@@ -35,6 +61,14 @@ public class DialogConfirm extends AppCompatDialogFragment {
         this.listener = listener;
     }
 
+    /**
+     * Public Constructor (Custom button number)
+     * @param color app theme
+     * @param icon id of the icon to be displayed, -1 for none
+     * @param text text to be displayed
+     * @param buttonNumbers number of buttons, 1, 2 or 3
+     * @param listener override the action of the buttons
+     */
     public DialogConfirm(int color, int icon, String text, int buttonNumbers,OnConfirmClickListener listener) {
         this.color = color;
         this.icon = icon;

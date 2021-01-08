@@ -17,6 +17,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import java.util.Objects;
 
+/**
+ * Fragment allowing the user to add a checklist item in the check list note activity
+ * @see CheckListNote
+ * @see CheckListNoteActivity
+ */
 public class FragmentAddCheckListItem extends AppCompatDialogFragment {
 
     private final int color;
@@ -24,10 +29,19 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
     private View dialog;
     private CheckListItem item;
 
+    /**
+     * Public constructor
+     * @param color theme of the activity
+     */
     public FragmentAddCheckListItem(int color){
         this.color = color;
     }
 
+    /**
+     * Override the onClick listener
+     * @see OnClickListener
+     * @param listener new listener
+     */
     public void setOnClickListener(OnClickListener listener){
         this.listener = listener;
     }
@@ -94,21 +108,39 @@ public class FragmentAddCheckListItem extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Allow to customize the action made in the fragment
+     * @see FragmentAddCheckListItem
+     */
     public interface OnClickListener{
+
         void onConfirmClickListener();
         void onSetDueTimeClickListener();
     }
 
+    /**
+     * Change the due time in the fragment
+     * @param text new text
+     */
     public void setDueTimeText(String text){
         TextView view = dialog.findViewById(R.id.fragment_item_due_time_text);
         view.setText(text);
     }
 
+    /**
+     * Get the input text from the fragment
+     * @return input text from the fragment
+     */
     public String getInputText(){
         EditText view = dialog.findViewById(R.id.fragment_item_text);
         return view.getText().toString().trim();
     }
 
+    /**
+     * return the current item created in the fragment
+     * @see CheckListItem
+     * @return a check list item
+     */
     public CheckListItem getItem(){
         return item;
     }
