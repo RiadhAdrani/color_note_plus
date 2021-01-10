@@ -48,6 +48,12 @@
     <string name="sort_by_creation">By Creation</string>
     <string name="sort_by_modification">By Modification</string>
 
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="no_account">No Account? Sign up here!</string>
+    <string name="username">User Email</string>
+    <string name="password">Password</string>
+
     <string name="low_priority">Unimportant</string>
     <string name="medium_priority">Normal</string>
     <string name="high_priority">Important</string>
