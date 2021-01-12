@@ -3,6 +3,7 @@ package com.example.colornoteplus;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -10,6 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+/**
+ * Allow user to login to his account
+ * @see App
+ * @see Sync
+ * @see DatabaseManager
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -20,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize activity layout and views
+     * Initialize activity layout and views.
+     * @see Style
      */
     void initActivity(){
 
@@ -34,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.password_field);
         Button loginButton = findViewById(R.id.login_button);
         TextView signUpText = findViewById(R.id.sign_up_text);
+        TextView rememberMe = findViewById(R.id.remember_me_label);
+        CheckBox rememberMeBox = findViewById(R.id.remember_me_box);
 
         background.setBackgroundColor(getResources().getColor(Style.getNeutralColor(getApplicationContext())));
 
@@ -97,6 +107,14 @@ public class LoginActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(),SplashScreen.class);
             startActivity(i);
         });
+
+        rememberMe.setTextColor(
+                getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))
+        );
+
+        rememberMeBox.setChecked(DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,getApplicationContext()));
+        rememberMeBox.setOnCheckedChangeListener((buttonView, isChecked) ->
+                DatabaseManager.SaveBoolean(isChecked,App.KEY_REMEMBER_ME,getApplicationContext()));
 
         signUpText.setTextColor(
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))

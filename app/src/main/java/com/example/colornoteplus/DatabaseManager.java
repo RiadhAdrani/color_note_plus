@@ -237,7 +237,6 @@ public abstract class DatabaseManager {
     }
 
     /**
-     * @deprecated
      * @see App
      * @param key value id
      * @param context calling context
@@ -246,6 +245,31 @@ public abstract class DatabaseManager {
     public static boolean LoadBoolean(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(key,false);
+    }
+
+    /**
+     * Save a boolean in the database
+     * @see App
+     * @param string value to be saved
+     * @param key value id
+     * @param context calling context
+     */
+    public static void SaveString(String string, String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key,string);
+        editor.apply();
+    }
+
+    /**
+     * @see App
+     * @param key value id
+     * @param context calling context
+     * @return return String
+     */
+    public static String LoadString(String key, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key,"Error...");
     }
 
     /**
@@ -289,8 +313,15 @@ public abstract class DatabaseManager {
      * @param context calling context
      */
     public static void wipeDatabase(Context context){
+
+        String currentUser = User.getCurrentUser(context).getUsername();
+        boolean rememberMe = DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,context);
+
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
+
+        DatabaseManager.SaveString(currentUser,App.KEY_CURRENT_USER,context);
+        DatabaseManager.SaveBoolean(rememberMe,App.KEY_REMEMBER_ME,context);
     }
 
 }

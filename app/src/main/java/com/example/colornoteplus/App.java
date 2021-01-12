@@ -29,6 +29,9 @@ public abstract class App {
     public final static String KEY_DATABASE_LAST_UPDATE = "DATABASE_LAST_UPDATE";
     public final static String KEY_LIGHT_THEME = "LIGHT_THEME";
     public final static String KEY_APP_COLOR = "APP_COLOR";
+    public final static String KEY_CURRENT_USER = "CURRENT_USER";
+    public final static String KEY_REMEMBER_ME = "REMEMBER_ME";
+    public final static String KEY_PATCH_NOTES = "PATCH_NOTES";
     public final static String TAG_FRAGMENT_COLOR_PICK = "PICK_COLOR";
     public final static String TAG_FRAGMENT_ADD_CHECK_LIST_ITEM = "ADD_CHECK_LIST_ITEM";
     public final static String TAG_FRAGMENT_DATE_PICKER = "DATE_PICKER";

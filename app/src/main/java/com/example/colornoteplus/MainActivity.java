@@ -343,6 +343,7 @@ public class MainActivity extends Activity{
                     break;
 
                 case updates:
+                    updateNotes();
                     break;
             }
 
@@ -1000,6 +1001,25 @@ public class MainActivity extends Activity{
                     }
                 });
         dialog.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
+    }
+
+    /**
+     * Display newest features about the app, problem fixing and the current bugs and problems
+     * @see DatabaseManager
+     * @see DialogConfirm
+     */
+    void updateNotes(){
+
+        String notes = DatabaseManager.LoadString(App.KEY_PATCH_NOTES,getApplicationContext());
+
+        DialogConfirm dialog = new DialogConfirm(
+                theme,
+                R.drawable.ic_color_noter,
+                notes,
+                1,
+                null
+        );
+        dialog.show(getSupportFragmentManager(),App.TAG_DIALOG_CONFIRM);
     }
 
 }

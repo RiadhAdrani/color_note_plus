@@ -51,6 +51,7 @@
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="no_account">No Account? Sign up here!</string>
+    <string name="remember_me">Remember Me</string>
     <string name="username">User Email</string>
     <string name="password">Password</string>
 

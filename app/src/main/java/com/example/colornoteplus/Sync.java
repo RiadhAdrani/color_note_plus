@@ -5,6 +5,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,6 +32,7 @@ abstract public class Sync {
     private static final String USER_INFO = App.DATABASE_USER_INFO;
     private static final String USER_NOTES = App.DATABASE_USER_NOTES;
     private static final String INFO = App.DATABASE_DATA_INFO;
+    private static final String INFO_DB = App.DATABASE_DATA_UPDATE_NOTES;
     private static final String INFO_APP_VERSION = App.DATABASE_DATA_APP_VERSION;
     private static final String INFO_LAST_SYNC = App.DATABASE_USER_INFO_LAST_SYNC;
     private static final String INFO_APP_COLOR = App.DATABASE_USER_COLOR;
@@ -95,6 +100,23 @@ abstract public class Sync {
          * @param value retrieved data
          */
         void onSuccess(int value);
+
+        /**
+         * executes on failure
+         */
+        void onFailure();
+    }
+
+    /**
+     * Interface for Stringvalue retrieval
+     */
+    public interface OnStringRetrieval{
+
+        /**
+         * Executes on success
+         * @param value retrieved data
+         */
+        void onSuccess(String value);
 
         /**
          * executes on failure
@@ -557,6 +579,31 @@ abstract public class Sync {
             setModificationDate(context, DatabaseManager.getDatabaseLastModificationDate(context));
 
         }
+
+    }
+
+    /**
+     * Receive and store update notes from the firebase firestore database.
+     * @param context calling context
+     * @param onStringRetrieval override on success and on failure actions.
+     * @see DatabaseManager
+     * @see App
+     */
+    static void getUpdateNotes(Context context, OnStringRetrieval onStringRetrieval){
+
+        DB.collection(INFO).document(INFO_DB)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    String patchNotes = snapshot.getString(INFO_DB);
+
+                    DatabaseManager.SaveString(patchNotes,App.KEY_PATCH_NOTES,context);
+
+                    if (onStringRetrieval != null) onStringRetrieval.onSuccess(patchNotes);
+                })
+                .addOnFailureListener(e -> {
+                    if (onStringRetrieval != null) onStringRetrieval.onFailure();
+                });
 
     }
 
