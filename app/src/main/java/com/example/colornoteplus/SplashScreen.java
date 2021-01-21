@@ -55,7 +55,7 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-        Sync.getUpdateNotes(this,null);
+        Sync.getUpdateNotes(this);
 
     }
 

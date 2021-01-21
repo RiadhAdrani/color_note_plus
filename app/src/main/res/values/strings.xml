@@ -37,6 +37,9 @@
     <string name="sync_success">Synchronization Success</string>
     <string name="sync_unable">Unable to sync !</string>
     <string name="sync_auto">Auto Sync</string>
+    <string name="log_out">Log out</string>
+    <string name="error">Error</string>
+    <string name="network_error">Network Error</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>

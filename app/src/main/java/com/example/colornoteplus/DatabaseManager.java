@@ -269,7 +269,7 @@ public abstract class DatabaseManager {
      */
     public static String LoadString(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getString(key,"Error...");
+        return sharedPreferences.getString(key,context.getString(R.string.error));
     }
 
     /**
@@ -314,7 +314,7 @@ public abstract class DatabaseManager {
      */
     public static void wipeDatabase(Context context){
 
-        String currentUser = User.getCurrentUser(context).getUsername();
+        String currentUser = User.getCurrentUsername(context);
         boolean rememberMe = DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,context);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);

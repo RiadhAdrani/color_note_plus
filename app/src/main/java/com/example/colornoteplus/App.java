@@ -58,12 +58,21 @@ public abstract class App {
     // -----------------------------------------------------------------------------------------------------------------
     //                                          FIREBASE DATABASE KEYS
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @deprecated
+     * */
     public final static String DATABASE_URL = "https://color-noter-default-rtdb.europe-west1.firebasedatabase.app/";
+
+    public final static String TEST_USER = "test_user";
     public final static String DATABASE_DATA_INFO = "db_info";
     public final static String DATABASE_DATA_APP_VERSION = "app_version";
     public final static String DATABASE_DATA_UPDATE_NOTES = "update_notes";
     public final static String DATABASE_DATA_USERS = "users";
     public final static String DATABASE_USER_INFO = "user_info";
+    public final static String DATABASE_USER_ID = "id";
+    public final static String DATABASE_USER_PASSWORD = "password";
+    public final static String DATABASE_USER_EMAIL = "email";
     public final static String DATABASE_USER_COLOR = "user_color";
     public final static String DATABASE_USER_THEME = "user_theme";
     public final static String DATABASE_USER_INFO_LAST_SYNC = "last_sync";

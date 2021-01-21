@@ -118,10 +118,10 @@ public class SettingsActivity extends Activity {
         ));
 
         SwitchCompat autoSyncSwitch = findViewById(R.id.settings_auto_sync_switch);
-        autoSyncSwitch.setChecked(Sync.getAutoSync(getApplicationContext()));
+        autoSyncSwitch.setChecked(Sync.getAutoSync());
         autoSyncSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Sync.setAutoSync(getApplicationContext(), isChecked);
-            Log.d("AUTO_SYNC", "Auto Sync is :" + Sync.getAutoSync(getApplicationContext()));
+            Log.d("AUTO_SYNC", "Auto Sync is :" + Sync.getAutoSync());
             ApplyTheme(theme);
         });
     }

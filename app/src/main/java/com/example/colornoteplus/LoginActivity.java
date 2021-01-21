@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.title_text);
         CardView loginCard = findViewById(R.id.bot_section);
         TextView loginText = findViewById(R.id.login_text);
-        EditText email = findViewById(R.id.email_field);
+        EditText username = findViewById(R.id.email_field);
         EditText password = findViewById(R.id.password_field);
         Button loginButton = findViewById(R.id.login_button);
         TextView signUpText = findViewById(R.id.sign_up_text);
@@ -70,9 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                 )
         ));
 
-        email.setTextColor(getResources().getColor(Style.getNeutralTextColor(getApplicationContext())));
-        email.setBackgroundColor(getResources().getColor(Style.getNeutralColor(getApplicationContext())));
-        email.setHintTextColor(getResources().getColor(
+        username.setTextColor(getResources().getColor(Style.getNeutralTextColor(getApplicationContext())));
+        username.setBackgroundColor(getResources().getColor(Style.getNeutralColor(getApplicationContext())));
+        username.setHintTextColor(getResources().getColor(
                 Style.getCustomColor(
                         getApplicationContext(),
                         3,
@@ -103,9 +103,18 @@ public class LoginActivity extends AppCompatActivity {
                 )
         );
 
-        loginButton.setOnClickListener(v -> {
+        loginButton.setOnClickListener(v ->
+                Sync.login(
+                        this,
+                        username.getText().toString(),
+                        password.getText().toString(),
+                        null)
+        );
+
+        loginButton.setOnLongClickListener(v -> {
             Intent i = new Intent(getApplicationContext(),SplashScreen.class);
             startActivity(i);
+            return true;
         });
 
         rememberMe.setTextColor(

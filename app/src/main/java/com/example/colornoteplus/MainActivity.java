@@ -297,7 +297,8 @@ public class MainActivity extends Activity{
                     settings = R.id.nav_settings,
                     about = R.id.nav_about,
                     updates = R.id.nav_updates,
-                    sync = R.id.nav_sync;
+                    sync = R.id.nav_sync,
+                    logout = R.id.nav_log_out;
 
             switch (item.getItemId()){
 
@@ -344,6 +345,10 @@ public class MainActivity extends Activity{
 
                 case updates:
                     updateNotes();
+                    break;
+
+                case logout:
+                    logOut();
                     break;
             }
 
@@ -1020,6 +1025,15 @@ public class MainActivity extends Activity{
                 null
         );
         dialog.show(getSupportFragmentManager(),App.TAG_DIALOG_CONFIRM);
+    }
+
+    /**
+     * Perform log out actions and sign user out from this session.
+     * @see DatabaseManager
+     * @see LoginActivity
+     */
+    void logOut(){
+
     }
 
 }

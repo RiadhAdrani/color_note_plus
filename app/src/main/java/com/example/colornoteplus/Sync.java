@@ -5,10 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,9 +25,15 @@ abstract public class Sync {
 
     @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore DB = FirebaseFirestore.getInstance();
+
     private static final String USERS = App.DATABASE_DATA_USERS;
+    private static final CollectionReference DB_USERS = FirebaseFirestore.getInstance().collection(USERS);
+
     private static final String USER_INFO = App.DATABASE_USER_INFO;
     private static final String USER_NOTES = App.DATABASE_USER_NOTES;
+    private static final String USER_ID = App.DATABASE_USER_ID;
+    private static final String USER_PASSWORD = App.DATABASE_USER_PASSWORD;
+    private static final String USER_EMAIL = App.DATABASE_USER_EMAIL;
     private static final String INFO = App.DATABASE_DATA_INFO;
     private static final String INFO_DB = App.DATABASE_DATA_UPDATE_NOTES;
     private static final String INFO_APP_VERSION = App.DATABASE_DATA_APP_VERSION;
@@ -154,6 +157,49 @@ abstract public class Sync {
     }
 
     /**
+     * Interface for user login process
+     */
+    public interface OnUserLogin{
+
+        /**
+         * Executes action after user has been found in the database.
+         * @param username user to be logged in
+         */
+        void onSuccess(String username);
+
+        /**
+         * Executes action after failing to retrieve user data.
+         */
+        void onFailure();
+
+        /**
+         * Executes upon failing to connect.
+         */
+        void onNetworkError();
+    }
+
+    /**
+     * General interface for data exchange handling
+     */
+    public interface OnAction{
+
+        /**
+         * On data exchange success
+         */
+        void onSuccess();
+
+        /**
+         * On data exchange failure
+         */
+        void onFailure();
+
+        /**
+         * On Network Error
+         */
+        void onError();
+    }
+
+    /**
      * get the modification date from the cloud server.
      * @param context calling context
      * @param onDataRetrieval post retrieval actions.
@@ -161,7 +207,7 @@ abstract public class Sync {
      */
     static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -186,7 +232,7 @@ abstract public class Sync {
         map.put(INFO_LAST_SYNC,date);
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map,SetOptions.merge())
@@ -201,7 +247,7 @@ abstract public class Sync {
      */
     static void getAppColor(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -226,7 +272,7 @@ abstract public class Sync {
         map.put(INFO_APP_COLOR,""+color);
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map, SetOptions.merge())
@@ -241,7 +287,7 @@ abstract public class Sync {
      */
     static void getAppTheme(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -266,7 +312,7 @@ abstract public class Sync {
         map.put(INFO_APP_THEME,""+theme);
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map, SetOptions.merge())
@@ -282,9 +328,8 @@ abstract public class Sync {
     static void getUserData(Context context, OnQueryDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context)
-                .getUsername()).
-                collection(USER_NOTES).
+                .document(User.getCurrentUsername(context))
+                .collection(USER_NOTES).
                 get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (onDataRetrieval != null) onDataRetrieval.onSuccess(queryDocumentSnapshots);
@@ -302,8 +347,8 @@ abstract public class Sync {
     static void setNote(Context context, Note<?> note){
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context)
-                .getUsername()).collection(USER_NOTES)
+                .document(User.getCurrentUsername(context))
+                .collection(USER_NOTES)
                 .document(note.getUid())
                 .set(note.toMap())
                 .addOnSuccessListener(aVoid ->
@@ -324,7 +369,7 @@ abstract public class Sync {
     static void getNote(Context context, String uid, OnDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_NOTES).document(uid)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -345,7 +390,7 @@ abstract public class Sync {
     static void wipeNotes(Context context, OnDataWiped onDataWiped){
 
         DB.collection(USERS)
-                .document(User.getCurrentUser(context).getUsername())
+                .document(User.getCurrentUsername(context))
                 .collection(USER_NOTES)
                 .get()
                 .addOnSuccessListener(snapshot -> {
@@ -357,7 +402,7 @@ abstract public class Sync {
 
                     for (String id: list){
                         DB.collection(USERS)
-                                .document(User.getCurrentUser(context).getUsername())
+                                .document(User.getCurrentUsername(context))
                                 .collection(USER_NOTES)
                                 .document(id)
                                 .delete();
@@ -374,12 +419,10 @@ abstract public class Sync {
     /**
      * get the preference of auto syncing from the local database
      * @see DatabaseManager
-     * @param context calling context
      * @return On : true, Off : false
      */
-    static boolean getAutoSync(Context context){
+    static boolean getAutoSync(){
         return true;
-//        return DatabaseManager.LoadBoolean(App.KEY_AUTO_SYNC,context);
     }
 
     /**
@@ -585,11 +628,10 @@ abstract public class Sync {
     /**
      * Receive and store update notes from the firebase firestore database.
      * @param context calling context
-     * @param onStringRetrieval override on success and on failure actions.
      * @see DatabaseManager
      * @see App
      */
-    static void getUpdateNotes(Context context, OnStringRetrieval onStringRetrieval){
+    static void getUpdateNotes(Context context){
 
         DB.collection(INFO).document(INFO_DB)
                 .get()
@@ -599,11 +641,71 @@ abstract public class Sync {
 
                     DatabaseManager.SaveString(patchNotes,App.KEY_PATCH_NOTES,context);
 
-                    if (onStringRetrieval != null) onStringRetrieval.onSuccess(patchNotes);
                 })
                 .addOnFailureListener(e -> {
-                    if (onStringRetrieval != null) onStringRetrieval.onFailure();
+
                 });
+
+    }
+
+    /**
+     * Try to login user with passed parameters.
+     * @see User
+     * @see LoginActivity
+     * @param context calling context
+     * @param username user name
+     * @param password user password
+     * @param onUserLogin interface for request handling
+     */
+    static void login(Context context, String username, String password, OnUserLogin onUserLogin){
+
+        DB_USERS.get()
+                .addOnSuccessListener(snapshot -> {
+
+                    int size = snapshot.size();
+                    for (int i = 0; i <= size; i++){
+                        if (i == size){
+                            Log.d("LOGIN","Bad combination : username not found");
+                            if (onUserLogin != null) onUserLogin.onFailure();
+                        }
+                        else {
+                            if (snapshot.getDocuments().get(i).getId().equals(username)){
+                                DB_USERS.document(snapshot.getDocuments().get(i).getId()).collection(USER_INFO).document(USER_ID)
+                                        .get()
+                                        .addOnSuccessListener(snap -> {
+                                            if (snap.getString(USER_PASSWORD).equals(password)){
+                                                Log.d("LOGIN","Good combination");
+                                                if (onUserLogin != null) onUserLogin.onSuccess(username);
+                                            }
+                                            else {
+                                                Log.d("LOGIN","Bad combination : wrong password");
+                                                if (onUserLogin != null) onUserLogin.onFailure();
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                        });
+                                break;
+                            }
+                        }
+                    }
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onUserLogin != null) onUserLogin.onNetworkError();
+                });
+
+    }
+
+    /**
+     * @deprecated
+     * Try to create a user in the cloud database
+     * @param context calling context
+     * @param username new account username
+     * @param password new account password
+     * @param email new account email
+     * @param onAction post-trial actions
+     */
+    static void signIn(Context context, String username, String password, String email, OnAction onAction){
 
     }
 
