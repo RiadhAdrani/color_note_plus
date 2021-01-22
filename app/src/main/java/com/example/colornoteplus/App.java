@@ -30,6 +30,7 @@ public abstract class App {
     public final static String KEY_LIGHT_THEME = "LIGHT_THEME";
     public final static String KEY_APP_COLOR = "APP_COLOR";
     public final static String KEY_CURRENT_USER = "CURRENT_USER";
+    public final static String KEY_CURRENT_EMAIL = "CURRENT_EMAIL";
     public final static String KEY_REMEMBER_ME = "REMEMBER_ME";
     public final static String KEY_PATCH_NOTES = "PATCH_NOTES";
     public final static String TAG_FRAGMENT_COLOR_PICK = "PICK_COLOR";
@@ -65,6 +66,7 @@ public abstract class App {
     public final static String DATABASE_URL = "https://color-noter-default-rtdb.europe-west1.firebasedatabase.app/";
 
     public final static String TEST_USER = "test_user";
+    public final static String TEST_EMAIL = "test@user.com";
     public final static String DATABASE_DATA_INFO = "db_info";
     public final static String DATABASE_DATA_APP_VERSION = "app_version";
     public final static String DATABASE_DATA_UPDATE_NOTES = "update_notes";

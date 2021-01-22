@@ -111,7 +111,7 @@ abstract public class Sync {
     }
 
     /**
-     * Interface for Stringvalue retrieval
+     * Interface for String value retrieval
      */
     public interface OnStringRetrieval{
 
@@ -207,7 +207,7 @@ abstract public class Sync {
      */
     static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -232,7 +232,7 @@ abstract public class Sync {
         map.put(INFO_LAST_SYNC,date);
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map,SetOptions.merge())
@@ -242,12 +242,13 @@ abstract public class Sync {
 
     /**
      * Get the app color theme from the cloud database
+     * @see OnIntRetrieval
      * @param context calling context
      * @param onDataRetrieval post retrieval actions
      */
     static void getAppColor(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -272,7 +273,7 @@ abstract public class Sync {
         map.put(INFO_APP_COLOR,""+color);
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map, SetOptions.merge())
@@ -282,12 +283,13 @@ abstract public class Sync {
 
     /**
      * Get the app lighting theme from the cloud database
+     * @see OnIntRetrieval
      * @param context calling context
      * @param onDataRetrieval post retrieval actions
      */
     static void getAppTheme(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .get()
@@ -312,7 +314,7 @@ abstract public class Sync {
         map.put(INFO_APP_THEME,""+theme);
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_INFO)
                 .document(INFO_LAST_SYNC)
                 .set(map, SetOptions.merge())
@@ -322,13 +324,14 @@ abstract public class Sync {
 
     /**
      * Get current User data from the cloud
+     * @see OnQueryDataRetrieval
      * @param context calling context
      * @param onDataRetrieval post retrieval actions
      */
     static void getUserData(Context context, OnQueryDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_NOTES).
                 get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -341,13 +344,14 @@ abstract public class Sync {
 
     /**
      * Save a note to the cloud database
+     * @see Note
      * @param context calling context
      * @param note note to be saved
      */
     static void setNote(Context context, Note<?> note){
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_NOTES)
                 .document(note.getUid())
                 .set(note.toMap())
@@ -362,6 +366,7 @@ abstract public class Sync {
     /**
      * @deprecated
      * Retrieve a note from cloud
+     * @see OnDataRetrieval
      * @param context calling context
      * @param uid note uid to be retrieved
      * @param onDataRetrieval post retrieval actions
@@ -369,7 +374,7 @@ abstract public class Sync {
     static void getNote(Context context, String uid, OnDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_NOTES).document(uid)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -384,13 +389,14 @@ abstract public class Sync {
 
     /**
      * Wipe User notes in the cloud database
+     * @see OnDataWiped
      * @param context calling context
      * @param onDataWiped post data clearing actions
      */
     static void wipeNotes(Context context, OnDataWiped onDataWiped){
 
         DB.collection(USERS)
-                .document(User.getCurrentUsername(context))
+                .document(User.getUsername(context))
                 .collection(USER_NOTES)
                 .get()
                 .addOnSuccessListener(snapshot -> {
@@ -402,7 +408,7 @@ abstract public class Sync {
 
                     for (String id: list){
                         DB.collection(USERS)
-                                .document(User.getCurrentUsername(context))
+                                .document(User.getUsername(context))
                                 .collection(USER_NOTES)
                                 .document(id)
                                 .delete();
@@ -436,6 +442,7 @@ abstract public class Sync {
 
     /**
      * Perform data syncing
+     * @see OnDataSynced
      * @param context calling context
      * @param onDataSynced post data syncing actions
      */
@@ -595,6 +602,19 @@ abstract public class Sync {
                         }
                     });
 
+                    getUserEmail(context, new OnStringRetrieval() {
+                        @Override
+                        public void onSuccess(String value) {
+                            User.setEmail(context,value);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.d("SYNC_NOTES","Unable to get user email ...");
+
+                        }
+                    });
+
                 }
 
                 @Override
@@ -626,6 +646,25 @@ abstract public class Sync {
     }
 
     /**
+     * retrieve user email from firebase firestore database.
+     * @param context calling context
+     * @param onRetrieval post retrieval actions
+     * @see OnStringRetrieval
+     */
+    static void getUserEmail(Context context, OnStringRetrieval onRetrieval){
+        DB_USERS.document(User.getUsername(context))
+                .collection(USER_INFO)
+                .document(USER_ID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (onRetrieval != null) onRetrieval.onSuccess(documentSnapshot.getString(USER_EMAIL));
+                })
+                .addOnFailureListener(e -> {
+                    if (onRetrieval != null) onRetrieval.onFailure();
+                });
+    }
+
+    /**
      * Receive and store update notes from the firebase firestore database.
      * @param context calling context
      * @see DatabaseManager
@@ -652,12 +691,12 @@ abstract public class Sync {
      * Try to login user with passed parameters.
      * @see User
      * @see LoginActivity
-     * @param context calling context
+     * @see OnUserLogin
      * @param username user name
      * @param password user password
      * @param onUserLogin interface for request handling
      */
-    static void login(Context context, String username, String password, OnUserLogin onUserLogin){
+    static void login(String username, String password, OnUserLogin onUserLogin){
 
         DB_USERS.get()
                 .addOnSuccessListener(snapshot -> {
@@ -673,7 +712,7 @@ abstract public class Sync {
                                 DB_USERS.document(snapshot.getDocuments().get(i).getId()).collection(USER_INFO).document(USER_ID)
                                         .get()
                                         .addOnSuccessListener(snap -> {
-                                            if (snap.getString(USER_PASSWORD).equals(password)){
+                                            if (Objects.equals(snap.getString(USER_PASSWORD), password)){
                                                 Log.d("LOGIN","Good combination");
                                                 if (onUserLogin != null) onUserLogin.onSuccess(username);
                                             }
@@ -699,13 +738,14 @@ abstract public class Sync {
     /**
      * @deprecated
      * Try to create a user in the cloud database
+     * @see OnAction
      * @param context calling context
      * @param username new account username
      * @param password new account password
      * @param email new account email
      * @param onAction post-trial actions
      */
-    static void signIn(Context context, String username, String password, String email, OnAction onAction){
+    static void register(Context context, String username, String password, String email, OnAction onAction){
 
     }
 

@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -22,6 +23,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Sync.getModificationDate(this, new Sync.OnLongRetrieval() {
+            @Override
+            public void onSuccess(Long value) {
+                Sync.performSync(getApplicationContext(),value,DatabaseManager.getDatabaseLastModificationDate(getApplicationContext()));
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
         initActivity();
     }
@@ -105,17 +118,31 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v ->
                 Sync.login(
-                        this,
                         username.getText().toString(),
                         password.getText().toString(),
-                        null)
+                        new Sync.OnUserLogin() {
+                            @Override
+                            public void onSuccess(String username) {
+                                DatabaseManager.wipeDatabase(getApplicationContext());
+                                User.setUsername(username,getApplicationContext());
+                                Sync.performSync(getApplicationContext(),1L,0L);
+                                Intent i = new Intent(getApplicationContext(),SplashScreen.class);
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Toast.makeText(LoginActivity.this, "Could not find an account with this combination of username and password !", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNetworkError() {
+                                Toast.makeText(LoginActivity.this, "Network Error ...", Toast.LENGTH_SHORT).show();
+                            }
+                        })
         );
 
-        loginButton.setOnLongClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),SplashScreen.class);
-            startActivity(i);
-            return true;
-        });
+        loginButton.setOnLongClickListener(v -> true);
 
         rememberMe.setTextColor(
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))

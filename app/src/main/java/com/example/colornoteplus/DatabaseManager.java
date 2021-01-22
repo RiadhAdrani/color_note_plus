@@ -314,7 +314,7 @@ public abstract class DatabaseManager {
      */
     public static void wipeDatabase(Context context){
 
-        String currentUser = User.getCurrentUsername(context);
+        String currentUser = User.getUsername(context);
         boolean rememberMe = DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,context);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(App.SHARED_PREFERENCES,Context.MODE_PRIVATE);

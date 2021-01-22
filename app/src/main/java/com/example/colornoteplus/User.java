@@ -6,12 +6,10 @@ import android.util.Log;
 public abstract class User {
 
     /**
-     * @deprecated
      * @param username set local user name
      * @param context calling context
      */
-    static public void setCurrentUsername(String username, Context context){
-
+    static public void setUsername(String username, Context context){
         DatabaseManager.SaveString(username,App.KEY_CURRENT_USER, context);
     }
 
@@ -20,7 +18,7 @@ public abstract class User {
      * @param context calling context
      * @return current username
      */
-    static public String getCurrentUsername(Context context){
+    static public String getUsername(Context context){
 
         String temp = DatabaseManager.LoadString(App.KEY_CURRENT_USER,context);
 
@@ -31,5 +29,30 @@ public abstract class User {
         else
             return temp;
 
+    }
+
+    /**
+     * Update current user email
+     * @param context calling context
+     * @param email new email
+     */
+    static public void setEmail(Context context, String email){
+        DatabaseManager.SaveString(email,App.KEY_CURRENT_EMAIL,context);
+    }
+
+    /**
+     * Get current user email
+     * @param context calling context
+     * @return email as a string
+     */
+    static public String getEmail(Context context){
+        String temp = DatabaseManager.LoadString(App.KEY_CURRENT_EMAIL,context);
+
+        if (temp.equals(context.getString(R.string.error))) {
+            Log.d("USER", "current user is " + App.TEST_EMAIL);
+            return App.TEST_EMAIL;
+        }
+        else
+            return temp;
     }
 }
