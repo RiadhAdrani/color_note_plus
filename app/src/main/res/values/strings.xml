@@ -52,11 +52,13 @@
     <string name="sort_by_modification">By Modification</string>
 
     <string name="login">Login</string>
+    <string name="logging_in">Logging In</string>
     <string name="sign_up">Sign Up</string>
     <string name="no_account">No Account? Sign up here!</string>
     <string name="remember_me">Remember Me</string>
-    <string name="username">User Email</string>
+    <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="bad_combination">Could not find an account with this combination of username and password … Try again !</string>
 
     <string name="low_priority">Unimportant</string>
     <string name="medium_priority">Normal</string>

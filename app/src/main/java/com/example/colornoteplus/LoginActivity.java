@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -36,6 +37,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        if (DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,this)){
+            skip();
+        }
+
         initActivity();
     }
 
@@ -57,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView signUpText = findViewById(R.id.sign_up_text);
         TextView rememberMe = findViewById(R.id.remember_me_label);
         CheckBox rememberMeBox = findViewById(R.id.remember_me_box);
+        TextView errorText = findViewById(R.id.error_text);
 
         background.setBackgroundColor(getResources().getColor(Style.getNeutralColor(getApplicationContext())));
 
@@ -117,29 +123,43 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         loginButton.setOnClickListener(v ->
-                Sync.login(
-                        username.getText().toString(),
-                        password.getText().toString(),
-                        new Sync.OnUserLogin() {
-                            @Override
-                            public void onSuccess(String username) {
-                                DatabaseManager.wipeDatabase(getApplicationContext());
-                                User.setUsername(username,getApplicationContext());
-                                Sync.performSync(getApplicationContext(),1L,0L);
-                                Intent i = new Intent(getApplicationContext(),SplashScreen.class);
-                                startActivity(i);
-                            }
+                {
 
-                            @Override
-                            public void onFailure() {
-                                Toast.makeText(LoginActivity.this, "Could not find an account with this combination of username and password !", Toast.LENGTH_SHORT).show();
-                            }
+                    LoadingFragment dialog = new LoadingFragment(getString(R.string.logging_in),null);
+                    dialog.setCancelable(false);
+                    dialog.show(getSupportFragmentManager(),"LOADING");
 
-                            @Override
-                            public void onNetworkError() {
-                                Toast.makeText(LoginActivity.this, "Network Error ...", Toast.LENGTH_SHORT).show();
-                            }
-                        })
+                    errorText.setVisibility(View.INVISIBLE);
+                    Sync.login(
+                            username.getText().toString(),
+                            password.getText().toString(),
+                            new Sync.OnUserLogin() {
+                                @Override
+                                public void onSuccess(String username) {
+                                    DatabaseManager.wipeDatabase(getApplicationContext());
+                                    User.setUsername(username, getApplicationContext());
+                                    Sync.performSync(getApplicationContext(), 1L, 0L);
+                                    dialog.dismiss();
+                                    skip();
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                    Toast.makeText(LoginActivity.this, getString(R.string.bad_combination), Toast.LENGTH_SHORT).show();
+                                    errorText.setText(R.string.bad_combination);
+                                    errorText.setVisibility(View.VISIBLE);
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onNetworkError() {
+                                    Toast.makeText(LoginActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                                    errorText.setText(R.string.network_error);
+                                    errorText.setVisibility(View.VISIBLE);
+                                    dialog.dismiss();
+                                }
+                            });
+                }
         );
 
         loginButton.setOnLongClickListener(v -> true);
@@ -155,5 +175,17 @@ public class LoginActivity extends AppCompatActivity {
         signUpText.setTextColor(
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))
         );
+
+        errorText.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Skip this screen activity.
+     * @see SplashScreen
+     */
+    private void skip(){
+        Intent i = new Intent(getApplicationContext(), SplashScreen.class);
+        startActivity(i);
+        finish();
     }
 }
