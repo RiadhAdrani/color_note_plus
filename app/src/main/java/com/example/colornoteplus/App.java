@@ -7,6 +7,7 @@ import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * Contains necessary data and setting values for the app to function correctly.
@@ -30,6 +31,7 @@ public abstract class App {
     public final static String KEY_LIGHT_THEME = "LIGHT_THEME";
     public final static String KEY_APP_COLOR = "APP_COLOR";
     public final static String KEY_CURRENT_USER = "CURRENT_USER";
+    public final static String KEY_CURRENT_USERNAME = "CURRENT_USER_NAME";
     public final static String KEY_CURRENT_EMAIL = "CURRENT_EMAIL";
     public final static String KEY_REMEMBER_ME = "REMEMBER_ME";
     public final static String KEY_PATCH_NOTES = "PATCH_NOTES";
@@ -55,6 +57,7 @@ public abstract class App {
     public final static int DEFAULT_COLOR_THEME = 0;
     public final static String NOTE_TEXT_ID = "T";
     public final static String NOTE_CHECK_ID = "C";
+    public final static int PASSWORD_MIN = 6;
 
     // -----------------------------------------------------------------------------------------------------------------
     //                                          FIREBASE DATABASE KEYS
@@ -102,10 +105,9 @@ public abstract class App {
      * @param textColor color of the text
      * @param bgColor background color of the toast
      * @param strokeWidth stroke of the toast
-     * @param strokeColor stroke color
      * @param isLong display toast for a long time or not
      */
-    public static void StyleableToast(Context context, String text, int textColor, int bgColor, int strokeWidth, int strokeColor,boolean isLong){
+    public static void StyleableToast(Context context, String text, int textColor, int bgColor, int strokeWidth,boolean isLong){
 
         new StyleableToast
                 .Builder(context)
@@ -208,4 +210,24 @@ public abstract class App {
 
         return true;
     }
+
+    /**
+     * Check if the password is suitable or not.
+     * @param password password to test
+     * @return true if it is suitable, else false.
+     */
+    public static boolean checkPassword(String password){
+
+        return password.trim().length() > PASSWORD_MIN;
+    }
+
+    /**
+     * Get the current time.
+     * @return current time as long.
+     */
+    public static Long getTimeNow(){
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
+
 }

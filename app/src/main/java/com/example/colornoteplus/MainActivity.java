@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -288,6 +289,14 @@ public class MainActivity extends Activity{
         drawer = findViewById(R.id.drawer_layout);
 
         navigationView = findViewById(R.id.navigation_view);
+
+        View header = navigationView.getHeaderView(0);
+        TextView user = header.findViewById(R.id.fragment_user_name);
+        user.setText(User.getUsername(this));
+
+        TextView email = header.findViewById(R.id.fragment_user_email);
+        email.setText(User.getEmail(this));
+
         navigationView.setCheckedItem(R.id.nav_notes);
         navigationView.setNavigationItemSelectedListener(item -> {
 

@@ -25,18 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Sync.getModificationDate(this, new Sync.OnLongRetrieval() {
-            @Override
-            public void onSuccess(Long value) {
-                Sync.performSync(getApplicationContext(),value,DatabaseManager.getDatabaseLastModificationDate(getApplicationContext()));
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
-
         if (DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,this)){
             skip();
         }
@@ -137,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(String username) {
                                     DatabaseManager.wipeDatabase(getApplicationContext());
-                                    User.setUsername(username, getApplicationContext());
+                                    User.setID(username, getApplicationContext());
                                     Sync.performSync(getApplicationContext(), 1L, 0L);
                                     dialog.dismiss();
                                     skip();
@@ -175,8 +163,15 @@ public class LoginActivity extends AppCompatActivity {
         signUpText.setTextColor(
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))
         );
+        signUpText.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),RegisterActivity.class);
+            startActivity(i);
+        });
 
+        errorText.setTextColor(getResources().getColor(
+                Style.getCustomColor(this,4, Style.COLORS.DARKER, Style.COLORS.LIGHTER)));
         errorText.setVisibility(View.INVISIBLE);
+
     }
 
     /**

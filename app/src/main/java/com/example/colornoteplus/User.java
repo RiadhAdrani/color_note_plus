@@ -6,11 +6,11 @@ import android.util.Log;
 public abstract class User {
 
     /**
-     * @param username set local user name
+     * @param id set local user name
      * @param context calling context
      */
-    static public void setUsername(String username, Context context){
-        DatabaseManager.SaveString(username,App.KEY_CURRENT_USER, context);
+    static public void setID(String id, Context context){
+        DatabaseManager.SaveString(id,App.KEY_CURRENT_USER, context);
     }
 
     /**
@@ -18,7 +18,7 @@ public abstract class User {
      * @param context calling context
      * @return current username
      */
-    static public String getUsername(Context context){
+    static public String getID(Context context){
 
         String temp = DatabaseManager.LoadString(App.KEY_CURRENT_USER,context);
 
@@ -29,6 +29,24 @@ public abstract class User {
         else
             return temp;
 
+    }
+
+    /**
+     * Update the current local username
+     * @param name new username
+     * @param context calling context
+     */
+    static public void setUsername(String name, Context context){
+        DatabaseManager.SaveString(name,App.KEY_CURRENT_USERNAME,context);
+    }
+
+    /**
+     * Get the currently active user username
+     * @param context calling context
+     * @return username as string
+     */
+    static public String getUsername(Context context){
+        return DatabaseManager.LoadString(App.KEY_CURRENT_USERNAME,context);
     }
 
     // Hello

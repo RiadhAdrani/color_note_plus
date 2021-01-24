@@ -1,7 +1,6 @@
 package com.example.colornoteplus;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -427,7 +426,6 @@ public class CheckListNoteActivity extends Activity {
                     Style.getColorMain(getApplicationContext(),note.getColor()),
                     Style.getNeutralColor(getApplicationContext()),
                     3,
-                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -470,7 +468,6 @@ public class CheckListNoteActivity extends Activity {
                     Style.getColorMain(getApplicationContext(),note.getColor()),
                     Style.getNeutralColor(getApplicationContext()),
                     3,
-                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 

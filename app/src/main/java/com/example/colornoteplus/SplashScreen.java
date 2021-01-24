@@ -41,17 +41,19 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onSuccess(Long value) {
 
-                Long localSync = DatabaseManager.getDatabaseLastModificationDate(getApplicationContext());
+                if (value != null)
+                {
+                    Long localSync = DatabaseManager.getDatabaseLastModificationDate(getApplicationContext());
+                    Sync.performSync(getApplicationContext(),value,localSync);
+                }
 
-                Sync.performSync(getApplicationContext(),value,localSync);
-
-                delayedStart(5L);
+                delayedStart(1000L);
 
             }
             @Override
             public void onFailure() {
                 Log.d("SYNC_NOTES","Unable to get Data");
-                delayedStart(10L);
+                delayedStart(100L);
             }
         });
 
@@ -68,7 +70,7 @@ public class SplashScreen extends AppCompatActivity {
 
     /**
      * Start the main activity after a delay.
-     * @param delay delay time
+     * @param delay delay time in milliseconds.
      * @see MainActivity
      */
     private void delayedStart(Long delay){

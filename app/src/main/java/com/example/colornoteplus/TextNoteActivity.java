@@ -317,7 +317,6 @@ public class TextNoteActivity extends Activity {
                     Style.getColorMain(getApplicationContext(),note.getColor()),
                     Style.getNeutralColor(getApplicationContext()),
                     3,
-                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     true);
 
             return false;
@@ -349,7 +348,6 @@ public class TextNoteActivity extends Activity {
                     Style.getColorMain(getApplicationContext(),note.getColor()),
                     Style.getNeutralColor(getApplicationContext()),
                     3,
-                    Style.getColorMain(getApplicationContext(),note.getColor()),
                     false);
         }
 
@@ -405,7 +403,6 @@ public class TextNoteActivity extends Activity {
                         Style.getColorPrimary(getApplicationContext(),note.getColor()),
                         R.color.white,
                         3,
-                        Style.getColorPrimary(getApplicationContext(),note.getColor()),
                         false);
             }
             else {
@@ -442,7 +439,6 @@ public class TextNoteActivity extends Activity {
                     Style.getColorPrimary(getApplicationContext(),note.getColor()),
                     R.color.white,
                     3,
-                    Style.getColorPrimary(getApplicationContext(),note.getColor()),
                     false);
         }
 

@@ -41,6 +41,10 @@ abstract public class Sync {
     private static final String INFO_APP_COLOR = App.DATABASE_USER_COLOR;
     private static final String INFO_APP_THEME = App.DATABASE_USER_THEME;
 
+    private static final int ERROR_USERNAME_EXIST = 0;
+    private static final int ERROR_EMAIL_EXIST = 1;
+    private static final int ERROR_PASSWORD_SHORT = 2;
+
 
     /**
      * Interface for data retrieval
@@ -181,17 +185,17 @@ abstract public class Sync {
     /**
      * General interface for data exchange handling
      */
-    public interface OnAction{
+    public interface OnRegister {
 
         /**
          * On data exchange success
          */
-        void onSuccess();
+        void onSuccess(String userID, String username, String email, String password);
 
         /**
          * On data exchange failure
          */
-        void onFailure();
+        void onFailure(int error);
 
         /**
          * On Network Error
@@ -207,9 +211,7 @@ abstract public class Sync {
      */
     static void getModificationDate(Context context, OnLongRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .get()
                 .addOnSuccessListener(snapshot -> {
 
@@ -232,9 +234,7 @@ abstract public class Sync {
         map.put(INFO_LAST_SYNC,date);
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .set(map,SetOptions.merge())
                 .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
@@ -248,9 +248,7 @@ abstract public class Sync {
      */
     static void getAppColor(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .get()
                 .addOnSuccessListener(snapshot -> {
 
@@ -273,9 +271,7 @@ abstract public class Sync {
         map.put(INFO_APP_COLOR,""+color);
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .set(map, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
@@ -289,9 +285,7 @@ abstract public class Sync {
      */
     static void getAppTheme(Context context, OnIntRetrieval onDataRetrieval){
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .get()
                 .addOnSuccessListener(snapshot -> {
 
@@ -314,9 +308,7 @@ abstract public class Sync {
         map.put(INFO_APP_THEME,""+theme);
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(INFO_LAST_SYNC)
+                .document(User.getID(context))
                 .set(map, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> Log.d("SYNC_NOTES","Data synchronization success"))
                 .addOnFailureListener(e -> Log.d("SYNC_NOTES","Data synchronization failure"));
@@ -331,7 +323,7 @@ abstract public class Sync {
     static void getUserData(Context context, OnQueryDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
+                .document(User.getID(context))
                 .collection(USER_NOTES).
                 get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -351,7 +343,7 @@ abstract public class Sync {
     static void setNote(Context context, Note<?> note){
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
+                .document(User.getID(context))
                 .collection(USER_NOTES)
                 .document(note.getUid())
                 .set(note.toMap())
@@ -374,7 +366,7 @@ abstract public class Sync {
     static void getNote(Context context, String uid, OnDataRetrieval onDataRetrieval){
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
+                .document(User.getID(context))
                 .collection(USER_NOTES).document(uid)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -396,7 +388,7 @@ abstract public class Sync {
     static void wipeNotes(Context context, OnDataWiped onDataWiped){
 
         DB.collection(USERS)
-                .document(User.getUsername(context))
+                .document(User.getID(context))
                 .collection(USER_NOTES)
                 .get()
                 .addOnSuccessListener(snapshot -> {
@@ -408,7 +400,7 @@ abstract public class Sync {
 
                     for (String id: list){
                         DB.collection(USERS)
-                                .document(User.getUsername(context))
+                                .document(User.getID(context))
                                 .collection(USER_NOTES)
                                 .document(id)
                                 .delete();
@@ -451,6 +443,11 @@ abstract public class Sync {
         getModificationDate(context, new OnLongRetrieval() {
             @Override
             public void onSuccess(Long value) {
+
+                if (value == null) {
+                    performSync(context, 0L, 1L);
+                    return;
+                }
 
                 Long localSync = DatabaseManager.getDatabaseLastModificationDate(context);
 
@@ -652,9 +649,7 @@ abstract public class Sync {
      * @see OnStringRetrieval
      */
     static void getUserEmail(Context context, OnStringRetrieval onRetrieval){
-        DB_USERS.document(User.getUsername(context))
-                .collection(USER_INFO)
-                .document(USER_ID)
+        DB_USERS.document(User.getID(context))
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (onRetrieval != null) onRetrieval.onSuccess(documentSnapshot.getString(USER_EMAIL));
@@ -708,23 +703,14 @@ abstract public class Sync {
                             if (onUserLogin != null) onUserLogin.onFailure();
                         }
                         else {
-                            if (snapshot.getDocuments().get(i).getId().equals(username)){
-                                DB_USERS.document(snapshot.getDocuments().get(i).getId()).collection(USER_INFO).document(USER_ID)
-                                        .get()
-                                        .addOnSuccessListener(snap -> {
-                                            if (Objects.equals(snap.getString(USER_PASSWORD), password)){
-                                                Log.d("LOGIN","Good combination");
-                                                if (onUserLogin != null) onUserLogin.onSuccess(username);
-                                            }
-                                            else {
-                                                Log.d("LOGIN","Bad combination : wrong password");
-                                                if (onUserLogin != null) onUserLogin.onFailure();
-                                            }
-                                        })
-                                        .addOnFailureListener(e -> {
-                                        });
-                                break;
+                            if (snapshot.getDocuments().get(i).getString(USER_ID).equals(username)
+                            && snapshot.getDocuments().get(i).getString(USER_PASSWORD).equals(password)){
+                                if (onUserLogin != null) onUserLogin.onSuccess(snapshot.getDocuments().get(i).getId());
                             }
+                            else {
+                                if (onUserLogin != null) onUserLogin.onFailure();
+                            }
+                            break;
                         }
                     }
 
@@ -736,16 +722,59 @@ abstract public class Sync {
     }
 
     /**
-     * @deprecated
      * Try to create a user in the cloud database
-     * @see OnAction
-     * @param context calling context
+     * @see OnRegister
      * @param username new account username
      * @param password new account password
      * @param email new account email
      * @param onAction post-trial actions
      */
-    static void register(Context context, String username, String password, String email, OnAction onAction){
+    static void register(String username, String password, String email, OnRegister onAction){
+
+        if (!App.checkPassword(password)){
+            if (onAction != null) onAction.onFailure(ERROR_PASSWORD_SHORT);
+            Log.d("REGISTER","bad password");
+            return;
+        }
+
+        DB_USERS.get()
+                .addOnSuccessListener(snapshot -> {
+
+                    for (DocumentSnapshot doc : snapshot.getDocuments()){
+                        if (doc.getString(USER_ID).equals(username)){
+                            if (onAction != null) onAction.onFailure(ERROR_USERNAME_EXIST);
+                            Log.d("REGISTER","existing username");
+                            return;
+                        }
+                        else if (doc.getString(USER_EMAIL).equals(email)){
+                            if (onAction != null) onAction.onFailure(ERROR_EMAIL_EXIST);
+                            Log.d("REGISTER","existing email");
+                            return;
+                        }
+                    }
+
+                    Map<String, java.lang.Object> user = new HashMap<>();
+                    user.put(USER_ID,username);
+                    user.put(USER_EMAIL,email);
+                    user.put(USER_PASSWORD,password);
+                    user.put(INFO_APP_COLOR,"0");
+                    user.put(INFO_APP_THEME,"0");
+                    user.put(INFO_LAST_SYNC,App.getTimeNow());
+
+                    DB_USERS.add(user).addOnSuccessListener(documentReference -> {
+
+                        Log.d("REGISTER","creating new user");
+                        if (onAction != null) onAction.onSuccess(documentReference.getId(),username,email,password);
+
+                        documentReference.collection(USER_NOTES);
+
+                    });
+
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onAction != null) onAction.onError();
+                });
 
     }
 
