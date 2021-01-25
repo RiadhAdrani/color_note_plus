@@ -6,6 +6,17 @@ import android.util.Log;
 public abstract class User {
 
     /**
+     * Reset local user info to (no-user) : null values.
+     * @param context calling context.
+     */
+    static public void resetUserData(Context context){
+        DatabaseManager.setDatabaseLastModificationDate(context,0L);
+        setID(App.NO_ID,context);
+        setUsername(App.NO_ID, context);
+        setEmail(context, App.NO_ID);
+    }
+
+    /**
      * @param id set local user name
      * @param context calling context
      */

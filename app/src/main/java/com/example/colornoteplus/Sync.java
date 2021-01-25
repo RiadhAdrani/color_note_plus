@@ -41,10 +41,10 @@ abstract public class Sync {
     private static final String INFO_APP_COLOR = App.DATABASE_USER_COLOR;
     private static final String INFO_APP_THEME = App.DATABASE_USER_THEME;
 
-    private static final int ERROR_USERNAME_EXIST = 0;
-    private static final int ERROR_EMAIL_EXIST = 1;
-    private static final int ERROR_PASSWORD_SHORT = 2;
-
+    public static final int ERROR_USERNAME_EXIST = 0;
+    public static final int ERROR_EMAIL_EXIST = 1;
+    public static final int ERROR_PASSWORD_BAD = 2;
+    public static final int ERROR_USERNAME_BAD = 3;
 
     /**
      * Interface for data retrieval
@@ -440,16 +440,24 @@ abstract public class Sync {
      */
     static void performSync(Context context, OnDataSynced onDataSynced){
 
+        if (User.getID(context).equals(App.NO_ID))
+            return;
+
         getModificationDate(context, new OnLongRetrieval() {
             @Override
             public void onSuccess(Long value) {
+
+                Long localSync = DatabaseManager.getDatabaseLastModificationDate(context);
+
+                if (value == null && localSync == 0L)
+                    return;
 
                 if (value == null) {
                     performSync(context, 0L, 1L);
                     return;
                 }
 
-                Long localSync = DatabaseManager.getDatabaseLastModificationDate(context);
+
 
                 if (!localSync.equals(value)) {
                     // firebase firestore database is ahead
@@ -548,6 +556,9 @@ abstract public class Sync {
      * @param localSync local last modification date
      */
     static void performSync(Context context, Long cloudSync, Long localSync){
+
+        if (User.getID(context).equals(App.NO_ID))
+            return;
 
         // both database are synced correctly
         if (cloudSync.equals(localSync)) return;
@@ -703,8 +714,8 @@ abstract public class Sync {
                             if (onUserLogin != null) onUserLogin.onFailure();
                         }
                         else {
-                            if (snapshot.getDocuments().get(i).getString(USER_ID).equals(username)
-                            && snapshot.getDocuments().get(i).getString(USER_PASSWORD).equals(password)){
+                            if (Objects.equals(snapshot.getDocuments().get(i).getString(USER_ID), username)
+                            && Objects.equals(snapshot.getDocuments().get(i).getString(USER_PASSWORD), password)){
                                 if (onUserLogin != null) onUserLogin.onSuccess(snapshot.getDocuments().get(i).getId());
                             }
                             else {
@@ -732,8 +743,14 @@ abstract public class Sync {
     static void register(String username, String password, String email, OnRegister onAction){
 
         if (!App.checkPassword(password)){
-            if (onAction != null) onAction.onFailure(ERROR_PASSWORD_SHORT);
+            if (onAction != null) onAction.onFailure(ERROR_PASSWORD_BAD);
             Log.d("REGISTER","bad password");
+            return;
+        }
+
+        if (!App.checkUsername(username)){
+            if (onAction != null) onAction.onFailure(ERROR_USERNAME_BAD);
+            Log.d("REGISTER","bad username");
             return;
         }
 
@@ -741,12 +758,15 @@ abstract public class Sync {
                 .addOnSuccessListener(snapshot -> {
 
                     for (DocumentSnapshot doc : snapshot.getDocuments()){
-                        if (doc.getString(USER_ID).equals(username)){
+                        if (Objects.equals(doc.getString(USER_ID), username)){
                             if (onAction != null) onAction.onFailure(ERROR_USERNAME_EXIST);
                             Log.d("REGISTER","existing username");
                             return;
                         }
-                        else if (doc.getString(USER_EMAIL).equals(email)){
+                    }
+
+                    for (DocumentSnapshot doc : snapshot.getDocuments()){
+                        if (Objects.equals(doc.getString(USER_EMAIL), email)){
                             if (onAction != null) onAction.onFailure(ERROR_EMAIL_EXIST);
                             Log.d("REGISTER","existing email");
                             return;
@@ -769,7 +789,6 @@ abstract public class Sync {
                         documentReference.collection(USER_NOTES);
 
                     });
-
 
                 })
                 .addOnFailureListener(e -> {

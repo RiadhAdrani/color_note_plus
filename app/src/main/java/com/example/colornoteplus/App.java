@@ -40,6 +40,7 @@ public abstract class App {
     public final static String TAG_FRAGMENT_DATE_PICKER = "DATE_PICKER";
     public final static String TAG_DIALOG_CONFIRM = "CONFIRM_DIALOG";
     public final static ArrayList<Character> SPECIAL_STRINGS = new ArrayList<>(Arrays.asList(' ',' '));
+    public final static ArrayList<Character> PROHIBITED_CHAR = new ArrayList<>(Arrays.asList(' ','/','"','\''));
     public enum SORT_ITEM { ALPHA , STATUS , CREATION , MODIFICATION , DUE , PRIORITY  }
     public enum SORT_NOTE { ALPHA , CREATION, MODIFICATION , COLOR}
 
@@ -58,6 +59,10 @@ public abstract class App {
     public final static String NOTE_TEXT_ID = "T";
     public final static String NOTE_CHECK_ID = "C";
     public final static int PASSWORD_MIN = 6;
+    public final static int PASSWORD_MAX = 20;
+    public final static int USERNAME_MIN = 5;
+    public final static int USERNAME_MAX = 20;
+    public final static String NO_ID = "no_id";
 
     // -----------------------------------------------------------------------------------------------------------------
     //                                          FIREBASE DATABASE KEYS
@@ -218,7 +223,30 @@ public abstract class App {
      */
     public static boolean checkPassword(String password){
 
+        if (password.trim().length() > PASSWORD_MAX)
+            return false;
+
         return password.trim().length() > PASSWORD_MIN;
+
+    }
+
+    /**
+     * Check if the password is suitable or not.
+     * @param username username to test
+     * @return true if good and false otherwise.
+     */
+    public static boolean checkUsername(String username){
+
+        for (int i = 0; i < username.trim().length(); i++){
+            if (PROHIBITED_CHAR.contains(username.trim().charAt(i)))
+                return false;
+        }
+
+        if (username.trim().length() > PASSWORD_MAX)
+            return false;
+
+        return username.trim().length() > USERNAME_MIN;
+
     }
 
     /**
@@ -227,6 +255,19 @@ public abstract class App {
      */
     public static Long getTimeNow(){
         return Calendar.getInstance().getTimeInMillis();
+    }
+
+    public static String getRegisterException(int exception, Context context){
+
+        switch (exception){
+            case Sync.ERROR_USERNAME_EXIST : return context.getString(R.string.username_exist);
+            case Sync.ERROR_EMAIL_EXIST : return context.getString(R.string.email_exist);
+            case Sync.ERROR_PASSWORD_BAD : return context.getString(R.string.password_bad);
+            case Sync.ERROR_USERNAME_BAD : return context.getString(R.string.username_bad);
+        }
+
+        return context.getString(R.string.signing_in);
+
     }
 
 

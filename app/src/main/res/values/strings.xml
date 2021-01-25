@@ -61,12 +61,17 @@
     <string name="bad_combination">Could not find an account with this combination of username and password … Try again !</string>
 
     <string name="sign_in">Register</string>
-    <string name="signing_in">Creating account … Please wait …</string>
+    <string name="signing_in">Creating account, Please wait …</string>
     <string name="email">Email</string>
     <string name="user_exists">This username exists already, please try another one !</string>
     <string name="short_password">The password is too short !</string>
     <string name="email_exists">This email is already used</string>
     <string name="have_account">Already have an account? Login in here!</string>
+
+    <string name="username_exist">Username already exist! Please try another one!</string>
+    <string name="password_bad">The password you entered is invalid or short or may contains some prohibited characters :</string>
+    <string name="username_bad">The username you entered is either short or contains some prohibited characters :</string>
+    <string name="email_exist">Provided email already in use, try another email or login.</string>
 
     <string name="low_priority">Unimportant</string>
     <string name="medium_priority">Normal</string>

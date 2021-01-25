@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
                             User.setID(userID,getApplicationContext());
                             User.setEmail(getApplicationContext(),email);
                             User.setUsername(username,getApplicationContext());
-                            DatabaseManager.setDatabaseLastModificationDate(getApplicationContext(),0L);
+                            DatabaseManager.setDatabaseLastModificationDate(getApplicationContext(),App.getTimeNow());
                             loading.dismiss();
                             Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
                             proceed();
@@ -138,6 +138,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(int error) {
+                            errorText.setText(App.getRegisterException(error,getApplicationContext()));
+                            errorText.setVisibility(View.VISIBLE);
                             loading.dismiss();
                             Toast.makeText(RegisterActivity.this, "Could not create account. Exception => "+error, Toast.LENGTH_SHORT).show();
                         }

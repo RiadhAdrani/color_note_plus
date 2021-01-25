@@ -1042,8 +1042,9 @@ public class MainActivity extends Activity{
      * @see LoginActivity
      */
     void logOut(){
-        DatabaseManager.SaveBoolean(false,App.KEY_REMEMBER_ME,getApplicationContext());
-        Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+        User.resetUserData(this);
+        DatabaseManager.SaveBoolean(false,App.KEY_REMEMBER_ME,this);
+        Intent i = new Intent(this,LoginActivity.class);
         startActivity(i);
         finish();
     }

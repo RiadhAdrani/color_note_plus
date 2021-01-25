@@ -26,7 +26,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,this)){
+            if (!User.getID(this).equals(App.NO_ID))
             skip();
+            else
+                DatabaseManager.SaveBoolean(false,App.KEY_REMEMBER_ME,this);
+        }
+        else {
+            DatabaseManager.wipeDatabase(this);
         }
 
         initActivity();
