@@ -273,13 +273,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        ArrayList<String> trash = DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST_TRASH,context);
+        ArrayList<String> trash = DatabaseManager.getStringArray(App.KEY_NOTE_LIST_TRASH,context);
         trash.add(uid);
-        DatabaseManager.SaveStringArray(trash, App.KEY_NOTE_LIST_TRASH,context);
+        DatabaseManager.setStringArray(trash, App.KEY_NOTE_LIST_TRASH,context);
 
         list.remove(position);
         notifyItemRemoved(position);
-        DatabaseManager.setDatabaseLastModificationDate(context);
+        DatabaseManager.setModificationDate(context);
     }
 
     /**
@@ -298,7 +298,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        DatabaseManager.DeleteNote(uid,getContext());
+        DatabaseManager.deleteNote(uid,getContext());
 
         list.remove(position);
         notifyItemRemoved(position);
@@ -320,13 +320,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
             }
         }
 
-        ArrayList<String> noteList = DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getContext());
+        ArrayList<String> noteList = DatabaseManager.getStringArray(App.KEY_NOTE_LIST,getContext());
         noteList.add(uid);
-        DatabaseManager.SaveStringArray(noteList, App.KEY_NOTE_LIST,getContext());
+        DatabaseManager.setStringArray(noteList, App.KEY_NOTE_LIST,getContext());
 
         list.remove(position);
         notifyItemRemoved(position);
-        DatabaseManager.setDatabaseLastModificationDate(context);
+        DatabaseManager.setModificationDate(context);
     }
 
     /**
@@ -350,7 +350,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
         list.get(position).setColor(newColor);
         notifyItemChanged(position);
-        DatabaseManager.setDatabaseLastModificationDate(context);
+        DatabaseManager.setModificationDate(context);
     }
 
     /**

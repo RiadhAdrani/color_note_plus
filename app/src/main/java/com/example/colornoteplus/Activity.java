@@ -1,7 +1,5 @@
 package com.example.colornoteplus;
 
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -16,12 +14,11 @@ public abstract class Activity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        Log.d("AUTO_SYNC", "Auto Sync is :" + Sync.getAutoSync());
+        if (User.getID(this).equals(App.NO_ID))
+            return;
 
         if (Sync.getAutoSync()) {
-            Log.d("AUTO_SYNC", "Syncing ... \nAuto Sync is :" + Sync.getAutoSync());
             Sync.performSync(this, null);
-            Log.d("SYNC_NOTES","Auto Sync On");
         }
 
     }

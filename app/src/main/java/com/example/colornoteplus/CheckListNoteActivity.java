@@ -96,7 +96,7 @@ public class CheckListNoteActivity extends Activity {
 
             // if the UID exists in the SharedPreference
             // Load the note
-            note = DatabaseManager.LoadCheckListNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = DatabaseManager.getCheckListNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         }
         else {
 
@@ -405,7 +405,7 @@ public class CheckListNoteActivity extends Activity {
      * @return the result of the checking
      */
     private boolean isNoteOld(String UID){
-        for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: DatabaseManager.getStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(UID)) return true;
         }
         return false;
@@ -452,12 +452,12 @@ public class CheckListNoteActivity extends Activity {
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        DatabaseManager.LoadStringArray(
+                        DatabaseManager.getStringArray(
                                 App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                DatabaseManager.SaveStringArray(
+                DatabaseManager.setStringArray(
                         noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

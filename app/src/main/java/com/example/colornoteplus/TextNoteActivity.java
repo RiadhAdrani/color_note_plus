@@ -115,7 +115,7 @@ public class TextNoteActivity extends Activity {
     private void getNoteFromIntent(){
 
         if (!getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY).equals(App.NOTE_DEFAULT_UID)){
-            note = DatabaseManager.LoadTextNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
+            note = DatabaseManager.getTextNote(getIntent().getStringExtra(App.KEY_NOTE_ACTIVITY),getApplicationContext());
         } else {
             note = new TextNote(getApplicationContext());
         }
@@ -268,7 +268,7 @@ public class TextNoteActivity extends Activity {
      * @see DatabaseManager
      */
     private boolean isNoteOld(){
-        for (String n: DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
+        for (String n: DatabaseManager.getStringArray(App.KEY_NOTE_LIST,getApplicationContext())){
             if (n.equals(note.getUid())) return true;
         }
         return false;
@@ -332,12 +332,12 @@ public class TextNoteActivity extends Activity {
                 Log.d("DEBUG_SAVE","Note is old !");
 
                 ArrayList<String> noteList =
-                        DatabaseManager.LoadStringArray(
+                        DatabaseManager.getStringArray(
                                 App.KEY_NOTE_LIST,getApplicationContext()
                         );
 
                 noteList.add(note.getUid());
-                DatabaseManager.SaveStringArray(
+                DatabaseManager.setStringArray(
                         noteList, App.KEY_NOTE_LIST,getApplicationContext()
                 );
             }

@@ -463,7 +463,7 @@ public abstract class Style extends AppCompatActivity {
      * @return current app theme
      */
     public static int getAppTheme(Context context){
-        return DatabaseManager.LoadInteger(App.KEY_LIGHT_THEME,context);
+        return DatabaseManager.getInteger(App.KEY_LIGHT_THEME,context);
     }
 
     /**
@@ -473,8 +473,8 @@ public abstract class Style extends AppCompatActivity {
      * @param context calling context
      */
     public static void setAppTheme(int theme, Context context){
-        DatabaseManager.SaveInteger(theme, App.KEY_LIGHT_THEME,context);
-        DatabaseManager.setDatabaseLastModificationDate(context);
+        DatabaseManager.setInteger(theme, App.KEY_LIGHT_THEME,context);
+        DatabaseManager.setModificationDate(context);
     }
 
     /**
@@ -483,7 +483,7 @@ public abstract class Style extends AppCompatActivity {
      * @return current color theme
      */
     public static int getAppColor(Context context){
-        return DatabaseManager.LoadInteger(App.KEY_APP_COLOR,context);
+        return DatabaseManager.getInteger(App.KEY_APP_COLOR,context);
     }
 
     /**
@@ -492,7 +492,7 @@ public abstract class Style extends AppCompatActivity {
      * @param context calling context
      */
     public static void setAppColor(int theme, Context context){
-        DatabaseManager.SaveInteger(theme, App.KEY_APP_COLOR,context);
-        DatabaseManager.setDatabaseLastModificationDate(context);
+        DatabaseManager.setInteger(theme, App.KEY_APP_COLOR,context);
+        DatabaseManager.setModificationDate(context);
     }
 }

@@ -26,13 +26,13 @@ public class TextNote extends Note<String> implements Serializable {
     @Override
     public void save(Context context) {
         setModificationDate();
-        DatabaseManager.SaveTextNote(this,context);
+        DatabaseManager.setTextNote(this,context);
     }
 
     @Override
     public boolean hasChanged(Context context) {
 
-        TextNote original = DatabaseManager.LoadTextNote(getUid(),context);
+        TextNote original = DatabaseManager.getTextNote(getUid(),context);
 
         if (getColor() != original.getColor())
             return true;

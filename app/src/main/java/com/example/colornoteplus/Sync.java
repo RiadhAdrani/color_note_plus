@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -158,6 +159,44 @@ abstract public class Sync {
          * @param notes retrieved notes.
          */
         void onDataDownloaded(ArrayList<Note<?>> notes);
+    }
+
+    /**
+     * Another interface for data synchronization process.
+     * Allow for more flexibility.
+     */
+    public interface OnDataSynchronization{
+
+        /**
+         * Executes when the process connects to the firebase firestore database.
+         */
+        void onStart();
+
+        /**
+         * Executes when the two databases are synced correctly
+         */
+        void onSynced();
+
+        /**
+         * Executes when the cloud database is behind the local database
+         */
+        void onUploaded();
+
+        /**
+         * Executes when the cloud database is ahead of the local database
+         */
+        void onDownloaded(int theme, int color, String username, String email, ArrayList<Note<?>> notes);
+
+        /**
+         * Executes when the process encountered a network error
+         */
+        void onNetworkError();
+
+        /**
+         * Executes after a time out delay.
+         */
+        void onTimeOut();
+
     }
 
     /**
@@ -429,39 +468,55 @@ abstract public class Sync {
      * @param auto new value
      */
     static void setAutoSync(Context context, boolean auto){
-        DatabaseManager.SaveBoolean(auto,App.KEY_AUTO_SYNC,context);
+        DatabaseManager.setBoolean(auto,App.KEY_AUTO_SYNC,context);
     }
 
     /**
-     * Perform data syncing
-     * @see OnDataSynced
+     * performSync V3:
+     * A more flexible and effective method to perform synchronization.
+     * Allow to handle event for various situation.
+     * @implNote onDataSynchronization.onSync executes after onUploaded and after onDownloaded too.
+     * @see OnDataSynchronization
      * @param context calling context
-     * @param onDataSynced post data syncing actions
+     * @param timeout timeout period, after this delay, onDataSynchronization.onTimeout will be executed regardless of whether the process completed or not.
+     * @param onDataSynchronization interface to handle various events.
      */
-    static void performSync(Context context, OnDataSynced onDataSynced){
+    static void performSync(Context context, int timeout, OnDataSynchronization onDataSynchronization ){
 
         if (User.getID(context).equals(App.NO_ID))
             return;
 
-        getModificationDate(context, new OnLongRetrieval() {
-            @Override
-            public void onSuccess(Long value) {
+        final boolean[] done = {false};
 
-                Long localSync = DatabaseManager.getDatabaseLastModificationDate(context);
+        DB_USERS.document(User.getID(context))
+                .get()
+                .addOnSuccessListener(snapshot -> {
 
-                if (value == null && localSync == 0L)
-                    return;
+                    if (onDataSynchronization != null) onDataSynchronization.onStart();
 
-                if (value == null) {
-                    performSync(context, 0L, 1L);
-                    return;
-                }
+                    Long cloud = snapshot.getLong(INFO_LAST_SYNC);
+                    Long local = DatabaseManager.getModificationDate(context);
 
+                    if (cloud == null)
+                        return;
 
+                    if (cloud.equals(local)){
+                        if (onDataSynchronization != null) onDataSynchronization.onSynced();
+                    }
 
-                if (!localSync.equals(value)) {
-                    // firebase firestore database is ahead
-                    if (value > localSync){
+                    if (cloud > local){
+
+                        int color = Integer.parseInt(Objects.requireNonNull(snapshot.getString(INFO_APP_COLOR)));
+                        Style.setAppColor(color,context);
+
+                        int theme = Integer.parseInt(Objects.requireNonNull(snapshot.getString(INFO_APP_THEME)));
+                        Style.setAppTheme(theme,context);
+
+                        String email = snapshot.getString(USER_EMAIL);
+                        User.setEmail(context, email);
+
+                        String username = snapshot.getString(USER_ID);
+                        User.setUsername(username,context);
 
                         getUserData(context, new OnQueryDataRetrieval() {
                             @Override
@@ -481,33 +536,138 @@ abstract public class Sync {
                                     }
                                 }
 
-                                DatabaseManager.SaveStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
+                                DatabaseManager.setStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
 
-                                Sync.getAppTheme(context, new OnIntRetrieval() {
-                                    @Override
-                                    public void onSuccess(int value) {
-                                        Style.setAppTheme(value,context);
+                                DatabaseManager.setModificationDate(context, cloud);
+                                if (onDataSynchronization != null) onDataSynchronization.onDownloaded(theme,color,username,email,notes);
+                                if (onDataSynchronization != null) onDataSynchronization.onSynced();
+                                done[0] = true;
+
+                            }
+
+
+
+                            @Override
+                            public void onFailure() {
+                                if (onDataSynchronization != null) onDataSynchronization.onNetworkError();
+                                Log.d("SYNC_NOTES","Unable to sync : Firebase database is ahead of the local database ...");
+                            }
+                        });
+
+                    }
+
+                    else {
+
+                        wipeNotes(context, () -> {
+                            ArrayList<Note<?>> noteList = DatabaseManager.getAllNotes(context);
+                            for (Note<?> note : noteList){
+                                setNote(context,note);
+                            }
+                        });
+
+                        setAppTheme(context,Style.getAppTheme(context));
+                        setAppColor(context,Style.getAppColor(context));
+                        setModificationDate(context, DatabaseManager.getModificationDate(context));
+
+                        if (onDataSynchronization != null) onDataSynchronization.onUploaded();
+                        if (onDataSynchronization != null) onDataSynchronization.onSynced();
+                        done[0] = true;
+
+                    }
+
+                })
+                .addOnFailureListener(e -> {
+                    if (onDataSynchronization != null) onDataSynchronization.onNetworkError();
+                    done[0] = true;
+                });
+
+        Handler handler=new Handler();
+        handler.postDelayed(() -> {
+
+            if (!done[0]){
+                if (onDataSynchronization != null) onDataSynchronization.onTimeOut();
+            }
+
+        },timeout);
+
+    }
+
+    /**
+     * Perform data syncing
+     * @see OnDataSynced
+     * @param context calling context
+     * @param onDataSynced post data syncing actions
+     */
+    static void performSync(Context context, OnDataSynced onDataSynced){
+
+        if (User.getID(context).equals(App.NO_ID))
+            return;
+
+        getModificationDate(context, new OnLongRetrieval() {
+            @Override
+            public void onSuccess(Long value) {
+
+                Long localSync = DatabaseManager.getModificationDate(context);
+
+                if (value == null && localSync == 0L)
+                    return;
+
+                if (value == null) {
+                    performSync(context, 0L, 1L);
+                    return;
+                }
+
+                if (!localSync.equals(value)) {
+                    // firebase firestore database is ahead
+                    if (value > localSync){
+
+                        Sync.getAppTheme(context, new OnIntRetrieval() {
+                            @Override
+                            public void onSuccess(int value) {
+                                Toast.makeText(context, "App Theme Retrieved", Toast.LENGTH_SHORT).show();
+                                Style.setAppTheme(value,context);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Log.d("SYNC_NOTES","Unable to get Theme : Firebase database is ahead of the local database ...");
+                            }
+                        });
+
+                        Sync.getAppColor(context, new OnIntRetrieval() {
+                            @Override
+                            public void onSuccess(int value) {
+                                Toast.makeText(context, "App Color Retrieved", Toast.LENGTH_SHORT).show();
+                                Style.setAppColor(value,context);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Log.d("SYNC_NOTES","Unable to get App Color : Firebase database is ahead of the local database ...");
+                            }
+                        });
+
+                        getUserData(context, new OnQueryDataRetrieval() {
+                            @Override
+                            public void onSuccess(QuerySnapshot snapshot) {
+
+                                DatabaseManager.wipeDatabase(context);
+
+                                // get data from the FirebaseFirestore database
+                                ArrayList<Note<?>> notes = new ArrayList<>();
+
+                                for (DocumentSnapshot snap : snapshot.getDocuments()){
+                                    Note<?> n = Note.fromMap(context, Objects.requireNonNull(snap.getData()));
+
+                                    if (n != null) {
+                                        n.save(context);
+                                        notes.add(n);
                                     }
+                                }
 
-                                    @Override
-                                    public void onFailure() {
-                                        Log.d("SYNC_NOTES","Unable to get Theme : Firebase database is ahead of the local database ...");
-                                    }
-                                });
+                                DatabaseManager.setStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
 
-                                Sync.getAppColor(context, new OnIntRetrieval() {
-                                    @Override
-                                    public void onSuccess(int value) {
-                                        Style.setAppColor(value,context);
-                                    }
-
-                                    @Override
-                                    public void onFailure() {
-                                        Log.d("SYNC_NOTES","Unable to get App Color : Firebase database is ahead of the local database ...");
-                                    }
-                                });
-
-                                DatabaseManager.setDatabaseLastModificationDate(context, value);
+                                DatabaseManager.setModificationDate(context, value);
                                 if (onDataSynced != null) onDataSynced.onDataDownloaded(notes);
 
                             }
@@ -524,7 +684,7 @@ abstract public class Sync {
                     else {
 
                         wipeNotes(context, () -> {
-                            ArrayList<Note<?>> noteList = DatabaseManager.LoadAllNotes(context);
+                            ArrayList<Note<?>> noteList = DatabaseManager.getAllNotes(context);
                             for (Note<?> note : noteList){
                                 setNote(context,note);
                             }
@@ -532,7 +692,7 @@ abstract public class Sync {
 
                         setAppTheme(context,Style.getAppTheme(context));
                         setAppColor(context,Style.getAppColor(context));
-                        setModificationDate(context, DatabaseManager.getDatabaseLastModificationDate(context));
+                        setModificationDate(context, DatabaseManager.getModificationDate(context));
 
                         if (onDataSynced != null) onDataSynced.onDataUploaded();
 
@@ -584,7 +744,7 @@ abstract public class Sync {
                         }
                     }
 
-                    DatabaseManager.SaveStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
+                    DatabaseManager.setStringArray(App.getNotesAsUIDFromList(notes), App.KEY_NOTE_LIST,context);
 
                     Sync.getAppTheme(context, new OnIntRetrieval() {
                         @Override
@@ -631,7 +791,7 @@ abstract public class Sync {
                 }
             });
 
-            DatabaseManager.setDatabaseLastModificationDate(context, cloudSync);
+            DatabaseManager.setModificationDate(context, cloudSync);
 
         }
 
@@ -639,7 +799,7 @@ abstract public class Sync {
         else {
 
             wipeNotes(context, () -> {
-                ArrayList<Note<?>> noteList = DatabaseManager.LoadAllNotes(context);
+                ArrayList<Note<?>> noteList = DatabaseManager.getAllNotes(context);
                 for (Note<?> note : noteList){
                     setNote(context,note);
                 }
@@ -647,7 +807,7 @@ abstract public class Sync {
 
             setAppTheme(context,Style.getAppTheme(context));
             setAppColor(context,Style.getAppColor(context));
-            setModificationDate(context, DatabaseManager.getDatabaseLastModificationDate(context));
+            setModificationDate(context, DatabaseManager.getModificationDate(context));
 
         }
 
@@ -684,7 +844,7 @@ abstract public class Sync {
 
                     String patchNotes = snapshot.getString(INFO_DB);
 
-                    DatabaseManager.SaveString(patchNotes,App.KEY_PATCH_NOTES,context);
+                    DatabaseManager.setString(patchNotes,App.KEY_PATCH_NOTES,context);
 
                 })
                 .addOnFailureListener(e -> {
@@ -708,14 +868,27 @@ abstract public class Sync {
                 .addOnSuccessListener(snapshot -> {
 
                     int size = snapshot.size();
+
                     for (int i = 0; i <= size; i++){
+
                         if (i == size){
-                            Log.d("LOGIN","Bad combination : username not found");
+                            Log.d("SYNC_LOGIN","Bad combination : username not found");
                             if (onUserLogin != null) onUserLogin.onFailure();
                         }
+
                         else {
-                            if (Objects.equals(snapshot.getDocuments().get(i).getString(USER_ID), username)
-                            && Objects.equals(snapshot.getDocuments().get(i).getString(USER_PASSWORD), password)){
+
+                            String _username = snapshot.getDocuments().get(i).getString(USER_ID);
+                            String _password = snapshot.getDocuments().get(i).getString(USER_PASSWORD);
+
+                            if (_password == null || _username == null)
+                                continue;
+
+                            if (_username.equals(username) &&  _password.equals(password)){
+
+                                Log.d("SYNC_LOGIN","user("+i+") name= "+_username);
+                                Log.d("SYNC_LOGIN","user("+i+") password= "+_password);
+
                                 if (onUserLogin != null) onUserLogin.onSuccess(snapshot.getDocuments().get(i).getId());
                             }
                             else {
@@ -723,6 +896,7 @@ abstract public class Sync {
                             }
                             break;
                         }
+
                     }
 
                 })

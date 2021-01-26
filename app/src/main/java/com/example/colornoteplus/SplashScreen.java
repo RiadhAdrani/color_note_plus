@@ -43,7 +43,7 @@ public class SplashScreen extends AppCompatActivity {
 
                 if (value != null)
                 {
-                    Long localSync = DatabaseManager.getDatabaseLastModificationDate(getApplicationContext());
+                    Long localSync = DatabaseManager.getModificationDate(getApplicationContext());
                     Sync.performSync(getApplicationContext(),value,localSync);
                 }
 

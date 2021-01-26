@@ -10,7 +10,7 @@ public abstract class User {
      * @param context calling context.
      */
     static public void resetUserData(Context context){
-        DatabaseManager.setDatabaseLastModificationDate(context,0L);
+        DatabaseManager.setModificationDate(context,0L);
         setID(App.NO_ID,context);
         setUsername(App.NO_ID, context);
         setEmail(context, App.NO_ID);
@@ -21,7 +21,7 @@ public abstract class User {
      * @param context calling context
      */
     static public void setID(String id, Context context){
-        DatabaseManager.SaveString(id,App.KEY_CURRENT_USER, context);
+        DatabaseManager.setString(id,App.KEY_CURRENT_USER, context);
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class User {
      */
     static public String getID(Context context){
 
-        String temp = DatabaseManager.LoadString(App.KEY_CURRENT_USER,context);
+        String temp = DatabaseManager.getString(App.KEY_CURRENT_USER,context);
 
         if (temp.equals(context.getString(R.string.error))) {
             Log.d("USER", "current user is " + App.TEST_USER);
@@ -48,7 +48,7 @@ public abstract class User {
      * @param context calling context
      */
     static public void setUsername(String name, Context context){
-        DatabaseManager.SaveString(name,App.KEY_CURRENT_USERNAME,context);
+        DatabaseManager.setString(name,App.KEY_CURRENT_USERNAME,context);
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class User {
      * @return username as string
      */
     static public String getUsername(Context context){
-        return DatabaseManager.LoadString(App.KEY_CURRENT_USERNAME,context);
+        return DatabaseManager.getString(App.KEY_CURRENT_USERNAME,context);
     }
 
     // Hello
@@ -67,7 +67,7 @@ public abstract class User {
      * @param email new email
      */
     static public void setEmail(Context context, String email){
-        DatabaseManager.SaveString(email,App.KEY_CURRENT_EMAIL,context);
+        DatabaseManager.setString(email,App.KEY_CURRENT_EMAIL,context);
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class User {
      * @return email as a string
      */
     static public String getEmail(Context context){
-        String temp = DatabaseManager.LoadString(App.KEY_CURRENT_EMAIL,context);
+        String temp = DatabaseManager.getString(App.KEY_CURRENT_EMAIL,context);
 
         if (temp.equals(context.getString(R.string.error))) {
             Log.d("USER", "current user is " + App.TEST_EMAIL);

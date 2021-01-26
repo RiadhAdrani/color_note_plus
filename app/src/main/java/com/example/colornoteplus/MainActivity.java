@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -135,7 +136,7 @@ public class MainActivity extends Activity{
                         @Override
                         public void OnPrimaryAction() {
                             for (Note<?> note: adapter.getListFull()){
-                                DatabaseManager.DeleteNote(note.getUid(),getApplicationContext());
+                                DatabaseManager.deleteNote(note.getUid(),getApplicationContext());
                             }
                             adapter.getList().clear();
                             adapter.getListFull().clear();
@@ -410,10 +411,10 @@ public class MainActivity extends Activity{
 
         navigationView.setCheckedItem(R.id.nav_notes);
 
-        for (String s : DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,this)) {
+        for (String s : DatabaseManager.getStringArray(App.KEY_NOTE_LIST,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(DatabaseManager.LoadTextNote(s,this)); break;
-                case CHECK_NOTE: noteList.add(DatabaseManager.LoadCheckListNote(s,this)); break;
+                case TEXT_NOTE: noteList.add(DatabaseManager.getTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(DatabaseManager.getCheckListNote(s,this)); break;
             }
         }
         
@@ -515,10 +516,10 @@ public class MainActivity extends Activity{
 
         navigationView.setCheckedItem(R.id.nav_recycler_bin);
 
-        for (String s : DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST_TRASH,this)) {
+        for (String s : DatabaseManager.getStringArray(App.KEY_NOTE_LIST_TRASH,this)) {
             switch (Note.getNoteClass(s)){
-                case TEXT_NOTE: noteList.add(DatabaseManager.LoadTextNote(s,this)); break;
-                case CHECK_NOTE: noteList.add(DatabaseManager.LoadCheckListNote(s,this)); break;
+                case TEXT_NOTE: noteList.add(DatabaseManager.getTextNote(s,this)); break;
+                case CHECK_NOTE: noteList.add(DatabaseManager.getCheckListNote(s,this)); break;
             }
         }
 
@@ -542,14 +543,14 @@ public class MainActivity extends Activity{
                             new DialogConfirm.OnConfirmClickListener() {
                                 @Override
                                 public void OnPrimaryAction() {
-                                    ArrayList<String> temp = DatabaseManager.LoadStringArray(
+                                    ArrayList<String> temp = DatabaseManager.getStringArray(
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
                                     temp.add(noteList.get(position).getUid());
 
-                                    DatabaseManager.SaveStringArray(
+                                    DatabaseManager.setStringArray(
                                             temp,
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
@@ -613,14 +614,14 @@ public class MainActivity extends Activity{
                             @Override
                             public void OnPrimaryAction() {
                                 {
-                                    ArrayList<String> temp = DatabaseManager.LoadStringArray(
+                                    ArrayList<String> temp = DatabaseManager.getStringArray(
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
                                     );
 
                                     temp.add(noteList.get(position).getUid());
 
-                                    DatabaseManager.SaveStringArray(
+                                    DatabaseManager.setStringArray(
                                             temp,
                                             App.KEY_NOTE_LIST,
                                             getApplicationContext()
@@ -649,7 +650,7 @@ public class MainActivity extends Activity{
                         new DialogConfirm.OnConfirmClickListener() {
                             @Override
                             public void OnPrimaryAction() {
-                                    DatabaseManager.DeleteNote(noteList.get(position).getUid(),getApplicationContext());
+                                    DatabaseManager.deleteNote(noteList.get(position).getUid(),getApplicationContext());
                                     adapter.removeItem(position);
                             }
 
@@ -767,7 +768,7 @@ public class MainActivity extends Activity{
         noteList = new ArrayList<>(adapter.getListFull());
 
         if (!App.stringArrayEqualStringArray(App.getNotesAsUIDFromList(noteList),
-                DatabaseManager.LoadStringArray(App.KEY_NOTE_LIST,getApplicationContext())))
+                DatabaseManager.getStringArray(App.KEY_NOTE_LIST,getApplicationContext())))
         {
             saveNoteList();
         }
@@ -858,10 +859,10 @@ public class MainActivity extends Activity{
 
         switch (state){
             case NOTES:
-                DatabaseManager.SaveStringArray(mNoteList, App.KEY_NOTE_LIST,getApplicationContext());
+                DatabaseManager.setStringArray(mNoteList, App.KEY_NOTE_LIST,getApplicationContext());
                 break;
             case DELETED_NOTES:
-                DatabaseManager.SaveStringArray(mNoteList, App.KEY_NOTE_LIST_TRASH,getApplicationContext());
+                DatabaseManager.setStringArray(mNoteList, App.KEY_NOTE_LIST_TRASH,getApplicationContext());
                 break;
         }
     }
@@ -1024,7 +1025,7 @@ public class MainActivity extends Activity{
      */
     void updateNotes(){
 
-        String notes = DatabaseManager.LoadString(App.KEY_PATCH_NOTES,getApplicationContext());
+        String notes = DatabaseManager.getString(App.KEY_PATCH_NOTES,getApplicationContext());
 
         DialogConfirm dialog = new DialogConfirm(
                 theme,
@@ -1042,11 +1043,66 @@ public class MainActivity extends Activity{
      * @see LoginActivity
      */
     void logOut(){
-        User.resetUserData(this);
-        DatabaseManager.SaveBoolean(false,App.KEY_REMEMBER_ME,this);
-        Intent i = new Intent(this,LoginActivity.class);
-        startActivity(i);
-        finish();
+
+        DatabaseManager.setBoolean(false,App.KEY_REMEMBER_ME,getApplicationContext());
+
+        Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+        LoadingFragment loading = new LoadingFragment(getResources().getString(R.string.sync_now),null);
+        loading.setCancelable(false);
+        loading.show(getSupportFragmentManager(), App.TAG_DIALOG_CONFIRM);
+
+        Sync.performSync(this, 10000, new Sync.OnDataSynchronization() {
+            @Override
+            public void onStart() {
+                Log.d("SYNCHRONIZATION","Start -> User : "+User.getUsername(getApplicationContext()));
+            }
+
+            @Override
+            public void onSynced() {
+                loading.dismiss();
+                User.resetUserData(getApplicationContext());
+                startActivity(i);
+                finish();
+                Log.d("SYNCHRONIZATION","Start -> User : "+User.getUsername(getApplicationContext()));
+            }
+
+            @Override
+            public void onUploaded() {
+                Log.d("SYNCHRONIZATION","Uploaded -> User : "+User.getUsername(getApplicationContext()));
+            }
+
+            @Override
+            public void onDownloaded(int theme, int color, String username, String email, ArrayList<Note<?>> notes) {
+
+                Style.setAppTheme(theme,getApplicationContext());
+                Style.setAppColor(color,getApplicationContext());
+                User.setUsername(username,getApplicationContext());
+                User.setEmail(getApplicationContext(),email);
+
+                Log.d("SYNCHRONIZATION","Downloaded -> User : "+User.getUsername(getApplicationContext()));
+
+            }
+
+            @Override
+            public void onNetworkError() {
+
+                Log.d("SYNCHRONIZATION","Network Error -> User : "+User.getUsername(getApplicationContext()));
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+                Toast.makeText(MainActivity.this, R.string.sync_time_out, Toast.LENGTH_SHORT).show();
+                User.resetUserData(getApplicationContext());
+                startActivity(i);
+                finish();
+
+                Log.d("SYNCHRONIZATION","TimeOut -> User : "+User.getUsername(getApplicationContext()));
+
+            }
+        });
+
     }
 
 }

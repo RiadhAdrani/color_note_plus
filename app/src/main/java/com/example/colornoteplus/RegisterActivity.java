@@ -87,9 +87,9 @@ public class RegisterActivity extends AppCompatActivity {
         );
 
         CheckBox rememberMeBox = findViewById(R.id.remember_me_box);
-        rememberMeBox.setChecked(DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,getApplicationContext()));
+        rememberMeBox.setChecked(DatabaseManager.getBoolean(App.KEY_REMEMBER_ME,getApplicationContext()));
         rememberMeBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                DatabaseManager.SaveBoolean(isChecked,App.KEY_REMEMBER_ME,getApplicationContext()));
+                DatabaseManager.setBoolean(isChecked,App.KEY_REMEMBER_ME,getApplicationContext()));
 
         TextView errorText = findViewById(R.id.error_text);
         errorText.setTextColor(getResources().getColor(
@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
                             User.setID(userID,getApplicationContext());
                             User.setEmail(getApplicationContext(),email);
                             User.setUsername(username,getApplicationContext());
-                            DatabaseManager.setDatabaseLastModificationDate(getApplicationContext(),App.getTimeNow());
+                            DatabaseManager.setModificationDate(getApplicationContext(),App.getTimeNow());
                             loading.dismiss();
                             Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
                             proceed();

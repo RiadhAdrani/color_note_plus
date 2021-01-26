@@ -25,11 +25,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,this)){
+        if (DatabaseManager.getBoolean(App.KEY_REMEMBER_ME,this)){
             if (!User.getID(this).equals(App.NO_ID))
             skip();
             else
-                DatabaseManager.SaveBoolean(false,App.KEY_REMEMBER_ME,this);
+                DatabaseManager.setBoolean(false,App.KEY_REMEMBER_ME,this);
         }
         else {
             DatabaseManager.wipeDatabase(this);
@@ -162,9 +162,9 @@ public class LoginActivity extends AppCompatActivity {
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))
         );
 
-        rememberMeBox.setChecked(DatabaseManager.LoadBoolean(App.KEY_REMEMBER_ME,getApplicationContext()));
+        rememberMeBox.setChecked(DatabaseManager.getBoolean(App.KEY_REMEMBER_ME,getApplicationContext()));
         rememberMeBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                DatabaseManager.SaveBoolean(isChecked,App.KEY_REMEMBER_ME,getApplicationContext()));
+                DatabaseManager.setBoolean(isChecked,App.KEY_REMEMBER_ME,getApplicationContext()));
 
         signUpText.setTextColor(
                 getResources().getColor(Style.getNeutralTextColor(getApplicationContext()))

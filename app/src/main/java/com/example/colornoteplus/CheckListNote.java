@@ -42,7 +42,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     @Override
     public void save(Context context) {
         setModificationDate();
-        DatabaseManager.SaveCheckListNote(this,context);
+        DatabaseManager.setCheckListNote(this,context);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CheckListNote extends Note<ArrayList<CheckListItem>> {
     @Override
     public boolean hasChanged(Context context) {
 
-        CheckListNote original = DatabaseManager.LoadCheckListNote(getUid(),context);
+        CheckListNote original = DatabaseManager.getCheckListNote(getUid(),context);
 
         if (getColor() != original.getColor()) {
             return true;
