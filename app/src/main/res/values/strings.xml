@@ -41,6 +41,7 @@
     <string name="error">Error</string>
     <string name="network_error">Network Error</string>
     <string name="sync_time_out">Synchronization is unexpectedly taking too long …</string>
+    <string name="sync_time_out_return">Synchronization is unexpectedly taking too long … Returning to Login screen.</string>
 
     <string name="sort">Sort</string>
     <string name="search">Search</string>

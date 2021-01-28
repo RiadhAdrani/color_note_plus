@@ -545,8 +545,6 @@ abstract public class Sync {
 
                             }
 
-
-
                             @Override
                             public void onFailure() {
                                 if (onDataSynchronization != null) onDataSynchronization.onNetworkError();
@@ -869,35 +867,30 @@ abstract public class Sync {
 
                     int size = snapshot.size();
 
-                    for (int i = 0; i <= size; i++){
+                    for (int i = 0; i < size; i++){
 
-                        if (i == size){
-                            Log.d("SYNC_LOGIN","Bad combination : username not found");
-                            if (onUserLogin != null) onUserLogin.onFailure();
-                        }
 
-                        else {
+                        String _username = snapshot.getDocuments().get(i).getString(USER_ID);
+                        String _password = snapshot.getDocuments().get(i).getString(USER_PASSWORD);
 
-                            String _username = snapshot.getDocuments().get(i).getString(USER_ID);
-                            String _password = snapshot.getDocuments().get(i).getString(USER_PASSWORD);
+                        if (_password == null || _username == null)
+                            continue;
 
-                            if (_password == null || _username == null)
-                                continue;
+                        if (_username.equals(username) &&  _password.equals(password)){
 
-                            if (_username.equals(username) &&  _password.equals(password)){
+                            Log.d("SYNC_LOGIN","user("+i+") name= "+_username);
+                            Log.d("SYNC_LOGIN","user("+i+") password= "+_password);
 
-                                Log.d("SYNC_LOGIN","user("+i+") name= "+_username);
-                                Log.d("SYNC_LOGIN","user("+i+") password= "+_password);
+                            if (onUserLogin != null) {
 
-                                if (onUserLogin != null) onUserLogin.onSuccess(snapshot.getDocuments().get(i).getId());
+                                onUserLogin.onSuccess(snapshot.getDocuments().get(i).getId());
+                                return;
+
                             }
-                            else {
-                                if (onUserLogin != null) onUserLogin.onFailure();
-                            }
-                            break;
                         }
-
                     }
+
+                    if (onUserLogin != null) onUserLogin.onFailure();
 
                 })
                 .addOnFailureListener(e -> {

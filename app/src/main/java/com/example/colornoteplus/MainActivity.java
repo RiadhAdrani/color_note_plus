@@ -1060,7 +1060,7 @@ public class MainActivity extends Activity{
             @Override
             public void onSynced() {
                 loading.dismiss();
-                User.resetUserData(getApplicationContext());
+                setReset(true);
                 startActivity(i);
                 finish();
                 Log.d("SYNCHRONIZATION","Start -> User : "+User.getUsername(getApplicationContext()));

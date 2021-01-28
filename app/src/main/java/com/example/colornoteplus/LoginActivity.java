@@ -2,6 +2,7 @@ package com.example.colornoteplus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.util.ArrayList;
 
 /**
  * Allow user to login to his account
@@ -130,11 +133,51 @@ public class LoginActivity extends AppCompatActivity {
                             new Sync.OnUserLogin() {
                                 @Override
                                 public void onSuccess(String username) {
+
                                     DatabaseManager.wipeDatabase(getApplicationContext());
                                     User.setID(username, getApplicationContext());
-                                    Sync.performSync(getApplicationContext(), 1L, 0L);
-                                    dialog.dismiss();
-                                    skip();
+
+                                    // Sync.performSync(getApplicationContext(), 1L, 0L);
+
+                                    Sync.performSync(
+                                            getBaseContext(),
+                                            0,
+                                            new Sync.OnDataSynchronization() {
+                                                @Override
+                                                public void onStart() {
+
+                                                }
+
+                                                @Override
+                                                public void onSynced() {
+                                                    dialog.dismiss();
+                                                }
+
+                                                @Override
+                                                public void onUploaded() {
+                                                    Log.d("SYNC_LOGIN","Login Process : Data uploaded for some reasons ...");
+                                                }
+
+                                                @Override
+                                                public void onDownloaded(int theme, int color, String username, String email, ArrayList<Note<?>> notes) {
+                                                    Style.setAppTheme(theme,getApplicationContext());
+                                                    Style.setAppColor(color,getApplicationContext());
+                                                    User.setUsername(username,getApplicationContext());
+                                                    User.setEmail(getApplicationContext(),email);
+                                                    skip();
+                                                }
+
+                                                @Override
+                                                public void onNetworkError() {
+                                                    Toast.makeText(LoginActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onTimeOut() {
+
+                                                }
+                                            }
+                                    );
                                 }
 
                                 @Override
@@ -181,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Skip this screen activity.
+     * Skip this screen activity and redirect into splash screen activity.
      * @see SplashScreen
      */
     private void skip(){
