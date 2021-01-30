@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
                 DatabaseManager.setBoolean(false,App.KEY_REMEMBER_ME,this);
         }
         else {
+            User.resetUserData(this);
             DatabaseManager.wipeDatabase(this);
         }
 

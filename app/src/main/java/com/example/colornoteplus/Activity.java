@@ -22,6 +22,9 @@ public abstract class Activity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+        if (reset)
+            return;
+
         if (User.getID(this).equals(App.NO_ID))
             return;
 
@@ -32,19 +35,14 @@ public abstract class Activity extends AppCompatActivity {
                     new Sync.OnDataSynchronization() {
                         @Override
                         public void onStart() {
-
                         }
 
                         @Override
                         public void onSynced() {
-                            if (reset)
-                                User.resetUserData(getApplicationContext());
-
                         }
 
                         @Override
                         public void onUploaded() {
-
                         }
 
                         @Override

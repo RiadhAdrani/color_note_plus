@@ -488,6 +488,16 @@ abstract public class Sync {
 
         final boolean[] done = {false};
 
+        Handler handler=new Handler();
+        handler.postDelayed(() -> {
+
+            if (!done[0]){
+                if (onDataSynchronization != null) onDataSynchronization.onTimeOut();
+                return;
+            }
+
+        },timeout);
+
         DB_USERS.document(User.getID(context))
                 .get()
                 .addOnSuccessListener(snapshot -> {
@@ -578,15 +588,6 @@ abstract public class Sync {
                     if (onDataSynchronization != null) onDataSynchronization.onNetworkError();
                     done[0] = true;
                 });
-
-        Handler handler=new Handler();
-        handler.postDelayed(() -> {
-
-            if (!done[0]){
-                if (onDataSynchronization != null) onDataSynchronization.onTimeOut();
-            }
-
-        },timeout);
 
     }
 
@@ -709,6 +710,7 @@ abstract public class Sync {
 
     /**
      * Perform syncing between local database and cloud storage
+     * @deprecated
      * @param context calling context
      * @param cloudSync cloud last modification date
      * @param localSync local last modification date

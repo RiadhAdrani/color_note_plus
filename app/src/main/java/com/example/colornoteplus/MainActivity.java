@@ -1094,7 +1094,6 @@ public class MainActivity extends Activity{
             public void onTimeOut() {
 
                 Toast.makeText(MainActivity.this, R.string.sync_time_out, Toast.LENGTH_SHORT).show();
-                User.resetUserData(getApplicationContext());
                 startActivity(i);
                 finish();
 
