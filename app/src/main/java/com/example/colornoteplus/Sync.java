@@ -493,7 +493,6 @@ abstract public class Sync {
 
             if (!done[0]){
                 if (onDataSynchronization != null) onDataSynchronization.onTimeOut();
-                return;
             }
 
         },timeout);
@@ -710,7 +709,6 @@ abstract public class Sync {
 
     /**
      * Perform syncing between local database and cloud storage
-     * @deprecated
      * @param context calling context
      * @param cloudSync cloud last modification date
      * @param localSync local last modification date
